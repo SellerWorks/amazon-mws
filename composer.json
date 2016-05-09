@@ -1,0 +1,29 @@
+{
+    "name": "sellerworks/amazonmws",
+    "type": "library",
+    "description": "A PHP client for the Amazon Marketplace Web Services (MWS) API",
+    "keywords": ["Amazon MWS", "SellerCentral"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Steve Nebes",
+            "email": "steve@seller.works",
+            "homepage": "https://seller.works"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "ext-curl": "*",
+        "ext-soap": "*",
+        "ext-openssl": "*",
+        "psr/log": "1.0.0"
+    },
+    "suggest": {
+        "monolog/monolog": "For logging SOAP transactions"
+    },
+    "autoload": {
+        "psr-4": {
+            "SellerWorks\\Amazon\\MWS\\": "src/"
+        }
+    }
+}
