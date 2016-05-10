@@ -1,6 +1,6 @@
 <?php
 
-namespace SellerWorks\AmazonMWS\Requests;
+namespace SellerWorks\Amazon\MWS\Common;
 
 interface RequestInterface
 {

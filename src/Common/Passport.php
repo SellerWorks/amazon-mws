@@ -1,14 +1,14 @@
 <?php
 
-namespace SellerWorks\Amazon\MWS;
+namespace SellerWorks\Amazon\MWS\Common;
 
 /**
- * Amazon MWS API Config
+ * Amazon MWS Passport
  *
  * @author      Steve Nebes
  * @copyright   Copyright (c) 2016 SellerWorks (https://seller.works)
  */
-final class Config
+final class Passport
 {
     private $sellerId;
     private $accessKey;
