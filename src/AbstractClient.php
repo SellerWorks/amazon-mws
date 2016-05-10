@@ -2,6 +2,8 @@
 
 namespace SellerWorks\Amazon\MWS;
 
+use Psr\Logger\LoggerInterface;
+
 /**
  * Abstract Amazon MWS API Client
  *
@@ -10,14 +12,14 @@ namespace SellerWorks\Amazon\MWS;
  */
 abstract class AbstractClient
 {
-	const MWS_VERSION;
-	const MWS_PATH;
-	const USER_AGENT = 'SellerWorks/MWS';
+	const MWS_VERSION   = '';
+	const MWS_PATH      = '';
+	const USER_AGENT    = 'SellerWorks/MWS';
 
 	/**
-     * @var SellerWorks\Amazon\MWS\Config
+     * @var SellerWorks\Amazon\MWS\Passport
      */
-    protected $config;
+    protected $passport;
     protected $region;
     protected $marketplaceId;
     protected $maxRetries;
@@ -26,18 +28,39 @@ abstract class AbstractClient
     /**
      * Constructor
      *
-     * @param  SellerWorks\Amazon\MWS\Config    $config
+     * @param  SellerWorks\Amazon\MWS\Passport    $passport
      * @return void
      */
-    public function __construct(Config $config)
+    public function __construct(Passport $passport)
     {
-        $this->config = $config;
+        $this->passport = $passport;
 
         $this->maxRetries   = 3;
         $this->restoreRate  = 60;
     }
 
-    public function makeRequest(string $method, array $params, string $requestBody = null)
+    public function makeRequest(Requests\RequestInterface $request)
+    {
+        $parameters = $this->buildParameters($request);
+        // return $this->post($parameters);
+    }
+    
+    protected function buildParameters(Requests\RequestInterface $request): array
+    {
+        $parameters = [
+            'SellerId'
+            'AWSAccessKeyId'
+            'Version'
+            ''
+        ];
+    }
+    
+    protected buildSignature(array $in): array
+    {
+        
+    }
+    
+    protected function post(array $parameters)
     {
         
     }
