@@ -71,10 +71,18 @@ abstract class AbstractClient
     public function makeRequest(RequestInterface $request)
     {
         $parameters = $this->buildParameters($request);
+        $response   = $this->post($parameters);
 
-        return $this->post($parameters);
+        \Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
+            'JMS\Serializer\Annotation',
+            dirname(dirname(__DIR__)).'/vendor/jms/serializer/src');
+
+        $serializer = \JMS\Serializer\SerializerBuilder::create()->build();
+        $respObj    = $serializer->deserialize($response, \SellerWorks\Amazon\MWS\FulfillmentInbound\Responses\GetServiceStatusResponse::class, 'xml');
+
+        return $respObj; //simplexml_load_string($response);
     }
-    
+
     protected function buildParameters(RequestInterface $request): array
     {
         $parameters = $request->getParameters();
@@ -141,7 +149,8 @@ abstract class AbstractClient
         ]);
 
         $response = curl_exec($ch);
-        print_r($response);
+
+        return $response;
     }
 
     protected function urlencode_rfc3986($s): string
