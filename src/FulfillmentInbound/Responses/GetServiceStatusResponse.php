@@ -10,11 +10,11 @@ final class GetServiceStatusResponse
      * @JMS\SerializedName("GetServiceStatusResult")
      * @JMS\Type("SellerWorks\Amazon\MWS\FulfillmentInbound\Results\GetServiceStatusResult")
      */
-    private $GetServiceStatusResult;
+    protected $GetServiceStatusResult;
 
     /**
      * @JMS\SerializedName("ResponseMetadata")
      * @JMS\Type("StdClass")
      */
-    private $ResponseMetadata;
+    protected $ResponseMetadata;
 }

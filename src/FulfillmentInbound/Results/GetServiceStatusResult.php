@@ -13,11 +13,11 @@ final class GetServiceStatusResult
      * @JMS\SerializedName("Status")
      * @JMS\Type("string")
      */
-    private $Status;
+    protected $Status;
 
     /**
      * @JMS\SerializedName("Timestamp")
-     * @JMS\Type("DateTime<'Y-m-d\Th:i:s.u\Z', 'UTC'>")
+     * @JMS\Type("DateTime<'Y-m-d\TH:i:s.u\Z'>")
      */
-    private $Timestamp;
+    protected $Timestamp;
 }

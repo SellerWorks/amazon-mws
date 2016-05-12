@@ -2,10 +2,10 @@
 
 namespace SellerWorks\Amazon\MWS\Common;
 
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use JMS\Serializer\SerializerBuilder;
+
+AnnotationRegistry::registerLoader('class_exists');
 
 /**
  * Abstract Amazon MWS API Client
@@ -78,14 +78,7 @@ abstract class AbstractClient
         $parameters = $this->buildParameters($request);
         $response   = $this->post($parameters);
 
-        \Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
-            'JMS\Serializer\Annotation',
-            dirname(dirname(__DIR__)).'/vendor/jms/serializer/src');
-/*
-        $serializer = \JMS\Serializer\SerializerBuilder::create()->build();
-        $respObj    = $serializer->deserialize($response, \SellerWorks\Amazon\MWS\FulfillmentInbound\Responses\GetServiceStatusResponse::class, 'xml');
-*/
-        $serializer = new Serializer([new ObjectNormalizer], [new XmlEncoder]);
+        $serializer = SerializerBuilder::create()->build();
         $respObj    = $serializer->deserialize($response, \SellerWorks\Amazon\MWS\FulfillmentInbound\Responses\GetServiceStatusResponse::class, 'xml');
 
         return $respObj; //simplexml_load_string($response);
