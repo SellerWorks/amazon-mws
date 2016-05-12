@@ -17,9 +17,7 @@
         "ext-soap": "*",
         "ext-openssl": "*",
         "psr/log": "1.0.x",
-        "jms/serializer": "^1.1",
-        "symfony/serializer": "^3.0",
-        "symfony/property-access": "^3.0"
+        "jms/serializer": "^1.1"
     },
     "suggest": {
         "monolog/monolog": "For logging SOAP transactions"
