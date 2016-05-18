@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SellerWorks\Amazon\MWS\Common;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;

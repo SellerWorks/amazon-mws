@@ -3,7 +3,11 @@
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 
 use JMS\Serializer\Annotation as JMS;
+use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 
+/**
+ * 
+ */
 final class GetServiceStatusResponse
 {
     /**
