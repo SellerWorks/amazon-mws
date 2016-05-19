@@ -9,7 +9,7 @@ final class GetServiceStatusRequest implements RequestInterface
     /**
      * {@inheritDoc}
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         $request = [
             'Action' => 'GetServiceStatus',

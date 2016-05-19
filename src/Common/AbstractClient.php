@@ -117,7 +117,7 @@ abstract class AbstractClient
 
         foreach ($parameters as $k => $v)
         {
-            $queryString .= sprintf('%s=%s', $k, $this->urlencode_rfc3986($v));
+            $queryString .= sprintf('%s=%s', $k, $this->urlencode_rfc3986((string) $v));
         }
 
         // Calculate signature.
