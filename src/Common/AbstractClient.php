@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\Common;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use JMS\Serializer\SerializerBuilder;
-
-AnnotationRegistry::registerLoader('class_exists');
-
 /**
  * Abstract Amazon MWS API Client
  *
@@ -20,6 +15,7 @@ abstract class AbstractClient
 	const MWS_VERSION   = '';
 	const MWS_PATH      = '';
 	const USER_AGENT    = 'SellerWorks/MWS';
+	const XML_SERVICE   = '';
 
     const REGION_US     = 'us';
     const REGION_UK     = 'uk';
@@ -30,11 +26,12 @@ abstract class AbstractClient
      */
     protected $passport;
     protected $host;
+    protected $xmlService;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param  SellerWorks\Amazon\MWS\Common\Passport    $passport
+     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
      * @return void
      */
     public function __construct(Passport $passport)
@@ -46,6 +43,12 @@ abstract class AbstractClient
         $this->restoreRate  = 60;
     }
 
+    /**
+     * Set Passport object to use.
+     *
+     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
+     * @return self
+     */
     public function setPassport(Passport $passport): self
     {
         $this->passport = $passport;
@@ -53,6 +56,12 @@ abstract class AbstractClient
         return $this;
     }
 
+    /**
+     * Set region information.
+     *
+     * @param  string  $region
+     * @return self
+     */
     public function setRegion(string $region): self
     {
         switch ($region) {
@@ -75,17 +84,32 @@ abstract class AbstractClient
         return $this;
     }
 
-    public function makeRequest(RequestInterface $request)
+    /**
+     * Make request to Amazon.
+     *
+     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
+     * @return SellerWorks\Amazon\MWS\Common\ResponseInterface
+     */
+    public function makeRequest(RequestInterface $request): ResponseInterface
     {
+        if (!($this->xmlService instanceof \Sabre\Xml\Service)) {
+            $className = static::XML_SERVICE;
+            $this->xmlService = new $className;
+        }
+
         $parameters = $this->buildParameters($request);
         $response   = $this->post($parameters);
-
-        $serializer = SerializerBuilder::create()->build();
-        $respObj    = $serializer->deserialize($response, \SellerWorks\Amazon\MWS\FulfillmentInbound\Responses\GetServiceStatusResponse::class, 'xml');
-
-        return $respObj; //simplexml_load_string($response);
+        
+        print_r($this->xmlService->parse($response));
+        die;
     }
 
+    /**
+     * Return dot-notation hash of request.
+     *
+     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
+     * @return array
+     */
     protected function buildParameters(RequestInterface $request): array
     {
         $parameters = $request->getParameters();
@@ -107,7 +131,13 @@ abstract class AbstractClient
 
         return $parameters;
     }
-    
+
+    /**
+     * Return signature of request.
+     *
+     * @param  array  $parameters
+     * @return string
+     */
     protected function buildSignature(array $parameters): string
     {
         // Build query string.
@@ -127,8 +157,14 @@ abstract class AbstractClient
         
         return $this->urlencode_rfc3986(base64_encode($sig));
     }
-    
-    protected function post(array $parameters)
+
+    /**
+     * Post request to Amazon.
+     *
+     * @param  array  $parameters
+     * @return string
+     */
+    protected function post(array $parameters): string
     {
         $url = sprintf('https://%s/%s', $this->host, trim(static::MWS_PATH, '/'));
         $qs  = http_build_query($parameters);
@@ -156,8 +192,14 @@ abstract class AbstractClient
         return $response;
     }
 
-    protected function urlencode_rfc3986($s): string
+    /**
+     * Return RFC 3986 compliant string.
+     *
+     * @param  string  $s
+     * @return string
+     */
+    protected function urlencode_rfc3986(string $s): string
     {
-        return str_replace('+', ' ', str_replace('%7E', '~', rawurlencode($s)));
+        return str_replace(['+', '%7E'], [' ', '~'], rawurlencode($s));
     }
 }
