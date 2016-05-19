@@ -17,7 +17,7 @@
         "ext-soap": "*",
         "ext-openssl": "*",
         "psr/log": "1.0.x",
-        "jms/serializer": "^1.1"
+        "sabre/xml": "^1.4"
     },
     "suggest": {
         "monolog/monolog": "For logging SOAP transactions"
