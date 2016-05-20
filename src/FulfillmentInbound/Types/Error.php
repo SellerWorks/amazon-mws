@@ -6,13 +6,17 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 
 /**
  */
-final class GetServiceStatusResult
+final class Error
 {
     /**
      */
-    public $Status;
+    public $Type;
 
     /**
      */
-    public $Timestamp;
+    public $Code;
+
+    /**
+     */
+    public $Message;
 }

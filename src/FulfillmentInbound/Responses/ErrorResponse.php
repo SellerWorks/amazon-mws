@@ -8,13 +8,13 @@ use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 
 /**
  */
-final class GetServiceStatusResponse implements ResponseInterface
+final class ErrorResponse implements ResponseInterface
 {
     /**
      */
-    public $GetServiceStatusResult;
+    public $Error;
 
     /**
      */
-    public $ResponseMetadata;
+    public $RequestID;
 }

@@ -6,13 +6,9 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 
 /**
  */
-final class GetServiceStatusResult
+final class ResponseMetadata
 {
     /**
      */
-    public $Status;
-
-    /**
-     */
-    public $Timestamp;
+    public $RequestId;
 }

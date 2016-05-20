@@ -98,7 +98,9 @@ abstract class AbstractClient
 
         $parameters = $this->buildParameters($request);
         $response   = $this->post($parameters);
-        
+
+        echo $response;
+
         print_r($this->xmlService->parse($response));
         die;
     }
