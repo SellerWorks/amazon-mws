@@ -15,7 +15,7 @@ abstract class AbstractClient
 	const MWS_VERSION   = '';
 	const MWS_PATH      = '';
 	const USER_AGENT    = 'SellerWorks/MWS';
-`
+
     const REGION_US     = 'us';
     const REGION_UK     = 'uk';
     const REGION_CA     = 'ca';

@@ -11,6 +11,7 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
  */
 interface FulfillmentInboundInterface
 {
+    const XML_NAMESPACE = '';
     /**
      * Returns the information required to create an inbound shipment.
      *
