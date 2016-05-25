@@ -29,7 +29,8 @@ class XmlService extends \Sabre\Xml\Service
 
     /**
      */
-/*    protected function mapImmutableObject($elementName, $className)
+/*
+    protected function mapImmutableObject($elementName, $className)
     {
         list($namespace) = self::parseClarkNotation($elementName);
 

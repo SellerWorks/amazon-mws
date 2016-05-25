@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\Common;
 
+use RuntimeException;
+
 /**
  * Abstract Amazon MWS API Client
  *
@@ -103,79 +105,24 @@ abstract class AbstractClient
      */
     public function makeRequest(RequestInterface $request): ResponseInterface
     {
-        $parameters = $this->buildParameters($request);
-        $response   = $this->post($parameters);
+        $response = $this->post($request);
 
         echo $response;
 
-        print_r($this->serializer->unserialize($response));
+//        print_r($this->serializer->unserialize($response));
         die;
-    }
-
-    /**
-     * Return dot-notation hash of request.
-     *
-     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
-     * @return array
-     */
-    protected function buildParameters(RequestInterface $request): array
-    {
-        $parameters = $request->getParameters();
-
-        // Add authentication params.
-        $parameters['SellerId']       = $this->passport->getSellerId();
-        $parameters['AWSAccessKeyId'] = $this->passport->getAccessKey();
-
-        if (!empty($this->passport->getMwsAuthToken())) {
-            $auth['MWSAuthToken'] = $this->passport->getMwsAuthToken();
-        }
-
-        // Add signature parameter.
-        $parameters['SignatureMethod']  = 'HmacSHA256';
-        $parameters['SignatureVersion'] = 2;
-        $parameters['Timestamp']        = gmdate("Y-m-d\TH:i:s.\\0\\0\\0\\Z");
-        $parameters['Version']          = static::MWS_VERSION;
-        $parameters['Signature']        = $this->buildSignature($parameters);
-
-        return $parameters;
-    }
-
-    /**
-     * Return signature of request.
-     *
-     * @param  array  $parameters
-     * @return string
-     */
-    protected function buildSignature(array $parameters): string
-    {
-        // Build query string.
-        unset($parameters['Signature']);
-        uksort($parameters, 'strcmp');
-        $queryString = '';
-
-        foreach ($parameters as $k => $v)
-        {
-            $queryString .= sprintf('%s=%s', $k, $this->urlencode_rfc3986((string) $v));
-        }
-
-        // Calculate signature.
-        $path = trim(static::MWS_PATH, '/');
-        $head = sprintf("POST\n%s\n/%s\n%s", $this->host, $path, $queryString);
-        $sig  = hash_hmac('sha256', $head, $this->passport->getSecretKey(), true);
-        
-        return $this->urlencode_rfc3986(base64_encode($sig));
     }
 
     /**
      * Post request to Amazon.
      *
-     * @param  array  $parameters
+     * @param  RequestInterface  $request
      * @return string
      */
-    protected function post(array $parameters): string
+    protected function post(RequestInterface $request): string
     {
         $url = sprintf('https://%s/%s', $this->host, trim(static::MWS_PATH, '/'));
-        $qs  = http_build_query($parameters);
+        $qs  = $this->buildQuery($request);
         
         $headers = [
             'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
@@ -188,7 +135,7 @@ abstract class AbstractClient
             CURLOPT_PORT            => 443,
             CURLOPT_SSL_VERIFYPEER  => true,
             CURLOPT_SSL_VERIFYHOST  => 2,
-            CURLOPT_USERAGENT      => static::USER_AGENT,
+            CURLOPT_USERAGENT       => static::USER_AGENT,
             CURLOPT_POST            => true,
             CURLOPT_POSTFIELDS      => $qs,
             CURLOPT_HTTPHEADER      => $headers,
@@ -198,6 +145,66 @@ abstract class AbstractClient
         $response = curl_exec($ch);
 
         return $response;
+    }
+
+    /**
+     * Return dot-notation query of request.
+     *
+     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
+     * @return array
+     */
+    protected function buildQuery(RequestInterface $request): string
+    {
+        if (!($this->serializer instanceof SerializerInterface)) {
+            throw new RuntimeException('Serializer must be configured.');
+        }
+
+        $parameters = $this->serializer->serialize($request);
+
+        // Add authentication params.
+        $parameters['SellerId']       = $this->passport->getSellerId();
+        $parameters['AWSAccessKeyId'] = $this->passport->getAccessKey();
+
+        if (!empty($this->passport->getMwsAuthToken())) {
+            $auth['MWSAuthToken'] = $this->passport->getMwsAuthToken();
+        }
+
+        // Add standard parameters.
+        $parameters['SignatureMethod']  = 'HmacSHA256';
+        $parameters['SignatureVersion'] = 2;
+        $parameters['Timestamp']        = gmdate("Y-m-d\TH:i:s.\\0\\0\\0\\Z");
+        $parameters['Version']          = static::MWS_VERSION;
+
+        // Build query.
+        unset($parameters['Signature']);
+        uksort($parameters, 'strcmp');
+		$query = array();
+
+		foreach ($parameters as $k => $v)
+		{
+			$query[] = sprintf('%s=%s', $k, $this->urlencode_rfc3986((string) $v));
+		}
+
+        $query  = implode('&', $query);
+        $query .= '&Signature=' . $this->calculateSignature($query);
+
+        return $query;
+    }
+
+    /**
+     * Calculate signature of request.
+     *
+     * @param  string  $query
+     * @return string
+     */
+    protected function calculateSignature(string $query): string
+    {
+        // Calculate signature.
+        $path = trim(static::MWS_PATH, '/');
+        $head = sprintf("POST\n%s\n/%s\n%s", $this->host, $path, $query);
+        $sig  = hash_hmac('sha256', $head, $this->passport->getSecretKey(), true);
+
+        return $this->urlencode_rfc3986(base64_encode($sig));
     }
 
     /**

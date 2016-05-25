@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
 use SellerWorks\Amazon\MWS\Common\AbstractClient;
+use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
  */
@@ -16,8 +17,9 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     /**
      * {@inheritDoc}
      */
-    public function __construct()
+    public function __construct(Passport $passport)
     {
+        parent::__construct($passport);
         $this->setSerializer(new Serializer);
     }
 

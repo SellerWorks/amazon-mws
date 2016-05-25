@@ -12,7 +12,7 @@ interface SerializerInterface
      * @param  RequestInterface  $request
      * @return array
      */
-    abstract public function serialize(RequestInterface $request): array;
+    public function serialize(RequestInterface $request): array;
 
     /**
      * Deserialize response into objects.
@@ -20,5 +20,5 @@ interface SerializerInterface
      * @param  string  $response
      * @return ResponseInterface
      */
-    abstract public function unserialize(string $response): ResponseInterface;
+    public function unserialize(string $response): ResponseInterface;
 }

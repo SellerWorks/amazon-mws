@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
-use ReflectionProperty;
+use DateTimeInterface;
+use ReflectionClass;
 use SellerWorks\Amazon\MWS\Common\RequestInterface;
 use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 use SellerWorks\Amazon\MWS\Common\SerializerInterface;
@@ -38,7 +39,16 @@ class Serializer implements SerializerInterface
      */
     public function serialize(RequestInterface $request): array
     {
-        
+        switch (true) {
+            case $request instanceof Requests\ListInboundShipmentsRequest:
+                return $this->serializeListInboundShipmentsRequest($request);
+
+            case $request instanceof Requests\GetServiceStatusRequest:
+                return $this->serializeGetServiceStatusRequest($request);
+
+            default:
+                throw new UnexpectedValueException(__CLASS__ . ' is not supported.');
+        }
     }
 
     /**
@@ -55,8 +65,55 @@ class Serializer implements SerializerInterface
      * @param  Requests\ListInboundShipmentsRequest
      * @return array
      */
-    protected function serializeListInboundShipmentsRequest(ListInboundShipmentsRequest $request): array
+    protected function serializeListInboundShipmentsRequest(Requests\ListInboundShipmentsRequest $request): array
     {
         $retArr = ['Action' => 'ListInboundShipments'];
+
+		// ShipmentStatusList
+		if (!empty($request->ShipmentStatusList)) {
+			$reflection  = new ReflectionClass(Types\ShipmentStatus::class);
+			$validValues = $reflection->getConstants();
+			$pos = 1;
+
+			foreach ($request->ShipmentStatusList as $status) {
+				if (in_array($status, $validValues)) {
+					$retArr['ShipmentStatusList.member.'.$pos] = $status;
+					$pos++;
+				}
+			}
+		}
+
+		// ShipmentIdList
+		if (!empty($request->ShipmentIdList)) {
+			$pos = 1;
+
+			foreach ($request->ShipmentIdList as $shipment) {
+				$retArr['ShipmentIdList.member.'.$pos] = $status;
+				$pos++;
+			}
+		}
+
+		// LastUpdatedAfter
+		if ($request->LastUpdatedAfter instanceof DateTimeInterface) {
+			$retArr['LastUpdatedAfter'] = $request->LastUpdatedAfter->format(static::DATE_FORMAT);
+		}
+
+		// LastUpdatedAfter
+		if ($request->LastUpdatedBefore instanceof DateTimeInterface) {
+			$retArr['LastUpdatedBefore'] = $request->LastUpdatedBefore->format(static::DATE_FORMAT);
+		}
+
+        return $retArr;
+    }
+
+    /**
+     * Serialize GetServiceStatusRequest.
+     *
+     * @param  Requests\GetServiceStatusRequest
+     * @return array
+     */
+    protected function serializeGetServiceStatusRequest(Requests\GetServiceStatusRequest $request): array
+    {
+        return ['Action' => 'GetServiceStatus'];
     }
 }
