@@ -14,7 +14,7 @@ abstract class AbstractClient
 {
 	const MWS_VERSION   = '';
 	const MWS_PATH      = '';
-	const USER_AGENT    = 'SellerWorks/MWS';
+	const USER_AGENT    = 'SellerWorks Amazon MWS 2016.05';
 
     const REGION_US     = 'us';
     const REGION_UK     = 'uk';
@@ -25,7 +25,7 @@ abstract class AbstractClient
      */
     protected $passport;
     protected $host;
-    protected $xmlService;
+    protected $serializer;
 
     /**
      * Constructor.
@@ -35,9 +35,11 @@ abstract class AbstractClient
      */
     public function __construct(Passport $passport)
     {
+        // Configure MWS.
         $this->setPassport($passport);
         $this->setRegion(static::REGION_US);
 
+        // Internal configuration.
         $this->maxRetries   = 3;
         $this->restoreRate  = 60;
     }
@@ -51,7 +53,6 @@ abstract class AbstractClient
     public function setPassport(Passport $passport): self
     {
         $this->passport = $passport;
-
         return $this;
     }
 
@@ -84,6 +85,17 @@ abstract class AbstractClient
     }
 
     /**
+     * Set the Sabre\XML\Service object.
+     *
+     * @return self
+     */
+    public function setSerializer(SerializerInterface $serializer): self
+    {
+        $this->serializer = $serializer;
+        return $this;
+    }
+
+    /**
      * Make request to Amazon.
      *
      * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
@@ -91,17 +103,12 @@ abstract class AbstractClient
      */
     public function makeRequest(RequestInterface $request): ResponseInterface
     {
-        if (!($this->xmlService instanceof \Sabre\Xml\Service)) {
-            $className = static::XML_SERVICE;
-            $this->xmlService = new $className;
-        }
-
         $parameters = $this->buildParameters($request);
         $response   = $this->post($parameters);
 
         echo $response;
 
-        print_r($this->xmlService->parse($response));
+        print_r($this->serializer->unserialize($response));
         die;
     }
 
