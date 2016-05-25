@@ -13,10 +13,6 @@ final class GetServiceStatusRequest implements RequestInterface
      */
     public function getParameters(): array
     {
-        $request = [
-            'Action' => 'GetServiceStatus',
-        ];
-
-        return $request;
+        return ['Action' => 'GetServiceStatus'];
     }
 }

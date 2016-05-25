@@ -1,30 +1,20 @@
-http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01
-  ?AWSAccessKeyId=AKIAJGUVGFGHNKE2NVUA
-  &Action=ListInboundShipments
-  &MWSAuthToken=amzn.mws.4ea38b7b-f563-7709-4bae-87aeaEXAMPLE
-  &SellerId=A2NKEXAMPLEF53
-  &LastUpdatedAfter=2015-10-02T12%3A00%3A54Z
-  $LastUpdatedBefore=2015-11-02T12%3A00%3A54Z
-  &SignatureVersion=2
-  &Timestamp=2015-12-02T02:40:36Z
-  &Version=2010-10-01
-  &Signature=COwchWurFSmkpQ9OOCoZy5THApVmrpf0mtyxk5ShtrI%3D
-  &SignatureMethod=HmacSHA256
-  &ShipmentStatusList.member.1=WORKING
-  &ShipmentStatusList.member.2=CLOSED
-  &ShipmentIdList.member.1=FBA44JV8R
-  &ShipmentIdList.member.2=FBA4X8YLS
-  &ShipmentIdList.member.3=FBA4X9FML
-
 <?php
 
 declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 
+use DateTimeInterface;
+use ReflectionClass;
 use SellerWorks\Amazon\MWS\Common\RequestInterface;
+use SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 
-final class GetServiceStatusRequest implements RequestInterface
+/**
+ * Returns a list of inbound shipments based on criteria that you specify.
+ *
+ * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipments.html
+ */
+final class ListInboundShipmentsRequest implements RequestInterface
 {
     /**
      * @var Array<string>
@@ -54,6 +44,44 @@ final class GetServiceStatusRequest implements RequestInterface
         $request = [
             'Action' => 'ListInboundShipments',
         ];
+
+
+		// ShipmentStatusList
+		if (!empty($this->ShipmentStatusList)) {
+			$classRefl   = new ReflectionClass(Types\ShipmentStatus::class);
+			$validValues = $classRefl->getConstants();
+			$pos = 1;
+
+			foreach ($this->ShipmentStatusList as $status) {
+				if (in_array($status, $validValues)) {
+					$request['ShipmentStatusList.member.'.$pos] = $status;
+					$pos++;
+				}
+			}
+		}
+
+
+		// ShipmentIdList
+		if (!empty($this->ShipmentIdList)) {
+			$pos = 1;
+
+			foreach ($this->ShipmentIdList as $shipment) {
+				$request['ShipmentIdList.member.'.$pos] = $status;
+				$pos++;
+			}
+		}
+
+
+		// LastUpdatedAfter
+		if ($this->LastUpdatedAfter instanceof DateTimeInterface) {
+			$request['LastUpdatedAfter'] = $this->LastUpdatedAfter->format(static::DATE_FORMAT);
+		}
+
+
+		// LastUpdatedAfter
+		if ($this->LastUpdatedBefore instanceof DateTimeInterface) {
+			$request['LastUpdatedBefore'] = $this->LastUpdatedBefore->format(static::DATE_FORMAT);
+		}
 
         return $request;
     }

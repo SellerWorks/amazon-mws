@@ -20,9 +20,9 @@ interface FulfillmentInboundInterface
      * @param  Requests\CreateInboundShipmentPlanRequest
      * @return Responses\CreateInboundShipmentPlanResponse
      */
-    public function createInboundShipmentPlan(
-    	Requests\CreateInboundShipmentPlanRequest $request
-    ):  Responses\CreateInboundShipmentPlanResponse;
+//    public function createInboundShipmentPlan(
+//    	Requests\CreateInboundShipmentPlanRequest $request
+//    ):  Responses\CreateInboundShipmentPlanResponse;
 
     /**
      * Creates an inbound shipment.
@@ -87,7 +87,7 @@ interface FulfillmentInboundInterface
      * @param  Requests\ListInboundShipmentsRequest
      * @return Responses\ListInboundShipmentsResponse
      */
-//    public function listInboundShipments(Requests\ListInboundShipmentsRequest $request): Responses\ListInboundShipmentsResponse;
+    public function listInboundShipments(Requests\ListInboundShipmentsRequest $request): Responses\ListInboundShipmentsResponse;
 
     /**
      * Returns the next page of inbound shipments using the NextToken parameter.
@@ -124,8 +124,7 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/MWS_GetServiceStatus.html
      *
-     * @param  Requests\GetServiceStatusRequest
      * @return Responses\GetServiceStatusResponse
      */
-    public function getServiceStatus(Requests\GetServiceStatusRequest $request): Responses\GetServiceStatusResponse;
+    public function getServiceStatus(): Responses\GetServiceStatusResponse;
 }
