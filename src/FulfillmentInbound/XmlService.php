@@ -10,19 +10,21 @@ use SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 
 /**
+ * Defines how to deserialize xml using Sabre\Xml
  */
 class XmlService extends \Sabre\Xml\Service
 {
     /**
+     * Add all objects to the service.
      */
     public function __construct()
     {
         $namespace = '{http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/}';
 
         $this->mapValueObject($namespace . 'GetServiceStatusResponse', Responses\GetServiceStatusResponse::class);
-        $this->mapValueObject($namespace . 'ErrorResponse ', Responses\ErrorResponse::class);
+        $this->mapValueObject($namespace . 'ErrorResponse', Responses\ErrorResponse::class);
 
-//        $this->mapValueObject($namespace . 'Error', Types\Error::class);        
+        $this->mapValueObject($namespace . 'Error', Types\Error::class);        
         $this->mapValueObject($namespace . 'GetServiceStatusResult', Types\GetServiceStatusResult::class);
         $this->mapValueObject($namespace . 'ResponseMetadata', Types\ResponseMetadata::class);
     }

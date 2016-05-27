@@ -106,10 +106,8 @@ abstract class AbstractClient
     public function makeRequest(RequestInterface $request): ResponseInterface
     {
         $response = $this->post($request);
-
         echo $response;
-
-//        print_r($this->serializer->unserialize($response));
+        print_r($this->serializer->unserialize($response));
         die;
     }
 
@@ -160,6 +158,7 @@ abstract class AbstractClient
         }
 
         $parameters = $this->serializer->serialize($request);
+        print_r($parameters);
 
         // Add authentication params.
         $parameters['SellerId']       = $this->passport->getSellerId();
