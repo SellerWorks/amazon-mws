@@ -21,12 +21,18 @@ class XmlService extends \Sabre\Xml\Service
     {
         $namespace = '{http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/}';
 
-        $this->mapValueObject($namespace . 'GetServiceStatusResponse', Responses\GetServiceStatusResponse::class);
+        // Response Objects
         $this->mapValueObject($namespace . 'ErrorResponse', Responses\ErrorResponse::class);
+        $this->mapValueObject($namespace . 'GetServiceStatusResponse', Responses\GetServiceStatusResponse::class);
+        $this->mapValueObject($namespace . 'ListInboundShipmentsResponse', Responses\ListInboundShipmentsResponse::class);
 
-        $this->mapValueObject($namespace . 'Error', Types\Error::class);        
+        // Type Objects
+        $this->mapValueObject($namespace . 'Error', Types\Error::class);
         $this->mapValueObject($namespace . 'GetServiceStatusResult', Types\GetServiceStatusResult::class);
+        $this->mapValueObject($namespace . 'ListInboundShipmentsResult', Types\ListInboundShipmentsResult::class);
         $this->mapValueObject($namespace . 'ResponseMetadata', Types\ResponseMetadata::class);
+        $this->mapValueObject($namespace . 'ShipFromAddress', Types\Address::class);
+        $this->mapValueObject($namespace . 'ShipmentData', Types\InboundShipmentInfo::class);
     }
 
     /**

@@ -87,7 +87,6 @@ class Serializer implements SerializerInterface
 
             switch ($propName) {
                 // Array<string> properties.
-/*
                 case 'ShipmentIdList':
                 case 'ShipmentStatusList':
                     if (is_array($propValue) && !empty($propValue)) {
@@ -100,7 +99,6 @@ class Serializer implements SerializerInterface
                         }
                     }
                     break;
-*/
 
 
                 // DateTime properties.
@@ -115,66 +113,4 @@ class Serializer implements SerializerInterface
 
         return $returnArr;
     }
-
-    /**
-     * Serialize ListInboundShipmentsRequest.
-     *
-     * @param  Requests\ListInboundShipmentsRequest
-     * @return array
-     */
-/*
-    protected function serializeListInboundShipmentsRequest(Requests\ListInboundShipmentsRequest $request): array
-    {
-        $retArr = ['Action' => 'ListInboundShipments'];
-
-		// ShipmentStatusList
-		if (!empty($request->ShipmentStatusList)) {
-			$reflection  = new ReflectionClass(Types\ShipmentStatus::class);
-			$validValues = $reflection->getConstants();
-			$pos = 1;
-
-			foreach ($request->ShipmentStatusList as $status) {
-				if (in_array($status, $validValues)) {
-					$retArr['ShipmentStatusList.member.'.$pos] = $status;
-					$pos++;
-				}
-			}
-		}
-
-		// ShipmentIdList
-		if (!empty($request->ShipmentIdList)) {
-			$pos = 1;
-
-			foreach ($request->ShipmentIdList as $shipment) {
-				$retArr['ShipmentIdList.member.'.$pos] = $status;
-				$pos++;
-			}
-		}
-
-		// LastUpdatedAfter
-		if ($request->LastUpdatedAfter instanceof DateTimeInterface) {
-			$retArr['LastUpdatedAfter'] = $request->LastUpdatedAfter->format(static::DATE_FORMAT);
-		}
-
-		// LastUpdatedAfter
-		if ($request->LastUpdatedBefore instanceof DateTimeInterface) {
-			$retArr['LastUpdatedBefore'] = $request->LastUpdatedBefore->format(static::DATE_FORMAT);
-		}
-
-        return $retArr;
-    }
-*/
-
-    /**
-     * Serialize GetServiceStatusRequest.
-     *
-     * @param  Requests\GetServiceStatusRequest
-     * @return array
-     */
-/*
-    protected function serializeGetServiceStatusRequest(Requests\GetServiceStatusRequest $request): array
-    {
-        return ['Action' => 'GetServiceStatus'];
-    }
-*/
 }

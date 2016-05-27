@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 
 /**
- * Results of ListInboundShipments and ListInboundShipmentsByNextToken
+ * Results of ListInboundShipments and ListInboundShipmentsByNextToken.
  */
 final class ListInboundShipmentsResult
 {
@@ -15,7 +15,7 @@ final class ListInboundShipmentsResult
     public $NextToken;
 
     /**
-     * @var  InboundShipmentInfo
+     * @var  Array<InboundShipmentInfo>
      */
     public $ShipmentData;
 }
