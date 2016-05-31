@@ -30,7 +30,7 @@ class Mock extends AbstractClient implements FulfillmentInboundInterface
 	    Requests\ListInboundShipmentsRequest $request
 	):  Responses\ListInboundShipmentsResponse
 	{
-    	$xml = file_get_contents(__DIR__.'Mock\ListInboundShipmentsResponse.xml');
+    	$xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentsResponse.xml');
 
 		return $this->serializer->unserialize($xml);
 	}
@@ -40,7 +40,7 @@ class Mock extends AbstractClient implements FulfillmentInboundInterface
 	 */
 	public function getServiceStatus(): Responses\GetServiceStatusResponse
 	{
-    	$xml = file_get_contents(__DIR__.'Mock\GetServiceStatusResponse.xml');
+    	$xml = file_get_contents(__DIR__.'/Mock/GetServiceStatusResponse.xml');
 
 		return $this->serializer->unserialize($xml);
 	}

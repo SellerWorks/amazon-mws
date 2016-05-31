@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
+use Closure;
 use ReflectionProperty;
 use Sabre\Xml\Reader;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
@@ -21,41 +22,96 @@ class XmlService extends \Sabre\Xml\Service
     {
         $namespace = '{http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/}';
 
-        // Response Objects
-        $this->mapValueObject($namespace . 'ErrorResponse', Responses\ErrorResponse::class);
-        $this->mapValueObject($namespace . 'GetServiceStatusResponse', Responses\GetServiceStatusResponse::class);
-        $this->mapValueObject($namespace . 'ListInboundShipmentsResponse', Responses\ListInboundShipmentsResponse::class);
+        // Response objects.
+        $this->mapImmutableObject($namespace . 'GetServiceStatusResponse', Responses\ErrorResponse::class);
+        $this->mapImmutableObject($namespace . 'ErrorResponse', Responses\ErrorResponse::class);
+        $this->mapImmutableObject($namespace . 'GetServiceStatusResponse', Responses\GetServiceStatusResponse::class);
+        $this->mapImmutableObject($namespace . 'ListInboundShipmentsResponse', Responses\ListInboundShipmentsResponse::class);
 
-        // Type Objects
-        $this->mapValueObject($namespace . 'Error', Types\Error::class);
-        $this->mapValueObject($namespace . 'GetServiceStatusResult', Types\GetServiceStatusResult::class);
-        $this->mapValueObject($namespace . 'ListInboundShipmentsResult', Types\ListInboundShipmentsResult::class);
-        $this->mapValueObject($namespace . 'ResponseMetadata', Types\ResponseMetadata::class);
-        $this->mapValueObject($namespace . 'ShipFromAddress', Types\Address::class);
-        $this->mapValueObject($namespace . 'ShipmentData', Types\InboundShipmentInfo::class);
+
+        // Result objects.
+        $this->mapImmutableObject($namespace . 'GetServiceStatusResult', Types\GetServiceStatusResult::class);
+        $this->mapImmutableObject($namespace . 'ListInboundShipmentsResult', Types\ListInboundShipmentsResult::class);
+
+
+        // Type objects.
+        $this->mapImmutableObject($namespace . 'Error', Types\Error::class);
+        $this->mapImmutableObject($namespace . 'ResponseMetadata', Types\ResponseMetadata::class);
+        $this->mapImmutableObject($namespace . 'ShipFromAddress', Types\Address::class);
+
+
+        // Collection objects.
+        $this->mapCollectionObject($namespace . 'ShipmentData', $namespace . 'member', Types\InboundShipmentInfo::class);
     }
 
     /**
+     * Create a closer for returning an immutable object.
+     *
+     * @param  string $namespace
+     * @param  string $className
+     * @return Closure
      */
-/*
+    protected function createClosure($namespace, $className): Closure
+    {
+        $namespace = trim($namespace, '{}');
+
+        return function(Reader $reader) use ($namespace, $className) {
+            $object = new $className;
+            $values = \Sabre\Xml\Deserializer\keyValue($reader, $namespace);
+
+            foreach ($values as $property => $value) {
+                if (property_exists($object, $property)) {
+                    $reflection = new ReflectionProperty($object, $property);
+                    $reflection->setAccessible(true);
+                    $reflection->setValue($object, $value);
+                }
+            }
+
+            return $object;
+        };
+    }
+
+    /**
+     * Map an immutable object into the xml service map.
+     *
+     * @param  string $elementName
+     * @param  string $className
+     * @return void
+     */
     protected function mapImmutableObject($elementName, $className)
     {
         list($namespace) = self::parseClarkNotation($elementName);
 
-        $this->elementMap[$elementName] = function(Reader $reader) use ($className, $namespace) {
-            $obj = new $className;
-            $values = \Sabre\Xml\Deserializer\keyValue($reader, $namespace);
+        $this->elementMap[$elementName] = $this->createClosure($namespace, $className);
+    }
 
-            foreach ($values as $property => $value) {
-                if (property_exists($obj, $property)) {
-                    $reflection = new ReflectionProperty($obj, $property);
-                    $reflection->setAccessible(true);
-                    $reflection->setValue($obj, $value);
+    /**
+     * Map a collection into the xml service map.
+     *
+     * @param  string $elementName
+     * @param  string $childElementName
+     * @param  string $className
+     * @return void
+     */
+    protected function mapCollectionObject($elementName, $childElementName, $className)
+    {
+        list($namespace) = self::parseClarkNotation($elementName);
+
+        $this->elementMap[$elementName] = function(Reader $reader) use ($childElementName, $className, $namespace) {
+            // Temporary element map.
+            $elementMap = $reader->elementMap;
+            $elementMap[$childElementName] = $this->createClosure($namespace, $className);
+
+            // Variation of Sabre\Xml\Deserializer\repeatingElements.
+            $result = [];
+
+            foreach ($reader->parseGetElements($elementMap) as $element) {
+                if ($element['name'] === $childElementName) {
+                    $result[] = $element['value'];
                 }
             }
 
-            return $obj;
+            return $result;
         };
     }
-*/
 }
