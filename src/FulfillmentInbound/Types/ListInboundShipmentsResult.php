@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 
 /**
- * Results of ListInboundShipments and ListInboundShipmentsByNextToken.
+ * Result object.  Returned by ListInboundShipmentsResponse.
  */
 final class ListInboundShipmentsResult
 {

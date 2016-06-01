@@ -23,6 +23,7 @@ class XmlService extends \Sabre\Xml\Service
         $namespace = '{http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/}';
 
         // Response objects.
+        $this->mapImmutableObject($namespace . 'CreateInboundShipmentPlanResponse', Responses\CreateInboundShipmentPlanResponse::class);
         $this->mapImmutableObject($namespace . 'GetServiceStatusResponse', Responses\ErrorResponse::class);
         $this->mapImmutableObject($namespace . 'ErrorResponse', Responses\ErrorResponse::class);
         $this->mapImmutableObject($namespace . 'GetServiceStatusResponse', Responses\GetServiceStatusResponse::class);
@@ -30,6 +31,7 @@ class XmlService extends \Sabre\Xml\Service
 
 
         // Result objects.
+        $this->mapImmutableObject($namespace . 'CreateInboundShipmentPlanResult', Types\CreateInboundShipmentPlanResult::class);
         $this->mapImmutableObject($namespace . 'GetServiceStatusResult', Types\GetServiceStatusResult::class);
         $this->mapImmutableObject($namespace . 'ListInboundShipmentsResult', Types\ListInboundShipmentsResult::class);
 
@@ -38,9 +40,12 @@ class XmlService extends \Sabre\Xml\Service
         $this->mapImmutableObject($namespace . 'Error', Types\Error::class);
         $this->mapImmutableObject($namespace . 'ResponseMetadata', Types\ResponseMetadata::class);
         $this->mapImmutableObject($namespace . 'ShipFromAddress', Types\Address::class);
+        $this->mapImmutableObject($namespace . 'PrepDetails', Types\PrepDetails::class);
 
 
         // Collection objects.
+        $this->mapCollectionObject($namespace . 'InboundShipmentPlans', $namespace . 'member', Types\InboundShipmentPlan::class);
+        $this->mapCollectionObject($namespace . 'PrepDetailsList', $namespace . 'PrepDetails', Types\PrepDetails::class);
         $this->mapCollectionObject($namespace . 'ShipmentData', $namespace . 'member', Types\InboundShipmentInfo::class);
     }
 
@@ -53,11 +58,9 @@ class XmlService extends \Sabre\Xml\Service
      */
     protected function createClosure($namespace, $className): Closure
     {
-        $namespace = trim($namespace, '{}');
-
         return function(Reader $reader) use ($namespace, $className) {
             $object = new $className;
-            $values = \Sabre\Xml\Deserializer\keyValue($reader, $namespace);
+            $values = \Sabre\Xml\Deserializer\keyValue($reader, trim($namespace, '{}'));
 
             foreach ($values as $property => $value) {
                 if (property_exists($object, $property)) {

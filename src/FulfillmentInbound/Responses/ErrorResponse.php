@@ -7,7 +7,7 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 
 /**
- * Error handler.
+ * Error response object.
  */
 final class ErrorResponse implements ResponseInterface
 {

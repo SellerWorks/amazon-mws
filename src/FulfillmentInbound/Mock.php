@@ -26,6 +26,18 @@ class Mock extends AbstractClient implements FulfillmentInboundInterface
 	/**
 	 * {@inheritDoc}
 	 */
+    public function createInboundShipmentPlan(
+    	Requests\CreateInboundShipmentPlanRequest $request
+    ):  Responses\CreateInboundShipmentPlanResponse
+    {
+    	$xml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentPlanResponse.xml');
+
+		return $this->serializer->unserialize($xml);
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function listInboundShipments(
 	    Requests\ListInboundShipmentsRequest $request
 	):  Responses\ListInboundShipmentsResponse

@@ -7,7 +7,7 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 
 /**
- * List of inbound shipments.
+ * ListInboundShipments response object.
  */
 final class ListInboundShipmentsResponse implements ResponseInterface
 {

@@ -20,9 +20,9 @@ interface FulfillmentInboundInterface
      * @param  Requests\CreateInboundShipmentPlanRequest
      * @return Responses\CreateInboundShipmentPlanResponse
      */
-//    public function createInboundShipmentPlan(
-//    	Requests\CreateInboundShipmentPlanRequest $request
-//    ):  Responses\CreateInboundShipmentPlanResponse;
+    public function createInboundShipmentPlan(
+    	Requests\CreateInboundShipmentPlanRequest $request
+    ):  Responses\CreateInboundShipmentPlanResponse;
 
     /**
      * Creates an inbound shipment.

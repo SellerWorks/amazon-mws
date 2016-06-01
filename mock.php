@@ -9,17 +9,17 @@ use SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 $client = new Mock();
 
 /*
-// GetServiceStatusRequest
+// GetServiceStatus
 $response = $client->getServiceStatus();
 print_r($response);
 */
 
+/*
+// ListInboundShipments
+$response = $client->listInboundShipments(new Requests\ListInboundShipmentsRequest);
+print_r($response);
+*/
 
-// ListInboundShipmentsRequest
-$request = new Requests\ListInboundShipmentsRequest;
-$request->ShipmentStatusList = ['CLOSED'];
-$request->LastUpdatedAfter  = new \DateTime('2016-05-01');
-$request->LastUpdatedBefore = new \DateTime('2016-05-10');
-
-$response = $client->listInboundShipments($request);
+// CreateInboundShipmentPlan
+$response = $client->createInboundShipmentPlan(new Requests\CreateInboundShipmentPlanRequest);
 print_r($response);
