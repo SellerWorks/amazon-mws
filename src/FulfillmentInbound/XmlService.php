@@ -16,12 +16,46 @@ use SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 class XmlService extends \Sabre\Xml\Service
 {
     /**
+     * @const string
+     */
+    const NS = '{http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/}';
+
+    /**
+     * Configure elementMap based on $input type.
+     *
+     * {@inheritDoc}
+     */
+    public function parse($input, $contentUri = null, &$rootElementName = null)
+    {
+        // 
+        
+
+        return parent::parse($input);
+    }
+
+    /**
      * Add all objects to the service.
      */
     public function __construct()
     {
         $namespace = '{http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/}';
+/*
 
+        $this->elementMap = [];
+        $this->elementMap[$namespace . 'GetServiceStatusResponse'] = function(Reader $reader) use ($namespace) {
+            $addMap = [
+                $namespace.'GetServiceStatusResult' => $this->createClosure($namespace, Types\GetServiceStatusResult::class)
+            ];
+
+            $reader->elementMap = array_merge($reader->elementMap, $addMap);
+
+            return \Sabre\Xml\Deserializer\valueObject($reader, Responses\GetServiceStatusResponse::class, $namespace);
+        };
+*/
+
+
+
+/*
         // Response objects.
         $this->mapImmutableObject($namespace . 'CreateInboundShipmentPlanResponse', Responses\CreateInboundShipmentPlanResponse::class);
         $this->mapImmutableObject($namespace . 'GetServiceStatusResponse', Responses\ErrorResponse::class);
@@ -47,9 +81,15 @@ class XmlService extends \Sabre\Xml\Service
         $this->mapCollectionObject($namespace . 'InboundShipmentPlans', $namespace . 'member', Types\InboundShipmentPlan::class);
         $this->mapCollectionObject($namespace . 'PrepDetailsList', $namespace . 'PrepDetails', Types\PrepDetails::class);
         $this->mapCollectionObject($namespace . 'ShipmentData', $namespace . 'member', Types\InboundShipmentInfo::class);
+*/
     }
 
-    /**
+    protected function mapCreateInboundShipmentPlanResponse(): Closure
+    {
+        
+    }
+
+   /**
      * Create a closer for returning an immutable object.
      *
      * @param  string $namespace
@@ -73,6 +113,17 @@ class XmlService extends \Sabre\Xml\Service
             return $object;
         };
     }
+
+/*
+    protected function createCollectionClosure($elementName, $childElementName, $className): Closure
+    {
+        list($namespace) = self::parseClarkNotation($elementName);
+
+        return function(Reader $reader) use ($childElementName, $className, $namespace) {
+            
+        };
+    }
+*/
 
     /**
      * Map an immutable object into the xml service map.
