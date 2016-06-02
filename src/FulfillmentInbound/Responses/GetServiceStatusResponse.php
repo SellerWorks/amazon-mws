@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 
-use SellerWorks\Amazon\MWS\Common\ResponseInterface;
+use Sabre\Xml\Reader;
+use Sabre\Xml\XmlDeserializable;
+use SellerWorks\Amazon\MWS\Common\AbstractResponse;
 
 /**
  * GetServiceStatus response object.
  */
-final class GetServiceStatusResponse implements ResponseInterface
+final class GetServiceStatusResponse implements ResponseInterface, XmlDeserializable
 {
     /**
      * @var GetServiceStatusResult

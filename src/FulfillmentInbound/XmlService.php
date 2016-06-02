@@ -18,41 +18,34 @@ class XmlService extends \Sabre\Xml\Service
     /**
      * @const string
      */
-    const NS = '{http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/}';
-
-    /**
-     * Configure elementMap based on $input type.
-     *
-     * {@inheritDoc}
-     */
-    public function parse($input, $contentUri = null, &$rootElementName = null)
-    {
-        // 
-        
-
-        return parent::parse($input);
-    }
+    const NS = 'http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/';
 
     /**
      * Add all objects to the service.
      */
     public function __construct()
     {
-        $namespace = '{http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/}';
-/*
+        $namespace = sprintf('{%s}', static::NS);
 
-        $this->elementMap = [];
-        $this->elementMap[$namespace . 'GetServiceStatusResponse'] = function(Reader $reader) use ($namespace) {
-            $addMap = [
-                $namespace.'GetServiceStatusResult' => $this->createClosure($namespace, Types\GetServiceStatusResult::class)
-            ];
+        $this->elementMap = [
+            // Response objects.
+            "{$namespace}GetServiceStatusResponse" => $this->mapObject(Responses\GetServiceStatusResponse::class),
+            "{$namespace}ListInboundShipmentsResponse" => $this->mapObject(Responses\ListInboundShipmentsResponse::class),
 
-            $reader->elementMap = array_merge($reader->elementMap, $addMap);
 
-            return \Sabre\Xml\Deserializer\valueObject($reader, Responses\GetServiceStatusResponse::class, $namespace);
-        };
-*/
+            // Response objects.
+            "{$namespace}GetServiceStatusResult" => $this->mapObject(Types\GetServiceStatusResult::class),
+            "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Types\ListInboundShipmentsResult::class),
 
+
+            // Collection objects.
+            "{$namespace}ShipmentData" => $this->mapCollectionObject("{$namespace}member", Types\InboundShipmentInfo::class),
+
+
+            // Type objects.
+            "{$namespace}ResponseMetadata" => $this->mapObject(Types\ResponseMetadata::class),
+            "{$namespace}ShipFromAddress" => $this->mapObject(Types\Address::class),
+        ];
 
 
 /*
@@ -84,23 +77,20 @@ class XmlService extends \Sabre\Xml\Service
 */
     }
 
-    protected function mapCreateInboundShipmentPlanResponse(): Closure
-    {
-        
-    }
-
-   /**
-     * Create a closer for returning an immutable object.
+    /**
+     * Return new object by closure.
      *
      * @param  string $namespace
      * @param  string $className
      * @return Closure
      */
-    protected function createClosure($namespace, $className): Closure
+    protected function mapObject(string $className): Closure
     {
+        $namespace = static::NS;
+
         return function(Reader $reader) use ($namespace, $className) {
             $object = new $className;
-            $values = \Sabre\Xml\Deserializer\keyValue($reader, trim($namespace, '{}'));
+            $values = \Sabre\Xml\Deserializer\keyValue($reader, $namespace);
 
             foreach ($values as $property => $value) {
                 if (property_exists($object, $property)) {
@@ -114,49 +104,20 @@ class XmlService extends \Sabre\Xml\Service
         };
     }
 
-/*
-    protected function createCollectionClosure($elementName, $childElementName, $className): Closure
-    {
-        list($namespace) = self::parseClarkNotation($elementName);
-
-        return function(Reader $reader) use ($childElementName, $className, $namespace) {
-            
-        };
-    }
-*/
-
     /**
-     * Map an immutable object into the xml service map.
+     * Return new collection by closure.
      *
-     * @param  string $elementName
-     * @param  string $className
-     * @return void
-     */
-    protected function mapImmutableObject($elementName, $className)
-    {
-        list($namespace) = self::parseClarkNotation($elementName);
-
-        $this->elementMap[$elementName] = $this->createClosure($namespace, $className);
-    }
-
-    /**
-     * Map a collection into the xml service map.
-     *
-     * @param  string $elementName
      * @param  string $childElementName
      * @param  string $className
-     * @return void
+     * @return Closure
      */
-    protected function mapCollectionObject($elementName, $childElementName, $className)
+    protected function mapCollectionObject(string $childElementName, string $className): Closure
     {
-        list($namespace) = self::parseClarkNotation($elementName);
+        $namespace = static::NS;
 
-        $this->elementMap[$elementName] = function(Reader $reader) use ($childElementName, $className, $namespace) {
-            // Temporary element map.
+        return function(Reader $reader) use ($childElementName, $className, $namespace) {
             $elementMap = $reader->elementMap;
-            $elementMap[$childElementName] = $this->createClosure($namespace, $className);
-
-            // Variation of Sabre\Xml\Deserializer\repeatingElements.
+            $elementMap[$childElementName] = $this->mapObject($className);
             $result = [];
 
             foreach ($reader->parseGetElements($elementMap) as $element) {
@@ -168,4 +129,20 @@ class XmlService extends \Sabre\Xml\Service
             return $result;
         };
     }
+
+    /**
+     * Map an immutable object into the xml service map.
+     *
+     * @param  string $elementName
+     * @param  string $className
+     * @return void
+     */
+/*
+    protected function mapImmutableObject($elementName, $className)
+    {
+        list($namespace) = self::parseClarkNotation($elementName);
+
+        $this->elementMap[$elementName] = $this->createClosure($namespace, $className);
+    }
+*/
 }

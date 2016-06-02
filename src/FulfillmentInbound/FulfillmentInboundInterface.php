@@ -87,7 +87,9 @@ interface FulfillmentInboundInterface
      * @param  Requests\ListInboundShipmentsRequest
      * @return Responses\ListInboundShipmentsResponse
      */
-    public function listInboundShipments(Requests\ListInboundShipmentsRequest $request): Responses\ListInboundShipmentsResponse;
+    public function listInboundShipments(
+        Requests\ListInboundShipmentsRequest $request
+    ):  Responses\ListInboundShipmentsResponse;
 
     /**
      * Returns the next page of inbound shipments using the NextToken parameter.
@@ -97,7 +99,9 @@ interface FulfillmentInboundInterface
      * @param  Requests\ListInboundShipmentsByNextTokenRequest
      * @return Responses\ListInboundShipmentsByNextTokenResponse
      */
-//    public function listInboundShipmentsByNextToken(Requests\ListInboundShipmentsByNextTokenRequest $request): Responses\ListInboundShipmentsByNextTokenResponse;
+    public function listInboundShipmentsByNextToken(
+        Requests\ListInboundShipmentsByNextTokenRequest $request
+    ):  Responses\ListInboundShipmentsByNextTokenResponse;
 
     /**
      * Returns a list of items in a specified inbound shipment, or a list of items that were updated within a specified time frame.
@@ -107,7 +111,11 @@ interface FulfillmentInboundInterface
      * @param  Requests\ListInboundShipmentItemsRequest
      * @return Responses\ListInboundShipmentItemsResponse
      */
-//    public function listInboundShipmentItems(Requests\ListInboundShipmentItemsRequest $request): Responses\ListInboundShipmentItemsResponse;
+/*
+    public function listInboundShipmentItems(
+        Requests\ListInboundShipmentItemsRequest $request
+    ):  Responses\ListInboundShipmentItemsResponse;
+*/
 
     /**
      * Returns the next page of inbound shipment items using the NextToken parameter.
@@ -117,7 +125,11 @@ interface FulfillmentInboundInterface
      * @param  Requests\ListInboundShipmentItemsByNextTokenRequest
      * @return Responses\ListInboundShipmentItemsByNextTokenResponse
      */
-//    public function listInboundShipmentItemsByNextToken(Requests\ListInboundShipmentItemsByNextTokenRequest $request): Responses\ListInboundShipmentItemsByNextTokenResponse;
+/*
+    public function listInboundShipmentItemsByNextToken(
+        Requests\ListInboundShipmentItemsByNextTokenRequest $request
+    ):  Responses\ListInboundShipmentItemsByNextTokenResponse;
+*/
 
     /**
      * Returns the operational status of the Fulfillment Inbound Shipment API section.

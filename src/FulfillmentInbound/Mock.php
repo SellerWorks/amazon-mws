@@ -10,7 +10,7 @@ use SellerWorks\Amazon\MWS\Common\Passport;
 /**
  * Mock client for unit testing.
  */
-class Mock extends AbstractClient implements FulfillmentInboundInterface
+class Mock extends AbstractClient // implements FulfillmentInboundInterface
 {
     const MWS_VERSION   = '2010-10-01';
     const MWS_PATH      = '/FulfillmentInboundShipment/2010-10-01/';
@@ -43,6 +43,18 @@ class Mock extends AbstractClient implements FulfillmentInboundInterface
 	):  Responses\ListInboundShipmentsResponse
 	{
     	$xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentsResponse.xml');
+
+		return $this->serializer->unserialize($xml);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public function listInboundShipmentsByNextToken(
+        Requests\ListInboundShipmentsByNextTokenRequest $request
+    ):  Responses\ListInboundShipmentsByNextTokenResponse
+	{
+    	$xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentsByNextTokenResponse.xml');
 
 		return $this->serializer->unserialize($xml);
 	}
