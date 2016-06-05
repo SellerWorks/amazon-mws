@@ -13,4 +13,28 @@ use SellerWorks\Amazon\MWS\Common\RequestInterface;
  */
 final class CreateInboundShipmentPlanRequest implements RequestInterface
 {
+	/**
+	 * @var SellerWorks\Amazon\MWS\FulfillmentInbound\Types\Address
+	 */
+	public $ShipFromAddress;
+
+	/**
+	 * @var string
+	 */
+	public $ShipToCountryCode;
+
+	/**
+	 * @var string
+	 */
+	public $ShipToCountrySubdivisionCode;
+
+	/**
+	 * @var string
+	 */
+	public $LabelPrepPreference;
+
+	/**
+	 * @var ArrayCollection<SellerWorks\Amazon\MWS\FulfillmentInbound\Types\InboundShipmentPlanRequestItem>
+	 */
+	public $InboundShipmentPlanRequestItems;
 }

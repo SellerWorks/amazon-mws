@@ -25,5 +25,5 @@ interface SerializerInterface
      * @param  string  $response
      * @return ResponseInterface
      */
-    public function unserialize(string $response); //: ResponseInterface;
+    public function unserialize(string $response): ResponseInterface;
 }

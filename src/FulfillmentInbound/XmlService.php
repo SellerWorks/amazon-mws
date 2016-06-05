@@ -29,58 +29,57 @@ class XmlService extends \Sabre\Xml\Service
 
         $this->elementMap = [
             // Response objects.
+            "{$namespace}CreateInboundShipmentPlanResponse" => $this->mapObject(Responses\CreateInboundShipmentPlanResponse::class),
+            "{$namespace}CreateInboundShipmentResponse" => $this->mapObject(Responses\CreateInboundShipmentResponse::class),
+            "{$namespace}GetPrepInstructionsForASINResponse" => $this->mapObject(Responses\GetPrepInstructionsForASINResponse::class),
+            "{$namespace}GetPrepInstructionsForSKUResponse" => $this->mapObject(Responses\GetPrepInstructionsForSKUResponse::class),
             "{$namespace}GetServiceStatusResponse" => $this->mapObject(Responses\GetServiceStatusResponse::class),
+            "{$namespace}ListInboundShipmentItemsResponse" => $this->mapObject(Responses\ListInboundShipmentItemsResponse::class),
             "{$namespace}ListInboundShipmentsResponse" => $this->mapObject(Responses\ListInboundShipmentsResponse::class),
+            "{$namespace}UpdateInboundShipmentResponse" => $this->mapObject(Responses\UpdateInboundShipmentResponse::class),
 
 
-            // Response objects.
+            // Result objects.
+            "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Types\CreateInboundShipmentPlanResult::class),
+            "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Types\CreateInboundShipmentResult::class),
             "{$namespace}GetServiceStatusResult" => $this->mapObject(Types\GetServiceStatusResult::class),
+            "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Types\GetPrepInstructionsForASINResult::class),
+            "{$namespace}GetPrepInstructionsForSKUResult" => $this->mapObject(Types\GetPrepInstructionsForSKUResult::class),
+            "{$namespace}ListInboundShipmentItemsResult" => $this->mapObject(Types\ListInboundShipmentItemsResult::class),
             "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Types\ListInboundShipmentsResult::class),
+            "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Types\UpdateInboundShipmentResult::class),
 
 
             // Collection objects.
+            "{$namespace}ASINPrepInstructionsList" => $this->mapCollectionObject("{$namespace}ASINPrepInstructions", Types\ASINPrepInstructions::class),
+//            "{$namespace}AmazonPrepFeesDetailsList" => $this->mapCollectionObject("{$namespace}AmazonPrepFeesDetails", Types\AmazonPrepFeesDetails::class),
+            "{$namespace}ItemData" => $this->mapCollectionObject("{$namespace}member", Types\InboundShipmentItem::class),
+            "{$namespace}InboundShipmentPlans" => $this->mapCollectionObject("{$namespace}member", Types\InboundShipmentPlan::class),
+            "{$namespace}InvalidASINList" => $this->mapCollectionObject("{$namespace}InvalidASIN", Types\InvalidASIN::class),
+            "{$namespace}InvalidSKUList" => $this->mapCollectionObject("{$namespace}InvalidSKU", Types\InvalidSKU::class),
+            "{$namespace}Items" => $this->mapCollectionObject("{$namespace}member", Types\InboundShipmentPlanItem::class),
+            "{$namespace}PrepDetailsList" => $this->mapCollectionObject("{$namespace}PrepDetails", Types\PrepDetails::class),
             "{$namespace}ShipmentData" => $this->mapCollectionObject("{$namespace}member", Types\InboundShipmentInfo::class),
+            "{$namespace}SKUPrepInstructionsList" => $this->mapCollectionObject("{$namespace}SKUPrepInstructions", Types\SKUPrepInstructions::class),
 
 
             // Type objects.
+            "{$namespace}Amount" => $this->mapObject(Types\Amount::class),
             "{$namespace}ResponseMetadata" => $this->mapObject(Types\ResponseMetadata::class),
             "{$namespace}ShipFromAddress" => $this->mapObject(Types\Address::class),
+            "{$namespace}ShipToAddress" => $this->mapObject(Types\Address::class),
+
+
+            // Lists.
+            "{$namespace}PrepInstructionList" => function(Reader $reader) use ($namespace) {
+                return \Sabre\Xml\Deserializer\repeatingElements($reader, "{$namespace}PrepInstruction");
+            },
         ];
-
-
-/*
-        // Response objects.
-        $this->mapImmutableObject($namespace . 'CreateInboundShipmentPlanResponse', Responses\CreateInboundShipmentPlanResponse::class);
-        $this->mapImmutableObject($namespace . 'GetServiceStatusResponse', Responses\ErrorResponse::class);
-        $this->mapImmutableObject($namespace . 'ErrorResponse', Responses\ErrorResponse::class);
-        $this->mapImmutableObject($namespace . 'GetServiceStatusResponse', Responses\GetServiceStatusResponse::class);
-        $this->mapImmutableObject($namespace . 'ListInboundShipmentsResponse', Responses\ListInboundShipmentsResponse::class);
-
-
-        // Result objects.
-        $this->mapImmutableObject($namespace . 'CreateInboundShipmentPlanResult', Types\CreateInboundShipmentPlanResult::class);
-        $this->mapImmutableObject($namespace . 'GetServiceStatusResult', Types\GetServiceStatusResult::class);
-        $this->mapImmutableObject($namespace . 'ListInboundShipmentsResult', Types\ListInboundShipmentsResult::class);
-
-
-        // Type objects.
-        $this->mapImmutableObject($namespace . 'Error', Types\Error::class);
-        $this->mapImmutableObject($namespace . 'ResponseMetadata', Types\ResponseMetadata::class);
-        $this->mapImmutableObject($namespace . 'ShipFromAddress', Types\Address::class);
-        $this->mapImmutableObject($namespace . 'PrepDetails', Types\PrepDetails::class);
-
-
-        // Collection objects.
-        $this->mapCollectionObject($namespace . 'InboundShipmentPlans', $namespace . 'member', Types\InboundShipmentPlan::class);
-        $this->mapCollectionObject($namespace . 'PrepDetailsList', $namespace . 'PrepDetails', Types\PrepDetails::class);
-        $this->mapCollectionObject($namespace . 'ShipmentData', $namespace . 'member', Types\InboundShipmentInfo::class);
-*/
     }
 
     /**
      * Return new object by closure.
      *
-     * @param  string $namespace
      * @param  string $className
      * @return Closure
      */
@@ -129,20 +128,4 @@ class XmlService extends \Sabre\Xml\Service
             return $result;
         };
     }
-
-    /**
-     * Map an immutable object into the xml service map.
-     *
-     * @param  string $elementName
-     * @param  string $className
-     * @return void
-     */
-/*
-    protected function mapImmutableObject($elementName, $className)
-    {
-        list($namespace) = self::parseClarkNotation($elementName);
-
-        $this->elementMap[$elementName] = $this->createClosure($namespace, $className);
-    }
-*/
 }

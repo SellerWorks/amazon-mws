@@ -61,10 +61,11 @@ class Serializer implements SerializerInterface
     /**
      * {@inheritDoc}
      */
-    public function unserialize(string $response) //: ResponseInterface
+    public function unserialize(string $response): ResponseInterface
     {
-        // Normalize response.
-//        $response = str_replace('RequestID>', 'RequestId>', $response);
+        // Configure serializer by 
+
+
 
         return $this->xmlService->parse($response);
     }

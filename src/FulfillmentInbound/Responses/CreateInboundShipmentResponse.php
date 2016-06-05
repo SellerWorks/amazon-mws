@@ -7,14 +7,14 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 
 /**
- * GetServiceStatus response object.
+ * CreateInboundShipmentPlan response object.
  */
-final class GetServiceStatusResponse implements ResponseInterface
+final class CreateInboundShipmentResponse implements ResponseInterface
 {
     /**
-     * @var GetServiceStatusResult
+     * @var CreateInboundShipmentResult
      */
-    public $GetServiceStatusResult;
+    public $CreateInboundShipmentResult;
 
     /**
      * @var ResponseMetadata

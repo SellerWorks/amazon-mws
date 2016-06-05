@@ -21,7 +21,7 @@ interface FulfillmentInboundInterface
      * @return Responses\CreateInboundShipmentPlanResponse
      */
     public function createInboundShipmentPlan(
-    	Requests\CreateInboundShipmentPlanRequest $request
+        Requests\CreateInboundShipmentPlanRequest $request
     ):  Responses\CreateInboundShipmentPlanResponse;
 
     /**
@@ -32,9 +32,9 @@ interface FulfillmentInboundInterface
      * @param  Requests\CreateInboundShipmentRequest
      * @return Responses\CreateInboundShipmentResponse
      */
-//    public function createInboundShipment(
-//		Requests\CreateInboundShipmentRequest $request
-//	):  Responses\CreateInboundShipmentResponse;
+    public function createInboundShipment(
+        Requests\CreateInboundShipmentRequest $request
+    ):  Responses\CreateInboundShipmentResponse;
 
     /**
      * Updates an existing inbound shipment.
@@ -44,7 +44,9 @@ interface FulfillmentInboundInterface
      * @param  Requests\UpdateInboundShipmentRequest
      * @return Responses\UpdateInboundShipmentResponse
      */
-//    public function updateInboundShipment(Requests\UpdateInboundShipmentRequest $request): Responses\UpdateInboundShipmentResponse;
+    public function updateInboundShipment(
+        Requests\UpdateInboundShipmentRequest $request
+    ):  Responses\UpdateInboundShipmentResponse;
 
     // GetPreorderInfo
     // ConfirmPreorder
@@ -57,7 +59,9 @@ interface FulfillmentInboundInterface
      * @param  Requests\GetPrepInstructionsForSKURequest
      * @return Responses\GetPrepInstructionsForSKUResponse
      */
-//    public function getPrepInstructionsForSKU(Requests\GetPrepInstructionsForSKURequest $request): Responses\GetPrepInstructionsForSKUResponse;
+    public function getPrepInstructionsForSKU(
+        Requests\GetPrepInstructionsForSKURequest $request
+    ):  Responses\GetPrepInstructionsForSKUResponse;
 
     /**
      * Returns item preparation instructions to help with item sourcing decisions.
@@ -67,7 +71,9 @@ interface FulfillmentInboundInterface
      * @param  Requests\GetPrepInstructionsForASINRequest
      * @return Responses\GetPrepInstructionsForASINResponse
      */
-//    public function GetPrepInstructionsForASIN(Requests\GetPrepInstructionsForASINRequest $request): Responses\GetPrepInstructionsForASINResponse;
+    public function GetPrepInstructionsForASIN(
+        Requests\GetPrepInstructionsForASINRequest $request
+    ):  Responses\GetPrepInstructionsForASINResponse;
     
     // PutTransportContent
     // EstimateTransportRequest
@@ -96,12 +102,10 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentsByNextToken.html
      *
-     * @param  Requests\ListInboundShipmentsByNextTokenRequest
-     * @return Responses\ListInboundShipmentsByNextTokenResponse
+     * @param  string $token
+     * @return Responses\ListInboundShipmentsResponse
      */
-    public function listInboundShipmentsByNextToken(
-        Requests\ListInboundShipmentsByNextTokenRequest $request
-    ):  Responses\ListInboundShipmentsByNextTokenResponse;
+//     public function listInboundShipmentsByNextToken(string $token): Responses\ListInboundShipmentsResponse;
 
     /**
      * Returns a list of items in a specified inbound shipment, or a list of items that were updated within a specified time frame.
@@ -111,11 +115,9 @@ interface FulfillmentInboundInterface
      * @param  Requests\ListInboundShipmentItemsRequest
      * @return Responses\ListInboundShipmentItemsResponse
      */
-/*
     public function listInboundShipmentItems(
         Requests\ListInboundShipmentItemsRequest $request
     ):  Responses\ListInboundShipmentItemsResponse;
-*/
 
     /**
      * Returns the next page of inbound shipment items using the NextToken parameter.

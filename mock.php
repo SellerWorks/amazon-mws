@@ -8,9 +8,11 @@ use SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 
 $client = new Mock();
 
+/*
 // GetServiceStatus
 $response = $client->getServiceStatus();
 print_r($response);
+*/
 
 /*
 // ListInboundShipments
@@ -23,3 +25,32 @@ print_r($response);
 $response = $client->createInboundShipmentPlan(new Requests\CreateInboundShipmentPlanRequest);
 print_r($response);
 */
+
+/*
+// CreateInboundShipment
+$response = $client->createInboundShipment(new Requests\CreateInboundShipmentRequest);
+print_r($response);
+*/
+
+/*
+// UpdateInboundShipment
+$response = $client->updateInboundShipment(new Requests\UpdateInboundShipmentRequest);
+print_r($response);
+*/
+
+/*
+// GetPrepInstructionsForSKU
+$response = $client->GetPrepInstructionsForSKU(new Requests\GetPrepInstructionsForSKURequest);
+print_r($response);
+*/
+
+/*
+// GetPrepInstructionsForASIN
+$response = $client->GetPrepInstructionsForASIN(new Requests\GetPrepInstructionsForASINRequest);
+print_r($response);
+*/
+
+
+// ListInboundShipmentItems
+$response = $client->ListInboundShipmentItems(new Requests\ListInboundShipmentItemsRequest);
+print_r($response);
