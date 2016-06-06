@@ -11,9 +11,20 @@ require 'vendor/autoload.php'
 use SellerWorks\Amazon\MWS\Common\Passport;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Client;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
+use SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 
 $passport  = new Passport(AMAZON_SELLER_ID, MWS_ACCESS_KEY, MWS_SECRET_KEY, OPTIONAL_MWS_AUTH_TOKEN);
 $mwsClient = new Client($passport);
-$response  = $mwsClient->GetServiceStatus();
+
+// Check service status
+$response = $mwsClient->GetServiceStatus();
+
+// Check for open shipments
+$request = new Requests\ListInboundShipmentsRequest;
+$request->ShipmentStatusList = [
+    Types\ShipmentStatus::SHIPPED,
+];
+
+$response = $mwsClient->ListInboundShipments($request);
 ```
 The XML returned by the webservice is marshalled into PHP objects specific to the API.
