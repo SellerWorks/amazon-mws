@@ -49,7 +49,7 @@ class Serializer implements SerializerInterface
                 break;
 
             default:
-                throw new UnexpectedValueException(__CLASS__ . ' is not supported.');
+                throw new UnexpectedValueException(getType($request) . ' is not supported.');
         }
 
         // Add properties.
@@ -63,10 +63,6 @@ class Serializer implements SerializerInterface
      */
     public function unserialize(string $response): ResponseInterface
     {
-        // Configure serializer by 
-
-
-
         return $this->xmlService->parse($response);
     }
 
