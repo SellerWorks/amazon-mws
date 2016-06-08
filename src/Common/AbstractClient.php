@@ -12,11 +12,17 @@ use RuntimeException;
  * @author      Steve Nebes
  * @copyright   Copyright (c) 2016 SellerWorks (https://seller.works)
  */
-abstract class AbstractClient
+abstract class AbstractClient implements ClientInterface
 {
-	const MWS_VERSION   = '';
-	const MWS_PATH      = '';
-	const USER_AGENT    = 'SellerWorks Amazon MWS 2016.05';
+    /**
+     * Service definitions.
+     */
+	const MWS_PATH    = '';
+	const MWS_VERSION = '';
+
+    /**
+     * 
+	const USER_AGENT = 'SellerWorks Amazon MWS 2016.05';
 
     const REGION_US     = 'us';
     const REGION_UK     = 'uk';
