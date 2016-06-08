@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 
-use SellerWorks\Amazon\MWS\Common\RequestInterface;
+use SellerWorks\Amazon\MWS\Common\Requests\RequestInterface;
 
 /**
  * Returns the operational status of the Fulfillment Inbound Shipment API section.

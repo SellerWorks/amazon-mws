@@ -17,7 +17,7 @@ interface SerializerInterface
      * @param  RequestInterface  $request
      * @return array
      */
-    public function serialize(RequestInterface $request): array;
+    public function serialize(Requests\RequestInterface $request): array;
 
     /**
      * Deserialize response into objects.

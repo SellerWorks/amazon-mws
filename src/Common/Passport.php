@@ -21,7 +21,7 @@ final class Passport
         string $sellerId,
         string $accessKey,
         string $secretKey,
-        string $mwsAuthToken = null
+        string $mwsAuthToken = ''
     )
     {
         $this->sellerId     = $sellerId;

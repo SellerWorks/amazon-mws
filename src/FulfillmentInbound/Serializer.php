@@ -7,7 +7,7 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 use DateTimeInterface;
 use ReflectionClass;
 use ReflectionProperty;
-use SellerWorks\Amazon\MWS\Common\RequestInterface;
+use SellerWorks\Amazon\MWS\Common\Requests\RequestInterface;
 use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 use SellerWorks\Amazon\MWS\Common\SerializerInterface;
 

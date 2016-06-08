@@ -114,13 +114,23 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Make request to Amazon.
      *
-     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
-     * @return SellerWorks\Amazon\MWS\Common\ResponseInterface
+     * @param  SellerWorks\Amazon\MWS\Common\Requests\RequestInterface  $request
+     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
+     * @return ...
      */
-    protected function makeRequest(RequestInterface $request): ResponseInterface
+    protected function makeRequest(Requests\RequestInterface $request, Passport $passport = null)
     {
-        $response = $this->post($request);
-        echo $response;
+        $usePassport = $passport?: $this->passport;
+
+        if (!($usePassport instanceof Passport)) {
+            throw new RuntimeException('A valid Passport must be provided.');
+        }
+
+        $response = $this->post($request, $usePassport);
+
+
+
+
         print_r($this->serializer->unserialize($response));
         die;
     }
@@ -128,14 +138,15 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Post request to Amazon.
      *
-     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
+     * @param  SellerWorks\Amazon\MWS\Common\Requests\RequestInterface  $request
+     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
      * @return string
      */
-    protected function post(RequestInterface $request): string
+    protected function post(Requests\RequestInterface $request, Passport $passport): string
     {
-        $url = sprintf('https://%s/%s', $this->host, trim(static::MWS_PATH, '/'));
-        $qs  = $this->buildQuery($request);
-        
+        $url = sprintf('%s/%s', $this->host, trim(static::MWS_PATH, '/'));
+        $qs  = $this->buildQuery($request, $passport);
+
         $headers = [
             'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
             'Expect: ',
@@ -162,17 +173,17 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Return dot-notation query of request.
      *
-     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
+     * @param  SellerWorks\Amazon\MWS\Common\Requests\RequestInterface  $request
+     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
      * @return array
      */
-    protected function buildQuery(RequestInterface $request): string
+    protected function buildQuery(Requests\RequestInterface $request, Passport $passport): string
     {
         if (!($this->serializer instanceof SerializerInterface)) {
             throw new RuntimeException('Serializer must be configured.');
         }
 
         $parameters = $this->serializer->serialize($request);
-        print_r($parameters);
 
         // Add authentication params.
         $parameters['SellerId']       = $this->passport->getSellerId();

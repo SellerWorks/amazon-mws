@@ -16,8 +16,8 @@ use SellerWorks\Amazon\MWS\Common\Passport;
  */
 class Client extends AbstractClient implements FulfillmentInboundInterface
 {
-    const MWS_VERSION   = '2010-10-01';
-    const MWS_PATH      = '/FulfillmentInboundShipment/2010-10-01/';
+    const MWS_VERSION = '2010-10-01';
+    const MWS_PATH    = '/FulfillmentInboundShipment/2010-10-01/';
 
     /**
      * {@inheritDoc}
