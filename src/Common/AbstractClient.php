@@ -5,34 +5,33 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\Common;
 
 use RuntimeException;
+use UnexpectedValueException;
 
 /**
  * Abstract Amazon MWS API Client
  *
- * @author      Steve Nebes
- * @copyright   Copyright (c) 2016 SellerWorks (https://seller.works)
+ * @author Steve Nebes <snebes@gmail.com>
  */
 abstract class AbstractClient implements ClientInterface
 {
-    /**
-     * Service definitions.
-     */
-	const MWS_PATH    = '';
-	const MWS_VERSION = '';
-
-    /**
-     * 
-	const USER_AGENT = 'SellerWorks Amazon MWS 2016.05';
-
-    const REGION_US     = 'us';
-    const REGION_UK     = 'uk';
-    const REGION_CA     = 'ca';
-
 	/**
      * @var SellerWorks\Amazon\MWS\Common\Passport
      */
     protected $passport;
+
+    /**
+     * @var string
+     */
     protected $host;
+
+    /**
+     * @var string
+     */
+    protected $marketplaceId;
+
+    /**
+     * @var SerializerInterface
+     */
     protected $serializer;
 
     /**
@@ -45,11 +44,7 @@ abstract class AbstractClient implements ClientInterface
     {
         // Configure MWS.
         $this->setPassport($passport);
-        $this->setRegion(static::REGION_US);
-
-        // Internal configuration.
-        $this->maxRetries   = 3;
-        $this->restoreRate  = 60;
+        $this->setCountry(static::COUNTRY_US);
     }
 
     /**
@@ -65,28 +60,40 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * Set region information.
+     * Set country to use.
      *
-     * @param  string  $region
+     * @param  string  $countryCode
      * @return self
      */
-    public function setRegion(string $region): self
+    public function setCountry(string $countryCode): self
     {
-        switch ($region) {
-            case 'ca':
-                $this->host = 'mws.amazonservices.com';
-                break;
+        $countryInfo = [
+            // NA Region
+            static::COUNTRY_CA => ['host' => 'https://mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
+            static::COUNTRY_MX => ['host' => 'https://mws.amazonservices.com.mx', 'marketplaceId' => 'ATVPDKIKX0DER'],
+            static::COUNTRY_US => ['host' => 'https://mws.amazonservices.com',    'marketplaceId' => 'A1AM78C64UM0Y8'],
 
-            case 'uk':
-                $this->host = 'mws.amazonservices.co.uk';
-                break;
+            // EU Region
+            static::COUNTRY_DE => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
+            static::COUNTRY_ES => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
+            static::COUNTRY_FR => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
+            static::COUNTRY_IN => ['host' => 'https://mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
+            static::COUNTRY_IT => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
+            static::COUNTRY_UK => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
 
-            case 'us':
-                $this->host = 'mws.amazonservices.com';
-                break;
+            // FE Region
+            static::COUNTRY_JP => ['host' => 'https://mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
 
-            default:
-                throw new \UnexpectedValueException($region);
+            // CN Region
+            static::COUNTRY_CN => ['host' => 'https://mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
+        ];
+
+        if (array_key_exists($countryCode, $countryInfo)) {
+            $this->host = $countryInfo[$countryCode]['host'];
+            $this->marketplaceId = $countryInfo[$countryCode]['marketplaceId'];
+        }
+        else {
+            throw new UnexpectedValueException($countryCode);
         }
 
         return $this;
@@ -95,6 +102,7 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Set the Sabre\XML\Service object.
      *
+     * @param  SellerWorks\Amazon\MWS\Common\SerializerInterface $serializer
      * @return self
      */
     public function setSerializer(SerializerInterface $serializer): self
@@ -109,7 +117,7 @@ abstract class AbstractClient implements ClientInterface
      * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
      * @return SellerWorks\Amazon\MWS\Common\ResponseInterface
      */
-    public function makeRequest(RequestInterface $request): ResponseInterface
+    protected function makeRequest(RequestInterface $request): ResponseInterface
     {
         $response = $this->post($request);
         echo $response;
@@ -120,7 +128,7 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Post request to Amazon.
      *
-     * @param  RequestInterface  $request
+     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
      * @return string
      */
     protected function post(RequestInterface $request): string

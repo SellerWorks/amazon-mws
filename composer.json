@@ -1,5 +1,5 @@
 {
-    "name": "sellerworks/amazonmws",
+    "name": "sellerworks/amazon-mws",
     "type": "library",
     "description": "A PHP client for the Amazon Marketplace Web Services (MWS) API",
     "keywords": ["Amazon MWS", "SellerCentral"],
@@ -20,7 +20,7 @@
         "sabre/xml": "^1.4"
     },
     "suggest": {
-        "monolog/monolog": "For logging SOAP transactions"
+        "monolog/monolog": "For logging transactions"
     },
     "autoload": {
         "psr-4": {
