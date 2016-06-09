@@ -21,14 +21,4 @@ final class GetServiceStatusResponse implements ResponseInterface
      * @var ResponseMetadata
      */
     public $ResponseMetadata;
-
-    /**
-     * Return the "Result" object.
-     *
-     * @return ResultInterface
-     */
-    public function getResult(): ResultInterface
-    {
-        return $this->GetServiceStatusResult;
-    }
 }

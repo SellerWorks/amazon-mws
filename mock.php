@@ -20,11 +20,9 @@ $response = $client->listInboundShipments(new Requests\ListInboundShipmentsReque
 print_r($response);
 */
 
-/*
 // CreateInboundShipmentPlan
 $response = $client->createInboundShipmentPlan(new Requests\CreateInboundShipmentPlanRequest);
 print_r($response);
-*/
 
 /*
 // CreateInboundShipment
@@ -51,6 +49,8 @@ print_r($response);
 */
 
 
+/*
 // ListInboundShipmentItems
 $response = $client->ListInboundShipmentItems(new Requests\ListInboundShipmentItemsRequest);
 print_r($response);
+*/

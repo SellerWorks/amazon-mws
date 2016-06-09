@@ -41,7 +41,7 @@ class XmlService extends \Sabre\Xml\Service
 
 
             // Result objects.
-//             "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Results\CreateInboundShipmentPlanResult::class),
+             "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Results\CreateInboundShipmentPlanResult::class),
 //             "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Results\CreateInboundShipmentResult::class),
             "{$namespace}GetServiceStatusResult" => $this->mapObject(Results\GetServiceStatusResult::class),
 //             "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Results\GetPrepInstructionsForASINResult::class),

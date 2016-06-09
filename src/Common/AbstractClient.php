@@ -103,7 +103,7 @@ abstract class AbstractClient implements ClientInterface
      * @param  Passport  $passport
      * @return ResultInterface
      */
-    protected function makeRequest(RequestInterface $request, Passport $passport = null): ResultInterface
+    protected function makeRequest(RequestInterface $request, Passport $passport = null): ResponseInterface
     {
         $usePassport = $passport?: $this->passport;
 
@@ -111,12 +111,9 @@ abstract class AbstractClient implements ClientInterface
             throw new RuntimeException('A valid Passport must be provided.');
         }
 
-        $response     = $this->post($request, $usePassport);
-        $unserialized = $this->serializer->unserialize($response);
-        $result       = $unserialized->getResult();
+        $response = $this->post($request, $usePassport);
 
-        print_r($result);
-        die;
+        return $this->serializer->unserialize($response);
     }
 
     /**

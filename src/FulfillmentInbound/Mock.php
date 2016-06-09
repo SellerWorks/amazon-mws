@@ -27,12 +27,18 @@ class Mock extends AbstractClient // implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function createInboundShipmentPlan(
-        Requests\CreateInboundShipmentPlanRequest $request
-    ):  Responses\CreateInboundShipmentPlanResponse
+        Requests\CreateInboundShipmentPlanRequest $request,
+        Passport $passport = null
+    ):  Results\CreateInboundShipmentPlanResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentPlanResponse.xml');
+        $response = $this->serializer->unserialize($xml);
+        
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
 
-        return $this->serializer->unserialize($xml);
+        return $response->CreateInboundShipmentPlanResult;
     }
 
     /**

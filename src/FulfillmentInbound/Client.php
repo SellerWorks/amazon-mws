@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
+use Exception;
 use SellerWorks\Amazon\MWS\Common\AbstractClient;
+use SellerWorks\Amazon\MWS\Common\ResultInterface;
 use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
@@ -19,8 +21,8 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     /**
      * MWS Service definitions.
      */
-    const MWS_VERSION = '2010-10-01';
     const MWS_PATH    = '/FulfillmentInboundShipment/2010-10-01/';
+    const MWS_VERSION = '2010-10-01';
 
     /**
      * {@inheritDoc}
@@ -35,10 +37,17 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function createInboundShipmentPlan(
-        Requests\CreateInboundShipmentPlanRequest $request
-    ):  Responses\CreateInboundShipmentPlanResponse
+        Requests\CreateInboundShipmentPlanRequest $request,
+        Passport $passport = null
+    ):  Results\CreateInboundShipmentPlanResult
     {
-        return $this->makeRequest($request);
+        $response = $this->makeRequest($request, $passport);
+
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->CreateInboundShipmentPlanResult;
     }
 
     /**
@@ -104,8 +113,25 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     /**
      * {@inheritDoc}
      */
-    public function getServiceStatus(): Responses\GetServiceStatusResponse
+    public function getServiceStatus(): Results\GetServiceStatusResult
     {
-        return $this->makeRequest(new Requests\GetServiceStatusRequest);
+        $response = $this->makeRequest(new Requests\GetServiceStatusRequest);
+
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->GetServiceStatusResult;
+    }
+
+    /**
+     * Throw Endpoint-specific error.
+     *
+     * @param  ResponseInterface
+     * @throw  
+     */
+    protected function throwError(ResponseInterface $response)
+    {
+        throw new \Exception($response->Error->Message);
     }
 }

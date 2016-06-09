@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
+use SellerWorks\Amazon\MWS\Common\ResponseInterface;
+use SellerWorks\Amazon\MWS\Common\Passport;
+
 /**
  * Amazon MWS Fulfillment Inbound Shipment
  *
@@ -11,7 +14,6 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
  */
 interface FulfillmentInboundInterface
 {
-    const XML_NAMESPACE = '';
     /**
      * Returns the information required to create an inbound shipment.
      *
@@ -20,9 +22,10 @@ interface FulfillmentInboundInterface
      * @param  Requests\CreateInboundShipmentPlanRequest
      * @return Responses\CreateInboundShipmentPlanResponse
      */
-    public function createInboundShipmentPlan(
-        Requests\CreateInboundShipmentPlanRequest $request
-    ):  Responses\CreateInboundShipmentPlanResponse;
+    function createInboundShipmentPlan(
+        Requests\CreateInboundShipmentPlanRequest $request,
+        Passport $passport = null
+    ):  Results\CreateInboundShipmentPlanResult;
 
     /**
      * Creates an inbound shipment.
@@ -140,5 +143,5 @@ interface FulfillmentInboundInterface
      *
      * @return Responses\GetServiceStatusResponse
      */
-    public function getServiceStatus(): Responses\GetServiceStatusResponse;
+    public function getServiceStatus(): Results\GetServiceStatusResult;
 }
