@@ -6,47 +6,80 @@ namespace SellerWorks\Amazon\MWS\Common;
 
 /**
  * Amazon MWS Passport
- *
- * @author      Steve Nebes
- * @copyright   Copyright (c) 2016 SellerWorks (https://seller.works)
  */
 final class Passport
 {
-    private $sellerId;
-    private $accessKey;
-    private $secretKey;
-    private $mwsAuthToken;
+    /**
+     * @var string
+     */
+    private $SellerId;
 
+    /**
+     * @var string
+     */
+    private $AccessKey;
+
+    /**
+     * @var string
+     */
+    private $SecretKey;
+
+    /**
+     * @var string
+     */
+    private $MwsAuthToken;
+
+    /**
+     * Value object constructor.
+     *
+     * @param  string $SellerId
+     * @param  string $AccessKey
+     * @param  string $SecretKey
+     * @param  string $MwsAuthToken
+     * @return void
+     */
     public function __construct(
-        string $sellerId,
-        string $accessKey,
-        string $secretKey,
-        string $mwsAuthToken = ''
+        string $SellerId,
+        string $AccessKey,
+        string $SecretKey,
+        string $MwsAuthToken = ''
     )
     {
-        $this->sellerId     = $sellerId;
-        $this->accessKey    = $accessKey;
-        $this->secretKey    = $secretKey;
-        $this->mwsAuthToken = $mwsAuthToken;
+        $this->SellerId     = $SellerId;
+        $this->AccessKey    = $AccessKey;
+        $this->SecretKey    = $SecretKey;
+        $this->MwsAuthToken = $MwsAuthToken;
     }
 
+    /**
+     * @return string
+     */
     public function getSellerId(): string
     {
-        return $this->sellerId;
+        return $this->SellerId;
     }
 
+    /**
+     * @return string
+     */
     public function getAccessKey(): string
     {
-        return $this->accessKey;
+        return $this->AccessKey;
     }
 
+    /**
+     * @return string
+     */
     public function getSecretKey(): string
     {
-        return $this->secretKey;
+        return $this->SecretKey;
     }
 
+    /**
+     * @return string
+     */
     public function getMwsAuthToken(): string
     {
-        return $this->mwsAuthToken;
+        return $this->MwsAuthToken;
     }
 }

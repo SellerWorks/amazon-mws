@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 
 use SellerWorks\Amazon\MWS\Common\ResponseInterface;
+use SellerWorks\Amazon\MWS\Common\ResultInterface;
 
 /**
  * GetServiceStatus response object.
@@ -20,4 +21,14 @@ final class GetServiceStatusResponse implements ResponseInterface
      * @var ResponseMetadata
      */
     public $ResponseMetadata;
+
+    /**
+     * Return the "Result" object.
+     *
+     * @return ResultInterface
+     */
+    public function getResult(): ResultInterface
+    {
+        return $this->GetServiceStatusResult;
+    }
 }

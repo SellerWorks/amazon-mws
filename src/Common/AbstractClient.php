@@ -14,20 +14,18 @@ use UnexpectedValueException;
  */
 abstract class AbstractClient implements ClientInterface
 {
-	/**
-     * @var SellerWorks\Amazon\MWS\Common\Passport
+	use PassportTrait;
+
+    /**
+     * MWS Service definitions.
      */
-    protected $passport;
+	const MWS_PATH    = '';
+	const MWS_VERSION = '';
 
     /**
      * @var string
      */
     protected $host;
-
-    /**
-     * @var string
-     */
-    protected $marketplaceId;
 
     /**
      * @var SerializerInterface
@@ -40,23 +38,11 @@ abstract class AbstractClient implements ClientInterface
      * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
      * @return void
      */
-    public function __construct(Passport $passport)
+    public function __construct(Passport $passport = null)
     {
         // Configure MWS.
-        $this->setPassport($passport);
         $this->setCountry(static::COUNTRY_US);
-    }
-
-    /**
-     * Set Passport object to use.
-     *
-     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
-     * @return self
-     */
-    public function setPassport(Passport $passport): self
-    {
-        $this->passport = $passport;
-        return $this;
+        $this->setPassport($passport);
     }
 
     /**
@@ -90,7 +76,6 @@ abstract class AbstractClient implements ClientInterface
 
         if (array_key_exists($countryCode, $countryInfo)) {
             $this->host = $countryInfo[$countryCode]['host'];
-            $this->marketplaceId = $countryInfo[$countryCode]['marketplaceId'];
         }
         else {
             throw new UnexpectedValueException($countryCode);
@@ -114,11 +99,11 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Make request to Amazon.
      *
-     * @param  SellerWorks\Amazon\MWS\Common\Requests\RequestInterface  $request
-     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
-     * @return ...
+     * @param  RequestInterface  $request
+     * @param  Passport  $passport
+     * @return ResultInterface
      */
-    protected function makeRequest(Requests\RequestInterface $request, Passport $passport = null)
+    protected function makeRequest(RequestInterface $request, Passport $passport = null): ResultInterface
     {
         $usePassport = $passport?: $this->passport;
 
@@ -126,23 +111,22 @@ abstract class AbstractClient implements ClientInterface
             throw new RuntimeException('A valid Passport must be provided.');
         }
 
-        $response = $this->post($request, $usePassport);
+        $response     = $this->post($request, $usePassport);
+        $unserialized = $this->serializer->unserialize($response);
+        $result       = $unserialized->getResult();
 
-
-
-
-        print_r($this->serializer->unserialize($response));
+        print_r($result);
         die;
     }
 
     /**
      * Post request to Amazon.
      *
-     * @param  SellerWorks\Amazon\MWS\Common\Requests\RequestInterface  $request
+     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
      * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
      * @return string
      */
-    protected function post(Requests\RequestInterface $request, Passport $passport): string
+    protected function post(RequestInterface $request, Passport $passport): string
     {
         $url = sprintf('%s/%s', $this->host, trim(static::MWS_PATH, '/'));
         $qs  = $this->buildQuery($request, $passport);
@@ -173,11 +157,11 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Return dot-notation query of request.
      *
-     * @param  SellerWorks\Amazon\MWS\Common\Requests\RequestInterface  $request
+     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
      * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
      * @return array
      */
-    protected function buildQuery(Requests\RequestInterface $request, Passport $passport): string
+    protected function buildQuery(RequestInterface $request, Passport $passport): string
     {
         if (!($this->serializer instanceof SerializerInterface)) {
             throw new RuntimeException('Serializer must be configured.');

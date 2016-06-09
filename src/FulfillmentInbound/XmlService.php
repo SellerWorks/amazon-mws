@@ -8,6 +8,7 @@ use Closure;
 use ReflectionProperty;
 use Sabre\Xml\Reader;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
+use SellerWorks\Amazon\MWS\FulfillmentInbound\Results;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 
 /**
@@ -40,14 +41,14 @@ class XmlService extends \Sabre\Xml\Service
 
 
             // Result objects.
-            "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Types\CreateInboundShipmentPlanResult::class),
-            "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Types\CreateInboundShipmentResult::class),
-            "{$namespace}GetServiceStatusResult" => $this->mapObject(Types\GetServiceStatusResult::class),
-            "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Types\GetPrepInstructionsForASINResult::class),
-            "{$namespace}GetPrepInstructionsForSKUResult" => $this->mapObject(Types\GetPrepInstructionsForSKUResult::class),
-            "{$namespace}ListInboundShipmentItemsResult" => $this->mapObject(Types\ListInboundShipmentItemsResult::class),
-            "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Types\ListInboundShipmentsResult::class),
-            "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Types\UpdateInboundShipmentResult::class),
+//             "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Results\CreateInboundShipmentPlanResult::class),
+//             "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Results\CreateInboundShipmentResult::class),
+            "{$namespace}GetServiceStatusResult" => $this->mapObject(Results\GetServiceStatusResult::class),
+//             "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Results\GetPrepInstructionsForASINResult::class),
+//             "{$namespace}GetPrepInstructionsForSKUResult" => $this->mapObject(Results\GetPrepInstructionsForSKUResult::class),
+//             "{$namespace}ListInboundShipmentItemsResult" => $this->mapObject(Results\ListInboundShipmentItemsResult::class),
+//             "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
+//            "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Results\UpdateInboundShipmentResult::class),
 
 
             // Collection objects.

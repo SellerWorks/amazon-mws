@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\Common;
 
+/**
+ * Interface for compatible serializers.
+ */
 interface SerializerInterface
 {
 	/**
@@ -17,7 +20,7 @@ interface SerializerInterface
      * @param  RequestInterface  $request
      * @return array
      */
-    public function serialize(Requests\RequestInterface $request): array;
+    public function serialize(RequestInterface $request): array;
 
     /**
      * Deserialize response into objects.

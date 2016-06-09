@@ -10,12 +10,6 @@ namespace SellerWorks\Amazon\MWS\Common;
 interface ClientInterface
 {
     /**
-     * MWS Service definitions.
-     */
-	const MWS_PATH    = '';
-	const MWS_VERSION = '';
-
-    /**
      * User-agent string for cURL.
      */
 	const USER_AGENT = 'SellerWorks Amazon MWS 2016.06';
