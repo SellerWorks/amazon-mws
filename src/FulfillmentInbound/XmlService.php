@@ -7,6 +7,8 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 use Closure;
 use ReflectionProperty;
 use Sabre\Xml\Reader;
+use SellerWorks\Amazon\MWS\Common\Responses\ErrorResponse;
+use SellerWorks\Amazon\MWS\Common\Results\Error;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Results;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
@@ -39,7 +41,7 @@ class XmlService extends \Sabre\Xml\Service
             "{$namespace}ListInboundShipmentsResponse" => $this->mapObject(Responses\ListInboundShipmentsResponse::class),
             "{$namespace}ListInboundShipmentsByNextTokenResponse" => $this->mapObject(Responses\ListInboundShipmentsByNextTokenResponse::class),
             "{$namespace}UpdateInboundShipmentResponse" => $this->mapObject(Responses\UpdateInboundShipmentResponse::class),
-            "{$namespace}ErrorResponse" => $this->mapObject(Responses\ErrorResponse::class),
+            "{$namespace}ErrorResponse" => $this->mapObject(ErrorResponse::class),
 
 
             // Result objects.
@@ -52,7 +54,7 @@ class XmlService extends \Sabre\Xml\Service
             "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
             "{$namespace}ListInboundShipmentsByNextTokenResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
 //           "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Results\UpdateInboundShipmentResult::class),
-            "{$namespace}Error" => $this->mapObject(Results\Error::class),
+            "{$namespace}Error" => $this->mapObject(Error::class),
 
 
             // Collection objects.

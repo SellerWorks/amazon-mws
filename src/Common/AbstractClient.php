@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\Common;
 
 use Error;
+use InvalidArgumentException;
 use RuntimeException;
-use UnexpectedValueException;
 
 /**
  * Abstract Amazon MWS API Client
@@ -87,7 +87,7 @@ abstract class AbstractClient implements ClientInterface
             $this->host = $countryInfo[$countryCode]['host'];
         }
         else {
-            throw new UnexpectedValueException($countryCode);
+            throw new InvalidArgumentException($countryCode);
         }
 
         return $this;
