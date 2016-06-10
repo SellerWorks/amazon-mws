@@ -47,6 +47,8 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
             return $this->throwError($response);
         }
 
+        $iterator = new RecordIterator($this, $response->CreateInboundShipmentPlanResult);
+
         return $response->CreateInboundShipmentPlanResult;
     }
 

@@ -3,12 +3,14 @@
 namespace SellerWorks\Amazon\MWS\Results;
 
 use Countable;
-use SeekableIterator;
+use Iterator;
+use SellerWorks\Amazon\MWS\Common\ClientInterface;
+use SellerWorks\Amazon\MWS\Common\ResultInterface;
 
 /**
- * Result iterator.
+ * Record iterator.
  */
-class ResultIterator implements SeekableIterator, Countable
+abstract class RecordIterator implements Countable, Iterator
 {
     /**
      * @var ClientInterface
@@ -21,11 +23,39 @@ class ResultIterator implements SeekableIterator, Countable
     protected $result;
 
     /**
+     * var string
+     */
+    protected $operation;
+
+    /**
      * @var int
      */
     protected $pointer = 0;
 
     /**
+     * @var ...
+     */
+    protected $current;
+
+    /**
+     * Constructor.
+     *
+     * @param  ClientInterface $client
+     * @param  IterableInterface $result
+     */
+    public function __construct(ClientInterface $client, IterableInterface $result)
+    {
+        $this->client = $client;
+        $this->result = $result;
+    }
+
+    /**
+     * Save the result set
+     *
+     * @param  Client $client
+     * @param  ResultInterface $result
+     */
+    abstract protected function setResult(ResultInterface $result);
 
     /**
      * SeekableIterator
