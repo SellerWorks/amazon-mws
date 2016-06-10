@@ -14,15 +14,15 @@ $response = $client->getServiceStatus();
 print_r($response);
 */
 
-/*
 // ListInboundShipments
 $response = $client->listInboundShipments(new Requests\ListInboundShipmentsRequest);
 print_r($response);
-*/
 
+/*
 // CreateInboundShipmentPlan
 $response = $client->createInboundShipmentPlan(new Requests\CreateInboundShipmentPlanRequest);
 print_r($response);
+*/
 
 /*
 // CreateInboundShipment

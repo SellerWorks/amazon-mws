@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
-use SellerWorks\Amazon\MWS\Common\ResponseInterface;
+use SellerWorks\Amazon\MWS\Common\RecordIterator;
 use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
@@ -19,8 +19,9 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_CreateInboundShipmentPlan.html
      *
-     * @param  Requests\CreateInboundShipmentPlanRequest
-     * @return Responses\CreateInboundShipmentPlanResponse
+     * @param  CreateInboundShipmentPlanRequest $request
+     * @param  Passport $passport
+     * @return CreateInboundShipmentPlanResponse
      */
     function createInboundShipmentPlan(
         Requests\CreateInboundShipmentPlanRequest $request,
@@ -35,7 +36,7 @@ interface FulfillmentInboundInterface
      * @param  Requests\CreateInboundShipmentRequest
      * @return Responses\CreateInboundShipmentResponse
      */
-    public function createInboundShipment(
+    function createInboundShipment(
         Requests\CreateInboundShipmentRequest $request
     ):  Responses\CreateInboundShipmentResponse;
 
@@ -47,7 +48,7 @@ interface FulfillmentInboundInterface
      * @param  Requests\UpdateInboundShipmentRequest
      * @return Responses\UpdateInboundShipmentResponse
      */
-    public function updateInboundShipment(
+    function updateInboundShipment(
         Requests\UpdateInboundShipmentRequest $request
     ):  Responses\UpdateInboundShipmentResponse;
 
@@ -62,7 +63,7 @@ interface FulfillmentInboundInterface
      * @param  Requests\GetPrepInstructionsForSKURequest
      * @return Responses\GetPrepInstructionsForSKUResponse
      */
-    public function getPrepInstructionsForSKU(
+    function getPrepInstructionsForSKU(
         Requests\GetPrepInstructionsForSKURequest $request
     ):  Responses\GetPrepInstructionsForSKUResponse;
 
@@ -74,7 +75,7 @@ interface FulfillmentInboundInterface
      * @param  Requests\GetPrepInstructionsForASINRequest
      * @return Responses\GetPrepInstructionsForASINResponse
      */
-    public function GetPrepInstructionsForASIN(
+    function GetPrepInstructionsForASIN(
         Requests\GetPrepInstructionsForASINRequest $request
     ):  Responses\GetPrepInstructionsForASINResponse;
     
@@ -93,12 +94,14 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipments.html
      *
-     * @param  Requests\ListInboundShipmentsRequest
-     * @return Responses\ListInboundShipmentsResponse
+     * @param  ListInboundShipmentsRequest $request
+     * @param  Passport $passport
+     * @return RecordIterator
      */
-    public function listInboundShipments(
-        Requests\ListInboundShipmentsRequest $request
-    ):  Responses\ListInboundShipmentsResponse;
+    function listInboundShipments(
+        Requests\ListInboundShipmentsRequest $request,
+        Passport $passport = null
+    ):  RecordIterator;
 
     /**
      * Returns the next page of inbound shipments using the NextToken parameter.
@@ -106,9 +109,13 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentsByNextToken.html
      *
      * @param  string $token
-     * @return Responses\ListInboundShipmentsResponse
+     * @param  Passport $passport
+     * @return ListInboundShipmentsResponse
      */
-//     public function listInboundShipmentsByNextToken(string $token): Responses\ListInboundShipmentsResponse;
+    function listInboundShipmentsByNextToken(
+        string $token,
+        Passport $passport = null
+    ):  Responses\ListInboundShipmentsResponse;
 
     /**
      * Returns a list of items in a specified inbound shipment, or a list of items that were updated within a specified time frame.
@@ -118,7 +125,7 @@ interface FulfillmentInboundInterface
      * @param  Requests\ListInboundShipmentItemsRequest
      * @return Responses\ListInboundShipmentItemsResponse
      */
-    public function listInboundShipmentItems(
+    function listInboundShipmentItems(
         Requests\ListInboundShipmentItemsRequest $request
     ):  Responses\ListInboundShipmentItemsResponse;
 
@@ -131,7 +138,7 @@ interface FulfillmentInboundInterface
      * @return Responses\ListInboundShipmentItemsByNextTokenResponse
      */
 /*
-    public function listInboundShipmentItemsByNextToken(
+    function listInboundShipmentItemsByNextToken(
         Requests\ListInboundShipmentItemsByNextTokenRequest $request
     ):  Responses\ListInboundShipmentItemsByNextTokenResponse;
 */
@@ -143,5 +150,5 @@ interface FulfillmentInboundInterface
      *
      * @return Responses\GetServiceStatusResponse
      */
-    public function getServiceStatus(): Results\GetServiceStatusResult;
+    function getServiceStatus(): Results\GetServiceStatusResult;
 }

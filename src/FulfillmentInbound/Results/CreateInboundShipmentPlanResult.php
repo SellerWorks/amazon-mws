@@ -7,7 +7,7 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Results;
 use SellerWorks\Amazon\MWS\Common\ResultInterface;
 
 /**
- * Result object.  Returned by CreateInboundShipmentPlanResponse.
+ * CreateInboundShipmentPlan result object.
  */
 final class CreateInboundShipmentPlanResult implements ResultInterface
 {

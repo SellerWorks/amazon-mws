@@ -9,4 +9,10 @@ namespace SellerWorks\Amazon\MWS\Common;
  */
 interface ResponseInterface
 {
+    /**
+     * Return "Result" object.
+     *
+     * @return ResultInterface
+     */
+    function getResult(): ResultInterface;
 }

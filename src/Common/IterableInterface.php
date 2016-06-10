@@ -14,7 +14,14 @@ interface IterableInterface
      *
      * @return array
      */
-    function getResults(): array;
+    function getRecords(): array;
+
+    /**
+     * Return name of "ByNextToken" method.
+     *
+     * @return string
+     */
+    function getMethod(): string;
 
     /**
      * Return next token string.

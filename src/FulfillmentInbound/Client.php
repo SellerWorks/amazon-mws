@@ -6,7 +6,7 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
 use Exception;
 use SellerWorks\Amazon\MWS\Common\AbstractClient;
-use SellerWorks\Amazon\MWS\Common\ResultInterface;
+use SellerWorks\Amazon\MWS\Common\RecordIterator;
 use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
@@ -46,8 +46,6 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
         if ($response instanceof Responses\ErrorResponse) {
             return $this->throwError($response);
         }
-
-        $iterator = new RecordIterator($this, $response->CreateInboundShipmentPlanResult);
 
         return $response->CreateInboundShipmentPlanResult;
     }
@@ -96,10 +94,28 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function listInboundShipments(
-        Requests\ListInboundShipmentsRequest $request
+        Requests\ListInboundShipmentsRequest $request,
+        Passport $passport = null
+    ):  RecordIterator
+    {
+        $response = $this->makeRequest($request, $passport);
+
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        $passport = $passport?: $this->getPassport();
+        $iterator = new RecordIterator($this, $passport, $response->getResult());
+
+        return $iterator;
+    }
+
+    public function listInboundShipmentsByNextToken(
+        string $token,
+        Passport $passport = null
     ):  Responses\ListInboundShipmentsResponse
     {
-        return $this->makeRequest($request);
+        
     }
 
     /**

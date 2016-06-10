@@ -2,20 +2,47 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
+namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Results;
+
+use SellerWorks\Amazon\MWS\Common\IterableInterface;
+use SellerWorks\Amazon\MWS\Common\ResultInterface;
 
 /**
- * Result object.  Returned by ListInboundShipmentsResponse.
+ * ListInboundShipments result object.
  */
-final class ListInboundShipmentsResult
+final class ListInboundShipmentsResult implements IterableInterface, ResultInterface
 {
     /**
-     * @var  string
+     * @var string
      */
     public $NextToken;
 
     /**
-     * @var  Array<InboundShipmentInfo>
+     * @var Array<InboundShipmentInfo>
      */
     public $ShipmentData;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRecords(): array
+    {
+        return $this->ShipmentData;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMethod(): string
+    {
+        return 'ListInboundShipmentsByNextToken';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNextToken(): string
+    {
+        return $this->NextToken;
+    }
 }

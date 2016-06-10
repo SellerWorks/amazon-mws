@@ -7,7 +7,7 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Results;
 use SellerWorks\Amazon\MWS\Common\ResultInterface;
 
 /**
- * GetServiceStatusResult object.
+ * GetServiceStatus result object.
  */
 final class GetServiceStatusResult implements ResultInterface
 {

@@ -33,6 +33,11 @@ abstract class AbstractClient implements ClientInterface
     protected $serializer;
 
     /**
+     * @var ResponseInterface
+     */
+    protected $lastResponse;
+
+    /**
      * Constructor.
      *
      * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
@@ -97,6 +102,26 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
+     * Return the last Response object.
+     *
+     * @return ResponseInterface
+     */
+    public function getLastResponse(): ResponseInterface
+    {
+        return $this->lastResponse?: new Responses\NullResponse;
+    }
+
+    /**
+     * Return the last Result object.
+     *
+     * @return ResultInterface
+     */
+    public function getLastResult(): ResultInterface
+    {
+        return $this->lastResponse? $this->lastResponse->getResult() : new Results\NullResult;
+    }
+
+    /**
      * Make request to Amazon.
      *
      * @param  RequestInterface  $request
@@ -112,8 +137,9 @@ abstract class AbstractClient implements ClientInterface
         }
 
         $response = $this->post($request, $usePassport);
+        $this->lastResponse = $this->serializer->unserialize($response);
 
-        return $this->serializer->unserialize($response);
+        return $this->lastResponse;
     }
 
     /**

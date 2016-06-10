@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
+use Exception;
 use SellerWorks\Amazon\MWS\Common\AbstractClient;
+use SellerWorks\Amazon\MWS\Common\RecordIterator;
 use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
@@ -93,12 +95,17 @@ class Mock extends AbstractClient // implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function listInboundShipments(
-        Requests\ListInboundShipmentsRequest $request
-    ):  Responses\ListInboundShipmentsResponse
+        Requests\ListInboundShipmentsRequest $request,
+        Passport $passport = null
+    ):  RecordIterator
     {
         $xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentsResponse.xml');
+        $response = $this->serializer->unserialize($xml);
 
-        return $this->serializer->unserialize($xml);
+        $passport = new Passport('','','','');
+        $iterator = new RecordIterator($this, $passport, $response->getResult());
+
+        return $iterator;
     }
 
     /**
