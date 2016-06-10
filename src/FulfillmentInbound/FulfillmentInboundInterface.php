@@ -10,6 +10,13 @@ use SellerWorks\Amazon\MWS\Common\Passport;
 /**
  * Amazon MWS Fulfillment Inbound Shipment
  *
+ * With the Fulfillment Inbound Shipment API section of Amazon Marketplace Web Service (Amazon MWS), you can create and
+ * update inbound shipments of inventory in the Amazon Fulfillment Network. You can also request lists of inbound
+ * shipments or inbound shipment items based on criteria that you specify. After your inventory has been received by the
+ * Amazon Fulfillment Network, Amazon can fulfill your orders regardless of whether you are selling on Amazon's retail
+ * web site or through other retail channels.
+ *
+ * @url http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_Overview.html
  * @version 2010-10-01
  */
 interface FulfillmentInboundInterface
@@ -34,10 +41,12 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_CreateInboundShipment.html
      *
      * @param  Requests\CreateInboundShipmentRequest
+     * @param  Passport $passport
      * @return Responses\CreateInboundShipmentResponse
      */
     function createInboundShipment(
-        Requests\CreateInboundShipmentRequest $request
+        Requests\CreateInboundShipmentRequest $request,
+        Passport $passport = null
     ):  Responses\CreateInboundShipmentResponse;
 
     /**
@@ -46,10 +55,12 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_UpdateInboundShipment.html
      *
      * @param  Requests\UpdateInboundShipmentRequest
+     * @param  Passport $passport
      * @return Responses\UpdateInboundShipmentResponse
      */
     function updateInboundShipment(
-        Requests\UpdateInboundShipmentRequest $request
+        Requests\UpdateInboundShipmentRequest $request,
+        Passport $passport = null
     ):  Responses\UpdateInboundShipmentResponse;
 
     // GetPreorderInfo
@@ -61,10 +72,12 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_GetPrepInstructionsForSKU.html
      *
      * @param  Requests\GetPrepInstructionsForSKURequest
+     * @param  Passport $passport
      * @return Responses\GetPrepInstructionsForSKUResponse
      */
     function getPrepInstructionsForSKU(
-        Requests\GetPrepInstructionsForSKURequest $request
+        Requests\GetPrepInstructionsForSKURequest $request,
+        Passport $passport = null
     ):  Responses\GetPrepInstructionsForSKUResponse;
 
     /**
@@ -73,10 +86,12 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_GetPrepInstructionsForASIN.html
      *
      * @param  Requests\GetPrepInstructionsForASINRequest
+     * @param  Passport $passport
      * @return Responses\GetPrepInstructionsForASINResponse
      */
     function GetPrepInstructionsForASIN(
-        Requests\GetPrepInstructionsForASINRequest $request
+        Requests\GetPrepInstructionsForASINRequest $request,
+        Passport $passport = null
     ):  Responses\GetPrepInstructionsForASINResponse;
     
     // PutTransportContent
@@ -123,10 +138,12 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItems.html
      *
      * @param  Requests\ListInboundShipmentItemsRequest
+     * @param  Passport $passport
      * @return Responses\ListInboundShipmentItemsResponse
      */
     function listInboundShipmentItems(
-        Requests\ListInboundShipmentItemsRequest $request
+        Requests\ListInboundShipmentItemsRequest $request,
+        Passport $passport = null
     ):  Responses\ListInboundShipmentItemsResponse;
 
     /**
@@ -135,11 +152,13 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItemsByNextToken.html
      *
      * @param  Requests\ListInboundShipmentItemsByNextTokenRequest
+     * @param  Passport $passport
      * @return Responses\ListInboundShipmentItemsByNextTokenResponse
      */
 /*
     function listInboundShipmentItemsByNextToken(
-        Requests\ListInboundShipmentItemsByNextTokenRequest $request
+        Requests\ListInboundShipmentItemsByNextTokenRequest $request,
+        Passport $passport = null
     ):  Responses\ListInboundShipmentItemsByNextTokenResponse;
 */
 
