@@ -125,12 +125,12 @@ interface FulfillmentInboundInterface
      *
      * @param  string $token
      * @param  Passport $passport
-     * @return ListInboundShipmentsResponse
+     * @return ListInboundShipmentsResult
      */
     function listInboundShipmentsByNextToken(
         string $token,
         Passport $passport = null
-    ):  Responses\ListInboundShipmentsResponse;
+    ):  Results\ListInboundShipmentsResult;
 
     /**
      * Returns a list of items in a specified inbound shipment, or a list of items that were updated within a specified time frame.
@@ -139,12 +139,12 @@ interface FulfillmentInboundInterface
      *
      * @param  Requests\ListInboundShipmentItemsRequest
      * @param  Passport $passport
-     * @return Responses\ListInboundShipmentItemsResponse
+     * @return RecordIterator
      */
     function listInboundShipmentItems(
         Requests\ListInboundShipmentItemsRequest $request,
         Passport $passport = null
-    ):  Responses\ListInboundShipmentItemsResponse;
+    ):  RecordIterator;
 
     /**
      * Returns the next page of inbound shipment items using the NextToken parameter.

@@ -37,38 +37,42 @@ class XmlService extends \Sabre\Xml\Service
             "{$namespace}GetServiceStatusResponse" => $this->mapObject(Responses\GetServiceStatusResponse::class),
             "{$namespace}ListInboundShipmentItemsResponse" => $this->mapObject(Responses\ListInboundShipmentItemsResponse::class),
             "{$namespace}ListInboundShipmentsResponse" => $this->mapObject(Responses\ListInboundShipmentsResponse::class),
+            "{$namespace}ListInboundShipmentsByNextTokenResponse" => $this->mapObject(Responses\ListInboundShipmentsByNextTokenResponse::class),
             "{$namespace}UpdateInboundShipmentResponse" => $this->mapObject(Responses\UpdateInboundShipmentResponse::class),
+            "{$namespace}ErrorResponse" => $this->mapObject(Responses\ErrorResponse::class),
 
 
             // Result objects.
-             "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Results\CreateInboundShipmentPlanResult::class),
-//             "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Results\CreateInboundShipmentResult::class),
+            "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Results\CreateInboundShipmentPlanResult::class),
+//            "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Results\CreateInboundShipmentResult::class),
             "{$namespace}GetServiceStatusResult" => $this->mapObject(Results\GetServiceStatusResult::class),
-//             "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Results\GetPrepInstructionsForASINResult::class),
-//             "{$namespace}GetPrepInstructionsForSKUResult" => $this->mapObject(Results\GetPrepInstructionsForSKUResult::class),
-//             "{$namespace}ListInboundShipmentItemsResult" => $this->mapObject(Results\ListInboundShipmentItemsResult::class),
-             "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
-//            "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Results\UpdateInboundShipmentResult::class),
+//            "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Results\GetPrepInstructionsForASINResult::class),
+//            "{$namespace}GetPrepInstructionsForSKUResult" => $this->mapObject(Results\GetPrepInstructionsForSKUResult::class),
+//            "{$namespace}ListInboundShipmentItemsResult" => $this->mapObject(Results\ListInboundShipmentItemsResult::class),
+            "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
+            "{$namespace}ListInboundShipmentsByNextTokenResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
+//           "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Results\UpdateInboundShipmentResult::class),
+            "{$namespace}Error" => $this->mapObject(Results\Error::class),
 
 
             // Collection objects.
-            "{$namespace}ASINPrepInstructionsList" => $this->mapCollectionObject("{$namespace}ASINPrepInstructions", Types\ASINPrepInstructions::class),
-//            "{$namespace}AmazonPrepFeesDetailsList" => $this->mapCollectionObject("{$namespace}AmazonPrepFeesDetails", Types\AmazonPrepFeesDetails::class),
-            "{$namespace}ItemData" => $this->mapCollectionObject("{$namespace}member", Types\InboundShipmentItem::class),
-            "{$namespace}InboundShipmentPlans" => $this->mapCollectionObject("{$namespace}member", Types\InboundShipmentPlan::class),
-            "{$namespace}InvalidASINList" => $this->mapCollectionObject("{$namespace}InvalidASIN", Types\InvalidASIN::class),
-            "{$namespace}InvalidSKUList" => $this->mapCollectionObject("{$namespace}InvalidSKU", Types\InvalidSKU::class),
-            "{$namespace}Items" => $this->mapCollectionObject("{$namespace}member", Types\InboundShipmentPlanItem::class),
-            "{$namespace}PrepDetailsList" => $this->mapCollectionObject("{$namespace}PrepDetails", Types\PrepDetails::class),
-            "{$namespace}ShipmentData" => $this->mapCollectionObject("{$namespace}member", Types\InboundShipmentInfo::class),
-            "{$namespace}SKUPrepInstructionsList" => $this->mapCollectionObject("{$namespace}SKUPrepInstructions", Types\SKUPrepInstructions::class),
+            "{$namespace}ASINPrepInstructionsList" => $this->mapCollectionObject("{$namespace}ASINPrepInstructions", Entities\ASINPrepInstructions::class),
+//            "{$namespace}AmazonPrepFeesDetailsList" => $this->mapCollectionObject("{$namespace}AmazonPrepFeesDetails", Entities\AmazonPrepFeesDetails::class),
+            "{$namespace}ItemData" => $this->mapCollectionObject("{$namespace}member", Entities\InboundShipmentItem::class),
+            "{$namespace}InboundShipmentPlans" => $this->mapCollectionObject("{$namespace}member", Entities\InboundShipmentPlan::class),
+            "{$namespace}InvalidASINList" => $this->mapCollectionObject("{$namespace}InvalidASIN", Entities\InvalidASIN::class),
+            "{$namespace}InvalidSKUList" => $this->mapCollectionObject("{$namespace}InvalidSKU", Entities\InvalidSKU::class),
+            "{$namespace}Items" => $this->mapCollectionObject("{$namespace}member", Entities\InboundShipmentPlanItem::class),
+            "{$namespace}PrepDetailsList" => $this->mapCollectionObject("{$namespace}PrepDetails", Entities\PrepDetails::class),
+            "{$namespace}ShipmentData" => $this->mapCollectionObject("{$namespace}member", Entities\InboundShipmentInfo::class),
+            "{$namespace}SKUPrepInstructionsList" => $this->mapCollectionObject("{$namespace}SKUPrepInstructions", Entities\SKUPrepInstructions::class),
 
 
             // Type objects.
-            "{$namespace}Amount" => $this->mapObject(Types\Amount::class),
-            "{$namespace}ResponseMetadata" => $this->mapObject(Types\ResponseMetadata::class),
-            "{$namespace}ShipFromAddress" => $this->mapObject(Types\Address::class),
-            "{$namespace}ShipToAddress" => $this->mapObject(Types\Address::class),
+            "{$namespace}Amount" => $this->mapObject(Entities\Amount::class),
+            "{$namespace}ResponseMetadata" => $this->mapObject(Entities\ResponseMetadata::class),
+            "{$namespace}ShipFromAddress" => $this->mapObject(Entities\Address::class),
+            "{$namespace}ShipToAddress" => $this->mapObject(Entities\Address::class),
 
 
             // Lists.

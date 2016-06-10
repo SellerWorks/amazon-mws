@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
-use Exception;
 use SellerWorks\Amazon\MWS\Common\AbstractClient;
 use SellerWorks\Amazon\MWS\Common\RecordIterator;
 use SellerWorks\Amazon\MWS\Common\Passport;
@@ -54,7 +53,8 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function createInboundShipment(
-        Requests\CreateInboundShipmentRequest $request
+        Requests\CreateInboundShipmentRequest $request,
+        Passport $passport = null
     ):  Responses\CreateInboundShipmentResponse
     {
         return $this->makeRequest($request);
@@ -64,7 +64,8 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function updateInboundShipment(
-        Requests\UpdateInboundShipmentRequest $request
+        Requests\UpdateInboundShipmentRequest $request,
+        Passport $passport = null
     ):  Responses\UpdateInboundShipmentResponse
     {
         return $this->makeRequest($request);
@@ -74,7 +75,8 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function getPrepInstructionsForSKU(
-        Requests\GetPrepInstructionsForSKURequest $request
+        Requests\GetPrepInstructionsForSKURequest $request,
+        Passport $passport = null
     ):  Responses\GetPrepInstructionsForSKUResponse
     {
         return $this->makeRequest($request);
@@ -84,7 +86,8 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function GetPrepInstructionsForASIN(
-        Requests\GetPrepInstructionsForASINRequest $request
+        Requests\GetPrepInstructionsForASINRequest $request,
+        Passport $passport = null
     ):  Responses\GetPrepInstructionsForASINResponse
     {
         return $this->makeRequest($request);
@@ -110,22 +113,46 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
         return $iterator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function listInboundShipmentsByNextToken(
         string $token,
         Passport $passport = null
-    ):  Responses\ListInboundShipmentsResponse
+    ):  Results\ListInboundShipmentsResult
     {
-        
+        $request = new Requests\ListInboundShipmentsByNextTokenRequest;
+        $request->NextToken = $token;
+
+        $response = $this->makeRequest($request, $passport);
+
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->getResult();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function listInboundShipmentItems(
-        Requests\ListInboundShipmentItemsRequest $request
-    ):  Responses\ListInboundShipmentItemsResponse
+    function listInboundShipmentItems(
+        Requests\ListInboundShipmentItemsRequest $request,
+        Passport $passport = null
+    ):  RecordIterator
     {
         return $this->makeRequest($request);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function listInboundShipmentItemsByNextToken(
+        string $token,
+        Passport $passport = null
+    ):  Responses\ListInboundShipmentsResponse
+    {
+        
     }
 
     /**
@@ -140,16 +167,5 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
         }
 
         return $response->GetServiceStatusResult;
-    }
-
-    /**
-     * Throw Endpoint-specific error.
-     *
-     * @param  ResponseInterface
-     * @throw  
-     */
-    protected function throwError(ResponseInterface $response)
-    {
-        throw new \Exception($response->Error->Message);
     }
 }

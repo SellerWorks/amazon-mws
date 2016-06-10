@@ -10,6 +10,7 @@ use ReflectionProperty;
 use SellerWorks\Amazon\MWS\Common\RequestInterface;
 use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 use SellerWorks\Amazon\MWS\Common\SerializerInterface;
+use UnexpectedValueException;
 
 /**
  * FulfillmentInboundShipment serializer.
@@ -42,6 +43,10 @@ class Serializer implements SerializerInterface
         switch (true) {
             case $request instanceof Requests\ListInboundShipmentsRequest:
                 $action = 'ListInboundShipments';
+                break;
+
+            case $request instanceof Requests\ListInboundShipmentsByNextTokenRequest:
+                $action = 'ListInboundShipmentsByNextToken';
                 break;
 
             case $request instanceof Requests\GetServiceStatusRequest:
@@ -104,6 +109,11 @@ class Serializer implements SerializerInterface
                     if ($propValue instanceof DateTimeInterface) {
                         $returnArr[$propName] = $propValue->format(static::DATE_FORMAT);
                     }
+                    break;
+
+                // String properties.
+                case 'NextToken':
+                    $returnArr[$propName] = $propValue;
                     break;
             }
         }

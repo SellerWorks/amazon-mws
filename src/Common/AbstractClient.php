@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\Common;
 
+use Error;
 use RuntimeException;
 use UnexpectedValueException;
 
@@ -14,13 +15,16 @@ use UnexpectedValueException;
  */
 abstract class AbstractClient implements ClientInterface
 {
-	use PassportTrait;
-
     /**
      * MWS Service definitions.
      */
 	const MWS_PATH    = '';
 	const MWS_VERSION = '';
+
+    /**
+     * @var Passport
+     */
+    protected $passport;
 
     /**
      * @var string
@@ -60,23 +64,23 @@ abstract class AbstractClient implements ClientInterface
     {
         $countryInfo = [
             // NA Region
-            static::COUNTRY_CA => ['host' => 'https://mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
-            static::COUNTRY_MX => ['host' => 'https://mws.amazonservices.com.mx', 'marketplaceId' => 'ATVPDKIKX0DER'],
-            static::COUNTRY_US => ['host' => 'https://mws.amazonservices.com',    'marketplaceId' => 'A1AM78C64UM0Y8'],
+            static::COUNTRY_CA => ['host' => 'mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
+            static::COUNTRY_MX => ['host' => 'mws.amazonservices.com.mx', 'marketplaceId' => 'ATVPDKIKX0DER'],
+            static::COUNTRY_US => ['host' => 'mws.amazonservices.com',    'marketplaceId' => 'A1AM78C64UM0Y8'],
 
             // EU Region
-            static::COUNTRY_DE => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
-            static::COUNTRY_ES => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
-            static::COUNTRY_FR => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
-            static::COUNTRY_IN => ['host' => 'https://mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
-            static::COUNTRY_IT => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
-            static::COUNTRY_UK => ['host' => 'https://mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
+            static::COUNTRY_DE => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
+            static::COUNTRY_ES => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
+            static::COUNTRY_FR => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
+            static::COUNTRY_IN => ['host' => 'mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
+            static::COUNTRY_IT => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
+            static::COUNTRY_UK => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
 
             // FE Region
-            static::COUNTRY_JP => ['host' => 'https://mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
+            static::COUNTRY_JP => ['host' => 'mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
 
             // CN Region
-            static::COUNTRY_CN => ['host' => 'https://mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
+            static::COUNTRY_CN => ['host' => 'mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
         ];
 
         if (array_key_exists($countryCode, $countryInfo)) {
@@ -85,6 +89,25 @@ abstract class AbstractClient implements ClientInterface
         else {
             throw new UnexpectedValueException($countryCode);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Passport
+     */
+    public function getPassport(): Passport
+    {
+        return $this->passport;
+    }
+
+    /**
+     * @param  Passport
+     * @return self
+     */
+    public function setPassport(Passport $passport = null): self
+    {
+        $this->passport = $passport;
 
         return $this;
     }
@@ -151,7 +174,7 @@ abstract class AbstractClient implements ClientInterface
      */
     protected function post(RequestInterface $request, Passport $passport): string
     {
-        $url = sprintf('%s/%s', $this->host, trim(static::MWS_PATH, '/'));
+        $url = sprintf('https://%s/%s', $this->host, trim(static::MWS_PATH, '/'));
         $qs  = $this->buildQuery($request, $passport);
 
         $headers = [
@@ -180,8 +203,8 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Return dot-notation query of request.
      *
-     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
-     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
+     * @param  RequestInterface $request
+     * @param  Passport $passport
      * @return array
      */
     protected function buildQuery(RequestInterface $request, Passport $passport): string
@@ -193,11 +216,11 @@ abstract class AbstractClient implements ClientInterface
         $parameters = $this->serializer->serialize($request);
 
         // Add authentication params.
-        $parameters['SellerId']       = $this->passport->getSellerId();
-        $parameters['AWSAccessKeyId'] = $this->passport->getAccessKey();
+        $parameters['SellerId']       = $passport->getSellerId();
+        $parameters['AWSAccessKeyId'] = $passport->getAccessKey();
 
-        if (!empty($this->passport->getMwsAuthToken())) {
-            $auth['MWSAuthToken'] = $this->passport->getMwsAuthToken();
+        if (!empty($passport->getMwsAuthToken())) {
+            $parameters['MWSAuthToken'] = $passport->getMwsAuthToken();
         }
 
         // Add standard parameters.
@@ -217,7 +240,7 @@ abstract class AbstractClient implements ClientInterface
 		}
 
         $query  = implode('&', $query);
-        $query .= '&Signature=' . $this->calculateSignature($query);
+        $query .= '&Signature=' . $this->calculateSignature($query, $passport->getSecretKey());
 
         return $query;
     }
@@ -225,15 +248,16 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Calculate signature of request.
      *
-     * @param  string  $query
+     * @param  string $query
+     * @param  string $secretKey
      * @return string
      */
-    protected function calculateSignature(string $query): string
+    protected function calculateSignature(string $query, string $secretKey): string
     {
         // Calculate signature.
         $path = trim(static::MWS_PATH, '/');
         $head = sprintf("POST\n%s\n/%s\n%s", $this->host, $path, $query);
-        $sig  = hash_hmac('sha256', $head, $this->passport->getSecretKey(), true);
+        $sig  = hash_hmac('sha256', $head, $secretKey, true);
 
         return $this->urlencode_rfc3986(base64_encode($sig));
     }
@@ -247,5 +271,16 @@ abstract class AbstractClient implements ClientInterface
     protected function urlencode_rfc3986(string $s): string
     {
         return str_replace(['+', '%7E'], [' ', '~'], rawurlencode($s));
+    }
+
+    /**
+     * Throw Endpoint-specific error.
+     *
+     * @param  ErrorResponse
+     * @throws Error
+     */
+    protected function throwError(Responses\ErrorResponse $error)
+    {
+        throw new Error($error->Error->Message);
     }
 }

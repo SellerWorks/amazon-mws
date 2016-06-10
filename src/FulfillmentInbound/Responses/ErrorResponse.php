@@ -10,7 +10,7 @@ use SellerWorks\Amazon\MWS\Common\ResultInterface;
 /**
  * Error response object.
  */
-final class ErrorResponse implements ResponseInterface, ResultInterface
+final class ErrorResponse implements ResponseInterface
 {
     /**
      * @var Error
@@ -27,6 +27,6 @@ final class ErrorResponse implements ResponseInterface, ResultInterface
      */
     public function getResult(): ResultInterface
     {
-        return $this;
+        return $this->Error;
     }
 }

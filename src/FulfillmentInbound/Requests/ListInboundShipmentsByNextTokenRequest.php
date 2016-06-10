@@ -14,7 +14,7 @@ use SellerWorks\Amazon\MWS\Common\RequestInterface;
 final class ListInboundShipmentsByNextTokenRequest implements RequestInterface
 {
     /**
-     * @var Array<string>
+     * @var string
      */
     public $NextToken;
 }

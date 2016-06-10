@@ -8,9 +8,9 @@ use SellerWorks\Amazon\MWS\Common\IterableInterface;
 use SellerWorks\Amazon\MWS\Common\ResultInterface;
 
 /**
- * ListInboundShipments result object.
+ * ListInboundShipmentsByNextToken result object.
  */
-final class ListInboundShipmentsResult implements IterableInterface, ResultInterface
+final class ListInboundShipmentsByNextTokenResult implements IterableInterface, ResultInterface
 {
     /**
      * @var string
@@ -43,6 +43,6 @@ final class ListInboundShipmentsResult implements IterableInterface, ResultInter
      */
     public function getNextToken(): string
     {
-        return (string) $this->NextToken;
+        return $this->NextToken;
     }
 }
