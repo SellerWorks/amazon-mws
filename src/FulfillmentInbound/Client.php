@@ -6,6 +6,9 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
 use SellerWorks\Amazon\MWS\Common\AbstractClient;
 use SellerWorks\Amazon\MWS\Common\RecordIterator;
+use SellerWorks\Amazon\MWS\Common\Requests\GetServiceStatusRequest;
+use SellerWorks\Amazon\MWS\Common\Responses\ErrorResponse;
+use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
 use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
@@ -42,7 +45,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     {
         $response = $this->makeRequest($request, $passport);
 
-        if ($response instanceof Responses\ErrorResponse) {
+        if ($response instanceof ErrorResponse) {
             return $this->throwError($response);
         }
 
@@ -103,7 +106,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     {
         $response = $this->makeRequest($request, $passport);
 
-        if ($response instanceof Responses\ErrorResponse) {
+        if ($response instanceof ErrorResponse) {
             return $this->throwError($response);
         }
 
@@ -126,7 +129,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
 
         $response = $this->makeRequest($request, $passport);
 
-        if ($response instanceof Responses\ErrorResponse) {
+        if ($response instanceof ErrorResponse) {
             return $this->throwError($response);
         }
 
@@ -158,11 +161,11 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     /**
      * {@inheritDoc}
      */
-    public function getServiceStatus(): Results\GetServiceStatusResult
+    public function getServiceStatus(): GetServiceStatusResult
     {
-        $response = $this->makeRequest(new Requests\GetServiceStatusRequest);
+        $response = $this->makeRequest(new GetServiceStatusRequest);
 
-        if ($response instanceof Responses\ErrorResponse) {
+        if ($response instanceof ErrorResponse) {
             return $this->throwError($response);
         }
 

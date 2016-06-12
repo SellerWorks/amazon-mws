@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
+namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Entities;
 
 /**
  * Postal address information.

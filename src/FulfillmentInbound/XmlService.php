@@ -8,7 +8,9 @@ use Closure;
 use ReflectionProperty;
 use Sabre\Xml\Reader;
 use SellerWorks\Amazon\MWS\Common\Responses\ErrorResponse;
+use SellerWorks\Amazon\MWS\Common\Responses\GetServiceStatusResponse;
 use SellerWorks\Amazon\MWS\Common\Results\Error;
+use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Results;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
@@ -31,30 +33,34 @@ class XmlService extends \Sabre\Xml\Service
         $namespace = sprintf('{%s}', static::NS);
 
         $this->elementMap = [
+            // Common objects.
+            "{$namespace}Error" => $this->mapObject(Error::class),
+            "{$namespace}ErrorResponse" => $this->mapObject(ErrorResponse::class),
+            "{$namespace}GetServiceStatusResponse" => $this->mapObject(GetServiceStatusResponse::class),
+            "{$namespace}GetServiceStatusResult" => $this->mapObject(GetServiceStatusResult::class),
+
+
             // Response objects.
             "{$namespace}CreateInboundShipmentPlanResponse" => $this->mapObject(Responses\CreateInboundShipmentPlanResponse::class),
             "{$namespace}CreateInboundShipmentResponse" => $this->mapObject(Responses\CreateInboundShipmentResponse::class),
             "{$namespace}GetPrepInstructionsForASINResponse" => $this->mapObject(Responses\GetPrepInstructionsForASINResponse::class),
             "{$namespace}GetPrepInstructionsForSKUResponse" => $this->mapObject(Responses\GetPrepInstructionsForSKUResponse::class),
-            "{$namespace}GetServiceStatusResponse" => $this->mapObject(Responses\GetServiceStatusResponse::class),
             "{$namespace}ListInboundShipmentItemsResponse" => $this->mapObject(Responses\ListInboundShipmentItemsResponse::class),
             "{$namespace}ListInboundShipmentsResponse" => $this->mapObject(Responses\ListInboundShipmentsResponse::class),
             "{$namespace}ListInboundShipmentsByNextTokenResponse" => $this->mapObject(Responses\ListInboundShipmentsByNextTokenResponse::class),
             "{$namespace}UpdateInboundShipmentResponse" => $this->mapObject(Responses\UpdateInboundShipmentResponse::class),
-            "{$namespace}ErrorResponse" => $this->mapObject(ErrorResponse::class),
 
 
             // Result objects.
             "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Results\CreateInboundShipmentPlanResult::class),
 //            "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Results\CreateInboundShipmentResult::class),
-            "{$namespace}GetServiceStatusResult" => $this->mapObject(Results\GetServiceStatusResult::class),
+
 //            "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Results\GetPrepInstructionsForASINResult::class),
 //            "{$namespace}GetPrepInstructionsForSKUResult" => $this->mapObject(Results\GetPrepInstructionsForSKUResult::class),
 //            "{$namespace}ListInboundShipmentItemsResult" => $this->mapObject(Results\ListInboundShipmentItemsResult::class),
             "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
             "{$namespace}ListInboundShipmentsByNextTokenResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
 //           "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Results\UpdateInboundShipmentResult::class),
-            "{$namespace}Error" => $this->mapObject(Error::class),
 
 
             // Collection objects.

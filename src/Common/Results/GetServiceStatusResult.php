@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Results;
+namespace SellerWorks\Amazon\MWS\Common\Results;
 
 use SellerWorks\Amazon\MWS\Common\ResultInterface;
 

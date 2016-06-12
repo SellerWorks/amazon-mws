@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
+namespace SellerWorks\Amazon\MWS\Common\Requests;
 
 use SellerWorks\Amazon\MWS\Common\RequestInterface;
 

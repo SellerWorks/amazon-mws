@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
 use SellerWorks\Amazon\MWS\Common\RecordIterator;
+use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
 use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
@@ -137,7 +138,7 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItems.html
      *
-     * @param  Requests\ListInboundShipmentItemsRequest
+     * @param  ListInboundShipmentItemsRequest
      * @param  Passport $passport
      * @return RecordIterator
      */
@@ -151,9 +152,9 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItemsByNextToken.html
      *
-     * @param  Requests\ListInboundShipmentItemsByNextTokenRequest
+     * @param  ListInboundShipmentItemsByNextTokenRequest
      * @param  Passport $passport
-     * @return Responses\ListInboundShipmentItemsByNextTokenResponse
+     * @return ListInboundShipmentItemsByNextTokenResponse
      */
 /*
     function listInboundShipmentItemsByNextToken(
@@ -167,7 +168,7 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/MWS_GetServiceStatus.html
      *
-     * @return Responses\GetServiceStatusResponse
+     * @return GetServiceStatusResponse
      */
-    function getServiceStatus(): Results\GetServiceStatusResult;
+    function getServiceStatus(): GetServiceStatusResult;
 }

@@ -8,6 +8,7 @@ use DateTimeInterface;
 use ReflectionClass;
 use ReflectionProperty;
 use SellerWorks\Amazon\MWS\Common\RequestInterface;
+use SellerWorks\Amazon\MWS\Common\Requests\GetServiceStatusRequest;
 use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 use SellerWorks\Amazon\MWS\Common\SerializerInterface;
 use UnexpectedValueException;
@@ -49,7 +50,7 @@ class Serializer implements SerializerInterface
                 $action = 'ListInboundShipmentsByNextToken';
                 break;
 
-            case $request instanceof Requests\GetServiceStatusRequest:
+            case $request instanceof GetServiceStatusRequest:
                 $action = 'GetServiceStatus';
                 break;
 

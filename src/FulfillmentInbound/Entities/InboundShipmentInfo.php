@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
+namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Entities;
 
 /**
  * Information about your inbound shipments. Returned by the ListInboundShipments operation.
