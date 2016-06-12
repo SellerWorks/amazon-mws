@@ -7,7 +7,9 @@ namespace SellerWorks\Amazon\MWS\Common\Tests;
 use InvalidArgumentException;
 use ReflectionProperty;
 use PHPUnit\Framework\TestCase;
+use SellerWorks\Amazon\MWS\Common\AbstractClient;
 use SellerWorks\Amazon\MWS\Common\Mock\MockClient;
+use SellerWorks\Amazon\MWS\Common\Passport;
 use SellerWorks\Amazon\MWS\Common\ClientInterface;
 
 /**
@@ -61,5 +63,41 @@ class MockClientTest extends TestCase
 
         $client = new MockClient();
         $client->setCountry('INVALID');
+    }
+
+    /**
+     * Test getPassport.
+     */
+    public function test_getPassport()
+    {
+        $passport = new Passport('', '', '');
+        $client = $this->getMockBuilder(MockClient::CLASS)
+            ->setConstructorArgs([$passport])
+            ->setMethods(['getPassport'])
+            ->getMock();
+
+        $client->expects($this->any())
+            ->method('getPassport')
+            ->will($this->returnValue($passport));
+    }
+
+    /**
+     * Test setPassport
+     */
+    public function test_setPassport()
+    {
+        $passport = new Passport('', '', '');
+        $client = $this->getMockBuilder(MockClient::CLASS)
+            ->disableOriginalConstructor()
+            ->setMethods(['setPassport'])
+            ->getMock();
+
+
+        $client->expects($this->any())
+            ->method('setPassport', [$passport])
+            ->will($this->returnSelf());
+            
+        $this->expectException(\Exception::class);
+        $client->method('setPassport', ['asdf']);
     }
 }

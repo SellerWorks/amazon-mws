@@ -15,8 +15,8 @@ class MockClient extends AbstractClient
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(Passport $passport = null)
     {
-        parent::__construct(new Passport('', '', ''));
+        parent::__construct($passport?: new Passport('', '', ''));
     }
 }
