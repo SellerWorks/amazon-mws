@@ -51,7 +51,7 @@ abstract class AbstractClient implements ClientInterface
     {
         // Configure MWS.
         $this->setCountry(static::COUNTRY_US);
-        $this->setPassport($passport);
+        $this->setPassport($passport?: new Passport('', '',''));
     }
 
     /**
@@ -201,7 +201,7 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * Return dot-notation query of request.
+     * Return query string of request.
      *
      * @param  RequestInterface $request
      * @param  Passport $passport

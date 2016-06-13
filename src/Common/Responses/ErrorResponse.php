@@ -20,7 +20,7 @@ final class ErrorResponse implements ResponseInterface
     /**
      * @var string
      */
-    public $RequestId;
+    public $RequestID;
 
     /**
      * {@inheritDoc}
