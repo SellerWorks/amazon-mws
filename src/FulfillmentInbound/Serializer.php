@@ -50,6 +50,10 @@ class Serializer implements SerializerInterface
                 $action = 'ListInboundShipmentsByNextToken';
                 break;
 
+            case $request instanceof Requests\ListInboundShipmentItemsRequest:
+                $action = 'ListInboundShipmentItems';
+                break;
+
             case $request instanceof GetServiceStatusRequest:
                 $action = 'GetServiceStatus';
                 break;
@@ -69,6 +73,7 @@ class Serializer implements SerializerInterface
      */
     public function unserialize(string $response): ResponseInterface
     {
+        echo $response;
         return $this->xmlService->parse($response);
     }
 
@@ -114,7 +119,8 @@ class Serializer implements SerializerInterface
 
                 // String properties.
                 case 'NextToken':
-                    $returnArr[$propName] = $propValue;
+                case 'ShipmentId':
+                    $returnArr[$propName] = (string) $propValue;
                     break;
             }
         }

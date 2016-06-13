@@ -31,7 +31,7 @@ interface FulfillmentInboundInterface
      * @param  Passport $passport
      * @return CreateInboundShipmentPlanResponse
      */
-    function createInboundShipmentPlan(
+    function CreateInboundShipmentPlan(
         Requests\CreateInboundShipmentPlanRequest $request,
         Passport $passport = null
     ):  Results\CreateInboundShipmentPlanResult;
@@ -45,7 +45,7 @@ interface FulfillmentInboundInterface
      * @param  Passport $passport
      * @return Responses\CreateInboundShipmentResponse
      */
-    function createInboundShipment(
+    function CreateInboundShipment(
         Requests\CreateInboundShipmentRequest $request,
         Passport $passport = null
     ):  Responses\CreateInboundShipmentResponse;
@@ -59,7 +59,7 @@ interface FulfillmentInboundInterface
      * @param  Passport $passport
      * @return Responses\UpdateInboundShipmentResponse
      */
-    function updateInboundShipment(
+    function UpdateInboundShipment(
         Requests\UpdateInboundShipmentRequest $request,
         Passport $passport = null
     ):  Responses\UpdateInboundShipmentResponse;
@@ -76,7 +76,7 @@ interface FulfillmentInboundInterface
      * @param  Passport $passport
      * @return Responses\GetPrepInstructionsForSKUResponse
      */
-    function getPrepInstructionsForSKU(
+    function GetPrepInstructionsForSKU(
         Requests\GetPrepInstructionsForSKURequest $request,
         Passport $passport = null
     ):  Responses\GetPrepInstructionsForSKUResponse;
@@ -114,7 +114,7 @@ interface FulfillmentInboundInterface
      * @param  Passport $passport
      * @return RecordIterator
      */
-    function listInboundShipments(
+    function ListInboundShipments(
         Requests\ListInboundShipmentsRequest $request,
         Passport $passport = null
     ):  RecordIterator;
@@ -128,7 +128,7 @@ interface FulfillmentInboundInterface
      * @param  Passport $passport
      * @return ListInboundShipmentsResult
      */
-    function listInboundShipmentsByNextToken(
+    function ListInboundShipmentsByNextToken(
         string $token,
         Passport $passport = null
     ):  Results\ListInboundShipmentsResult;
@@ -142,7 +142,7 @@ interface FulfillmentInboundInterface
      * @param  Passport $passport
      * @return RecordIterator
      */
-    function listInboundShipmentItems(
+    function ListInboundShipmentItems(
         Requests\ListInboundShipmentItemsRequest $request,
         Passport $passport = null
     ):  RecordIterator;
@@ -157,7 +157,7 @@ interface FulfillmentInboundInterface
      * @return ListInboundShipmentItemsByNextTokenResponse
      */
 /*
-    function listInboundShipmentItemsByNextToken(
+    function ListInboundShipmentItemsByNextToken(
         Requests\ListInboundShipmentItemsByNextTokenRequest $request,
         Passport $passport = null
     ):  Responses\ListInboundShipmentItemsByNextTokenResponse;
@@ -170,5 +170,5 @@ interface FulfillmentInboundInterface
      *
      * @return GetServiceStatusResponse
      */
-    function getServiceStatus(): GetServiceStatusResult;
+    function GetServiceStatus(): GetServiceStatusResult;
 }

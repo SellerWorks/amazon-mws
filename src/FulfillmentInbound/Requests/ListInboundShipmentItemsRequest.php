@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 
-use SellerWorks\Amazon\MWS\Common\Requests\AbstractRequest;
+use DateTimeInterface;
+use SellerWorks\Amazon\MWS\Common\RequestInterface;
 
 /**
  * Returns a list of items in a specified inbound shipment, or a list of items that were updated within a specified time
@@ -12,6 +13,38 @@ use SellerWorks\Amazon\MWS\Common\Requests\AbstractRequest;
  *
  * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItems.html
  */
-final class ListInboundShipmentItemsRequest extends AbstractRequest
+final class ListInboundShipmentItemsRequest implements RequestInterface
 {
+    /**
+     * @var string
+     */
+    public $ShipmentId;
+
+    /**
+     * @var DateTimeInterface
+     */
+    public $LastUpdatedAfter;
+
+    /**
+     * @var DateTimeInterface
+     */
+    public $LastUpdatedBefore;
+
+    /**
+     * Construct object by parameters.  Optional to use.
+     *
+     * @param  string $ShipmentId
+     * @param  DateTimeInterface $LastUpdatedAfter
+     * @param  DateTimeInterface $LastUpdatedBefore
+     */
+    public function __construct(
+        string $ShipmentId = null,
+        DateTimeInterface $LastUpdatedAfter = null,
+        DateTimeInterface $LastUpdatedBefore = null
+    )
+    {
+        $this->ShipmentId = $ShipmentId;
+        $this->LastUpdatedAfter = $LastUpdatedAfter;
+        $this->LastUpdatedBefore = $LastUpdatedBefore;
+    }
 }
