@@ -3,7 +3,8 @@
         bootstrap="vendor/autoload.php"
         colors="true"
         convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true">
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true">
     <testsuites>
         <testsuite name="Seller Works Amazon MWS Test Suite">
             <directory>tests</directory>
@@ -14,4 +15,9 @@
             <directory suffix=".php">src</directory>
         </whitelist>
     </filter>
+    <logging>
+        <log type="coverage-html"   target="build/coverage" charset="UTF-8" yui="true" highlight="true"/>
+        <log type="coverage-text"   target="build/coverage.txt"/>
+        <log type="coverage-clover" target="build/clover.xml"/>
+    </logging>
 </phpunit>
