@@ -226,7 +226,7 @@ abstract class AbstractClient implements ClientInterface
         // Add standard parameters.
         $parameters['SignatureMethod']  = 'HmacSHA256';
         $parameters['SignatureVersion'] = 2;
-        $parameters['Timestamp']        = gmdate("Y-m-d\TH:i:s.\\0\\0\\0\\Z");
+        $parameters['Timestamp']        = gmdate("Y-m-d\TH:i:s\\Z");
         $parameters['Version']          = static::MWS_VERSION;
 
         // Build query.

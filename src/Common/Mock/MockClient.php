@@ -12,4 +12,9 @@ use SellerWorks\Amazon\MWS\Common\Passport;
  */
 class MockClient extends AbstractClient
 {
+    /**
+     * MWS Service definitions.
+     */
+    const MWS_PATH    = '/FulfillmentInboundShipment/2010-10-01/';
+    const MWS_VERSION = '2010-10-01';
 }

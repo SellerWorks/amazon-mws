@@ -18,6 +18,7 @@ class MockSerializer implements SerializerInterface
      */
     public function serialize(RequestInterface $request): array
     {
+        return ['Action' => 'GetServiceStatus'];
     }
 
     /**

@@ -13,6 +13,7 @@ use SellerWorks\Amazon\MWS\Common\ClientInterface;
 use SellerWorks\Amazon\MWS\Common\Mock\MockClient;
 use SellerWorks\Amazon\MWS\Common\Mock\MockSerializer;
 use SellerWorks\Amazon\MWS\Common\Passport;
+use SellerWorks\Amazon\MWS\Common\Requests;
 use SellerWorks\Amazon\MWS\Common\Responses;
 use SellerWorks\Amazon\MWS\Common\Results;
 
@@ -131,7 +132,6 @@ class MockClientTest extends TestCase
      */
     public function test_getLastResponse()
     {
-        
     }
 
     /**
@@ -139,7 +139,6 @@ class MockClientTest extends TestCase
      */
     public function test_getLastResult()
     {
-        
     }
 
     /**
@@ -147,7 +146,6 @@ class MockClientTest extends TestCase
      */
     public function test_makeRequest()
     {
-        
     }
 
     /**
@@ -155,7 +153,6 @@ class MockClientTest extends TestCase
      */
     public function test_post()
     {
-        
     }
 
     /**
@@ -163,7 +160,29 @@ class MockClientTest extends TestCase
      */
     public function test_buildQuery()
     {
-        
+        $client = new MockClient($this->passport);
+        $client->setSerializer(new MockSerializer);
+
+        // Expected response.
+        $expected = [
+            'AWSAccessKeyId=ACCESS_KEY',
+            'Action=GetServiceStatus',
+            'MWSAuthToken=MWS_AUTH_TOKEN',
+            'SellerId=SELLER_ID',
+            'SignatureMethod=HmacSHA256',
+            'SignatureVersion=2',
+            'Timestamp=2016-06-13T20%3A29%3A44Z',
+            'Version=2010-10-01',
+            'Signature=5X8inVe9PDtVZWxKd%2FSxzCQyzbTxJZShT0YqGFt7AD4%3D'
+        ];
+        $expected = implode('&', $expected);
+
+        // Actual response.
+        $reflection = new ReflectionMethod($client, 'buildQuery');
+        $reflection->setAccessible(true);
+        $actual = $reflection->invoke($client, new Requests\GetServiceStatusRequest, $this->passport);
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -187,9 +206,9 @@ class MockClientTest extends TestCase
             'Version=2010-10-01',
         ];
         $secretKey = 'SECRET_KEY';
-        $answer    = 'ivLuQpwBBEu%2BUpfGi62Z7EpWbpkXIFUh5zUAj7XiArY%3D';
+        $expected  = '5X8inVe9PDtVZWxKd%2FSxzCQyzbTxJZShT0YqGFt7AD4%3D';
 
-        $this->assertEquals($answer, $reflection->invoke($client, implode('&', $queryString), $secretKey));
+        $this->assertEquals($expected, $reflection->invoke($client, implode('&', $queryString), $secretKey));
     }
 
     /**
