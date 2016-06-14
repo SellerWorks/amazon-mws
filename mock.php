@@ -3,10 +3,10 @@
 require 'vendor/autoload.php';
 
 use SellerWorks\Amazon\MWS\Common\Passport;
-use SellerWorks\Amazon\MWS\FulfillmentInbound\Mock;
+use SellerWorks\Amazon\MWS\FulfillmentInbound\MockClient;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 
-$client = new Mock();
+$client = new MockClient();
 
 /*
 // GetServiceStatus
@@ -14,9 +14,15 @@ $response = $client->getServiceStatus();
 print_r($response);
 */
 
+// Error
+$response = $client->Error();
+print_r($response);
+
+/*
 // ListInboundShipments
 $response = $client->listInboundShipments(new Requests\ListInboundShipmentsRequest);
 print_r($response);
+*/
 
 /*
 // CreateInboundShipmentPlan

@@ -24,9 +24,19 @@ use SellerWorks\Amazon\MWS\Common\Results;
  */
 class MockClientTest extends TestCase
 {
+    /**
+     * @var Passport
+     */
     protected $passport;
+
+    /**
+     * @var Passport
+     */
     protected $multipass;
 
+    /**
+     * Setup generic passports.
+     */
     public function setUp()
     {
         $this->passport  = new Passport('SELLER_ID', 'ACCESS_KEY', 'SECRET_KEY', 'MWS_AUTH_TOKEN');

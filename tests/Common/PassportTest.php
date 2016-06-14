@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\Common\Tests;
+namespace SellerWorks\Amazon\MWS\Tests\Common;
 
 use PHPUnit\Framework\TestCase;
 use SellerWorks\Amazon\MWS\Common\Passport;

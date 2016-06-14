@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ErrorResponse xmlns="com.amazonservices.mws.FulfillmentInboundShipment._2010_10_01">
+<ErrorResponse xmlns="http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/">
   <!--1 or more repetitions:-->
   <Error>
     <Type>Sender</Type>

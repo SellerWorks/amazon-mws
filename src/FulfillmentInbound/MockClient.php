@@ -7,15 +7,19 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 use Exception;
 use SellerWorks\Amazon\MWS\Common\AbstractClient;
 use SellerWorks\Amazon\MWS\Common\RecordIterator;
+use SellerWorks\Amazon\MWS\Common\Results\Error;
 use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
  * Mock client for unit testing.
  */
-class Mock extends AbstractClient // implements FulfillmentInboundInterface
+class MockClient extends AbstractClient // implements FulfillmentInboundInterface
 {
-    const MWS_VERSION   = '2010-10-01';
-    const MWS_PATH      = '/FulfillmentInboundShipment/2010-10-01/';
+    /**
+     * MWS Service definitions.
+     */
+    const MWS_PATH    = '/FulfillmentInboundShipment/2010-10-01/';
+    const MWS_VERSION = '2010-10-01';
 
     /**
      * {@inheritDoc}
@@ -26,16 +30,27 @@ class Mock extends AbstractClient // implements FulfillmentInboundInterface
     }
 
     /**
+     * Mock error response.
+     */
+    public function Error(): Results\Error
+    {
+        $xml = file_get_contents(__DIR__.'/Mock/ErrorResponse.xml');
+        $response = $this->serializer->unserialize($xml);
+
+        return $this->throwError($response);
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function createInboundShipmentPlan(
+    public function CreateInboundShipmentPlan(
         Requests\CreateInboundShipmentPlanRequest $request,
         Passport $passport = null
     ):  Results\CreateInboundShipmentPlanResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentPlanResponse.xml');
         $response = $this->serializer->unserialize($xml);
-        
+
         if ($response instanceof Responses\ErrorResponse) {
             return $this->throwError($response);
         }

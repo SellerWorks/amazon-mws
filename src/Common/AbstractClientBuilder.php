@@ -8,6 +8,7 @@ use Psr\LoggerInterface;
 
 /**
  * Abstract Amazon MWS API Client
+ * @codeCoverageIgnore
  */
 abstract class AbstractClientBuilder
 {

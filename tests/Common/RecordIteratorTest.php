@@ -14,4 +14,8 @@ use SellerWorks\Amazon\MWS\Common\ResultInterface;
  */
 class RecordIteratorTest extends TestCase
 {
+    public function test()
+    {
+        $this->assertTrue(true);
+    }
 }
