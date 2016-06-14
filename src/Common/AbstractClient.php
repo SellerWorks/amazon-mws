@@ -51,7 +51,7 @@ abstract class AbstractClient implements ClientInterface
     {
         // Configure MWS.
         $this->setCountry(static::COUNTRY_US);
-        $this->setPassport($passport?: new Passport('', '',''));
+        $this->setPassport($passport);
     }
 
     /**
@@ -226,7 +226,7 @@ abstract class AbstractClient implements ClientInterface
         // Add standard parameters.
         $parameters['SignatureMethod']  = 'HmacSHA256';
         $parameters['SignatureVersion'] = 2;
-        $parameters['Timestamp']        = gmdate("Y-m-d\TH:i:s\\Z");
+        $parameters['Timestamp']        = $this->gmdate();
         $parameters['Version']          = static::MWS_VERSION;
 
         // Build query.
@@ -271,6 +271,18 @@ abstract class AbstractClient implements ClientInterface
     protected function urlencode_rfc3986(string $s): string
     {
         return str_replace(['+', '%7E'], [' ', '~'], rawurlencode($s));
+    }
+
+    /**
+     * Return UTC timestamp.
+     *
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    protected function gmdate()
+    {
+        return gmdate(SerializerInterface::DATE_FORMAT);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\Common\Tests;
+namespace SellerWorks\Amazon\MWS\Tests\Common;
 
 use InvalidArgumentException;
 use ReflectionMethod;
@@ -14,7 +14,9 @@ use SellerWorks\Amazon\MWS\Common\Mock\MockClient;
 use SellerWorks\Amazon\MWS\Common\Mock\MockSerializer;
 use SellerWorks\Amazon\MWS\Common\Passport;
 use SellerWorks\Amazon\MWS\Common\Requests;
+use SellerWorks\Amazon\MWS\Common\ResponseInterface;
 use SellerWorks\Amazon\MWS\Common\Responses;
+use SellerWorks\Amazon\MWS\Common\ResultInterface;
 use SellerWorks\Amazon\MWS\Common\Results;
 
 /**
@@ -132,6 +134,18 @@ class MockClientTest extends TestCase
      */
     public function test_getLastResponse()
     {
+        $client = new MockClient($this->passport);
+        $client->setSerializer(new MockSerializer);
+
+        // NullResponse
+        $this->assertTrue($client->getLastResponse() instanceof Responses\NullResponse);
+
+        // GetServiceStatusResponse
+        $reflection = new ReflectionMethod($client, 'makeRequest');
+        $reflection->setAccessible(true);
+        $reflection->invoke($client, new Requests\GetServiceStatusRequest, $this->passport);
+
+        $this->assertTrue($client->getLastResponse() instanceof ResponseInterface);
     }
 
     /**
@@ -139,6 +153,18 @@ class MockClientTest extends TestCase
      */
     public function test_getLastResult()
     {
+        $client = new MockClient($this->passport);
+        $client->setSerializer(new MockSerializer);
+
+        // NullResponse
+        $this->assertTrue($client->getLastResult() instanceof Results\NullResult);
+
+        // GetServiceStatusResponse
+        $reflection = new ReflectionMethod($client, 'makeRequest');
+        $reflection->setAccessible(true);
+        $reflection->invoke($client, new Requests\GetServiceStatusRequest, $this->passport);
+
+        $this->assertTrue($client->getLastResult() instanceof ResultInterface);
     }
 
     /**
@@ -146,6 +172,19 @@ class MockClientTest extends TestCase
      */
     public function test_makeRequest()
     {
+        $client = new MockClient();
+        $client->setSerializer(new MockSerializer);
+
+        // GetServiceStatusResponse
+        $reflection = new ReflectionMethod($client, 'makeRequest');
+        $reflection->setAccessible(true);
+        $response = $reflection->invoke($client, new Requests\GetServiceStatusRequest, $this->passport);
+
+        $this->assertTrue($response instanceof ResponseInterface);
+
+        // No passport used.
+        $this->expectException(\RuntimeException::class);
+        $reflection->invoke($client, new Requests\GetServiceStatusRequest);
     }
 
     /**
@@ -153,6 +192,34 @@ class MockClientTest extends TestCase
      */
     public function test_post()
     {
+        $client = new MockClient($this->passport);
+        $client->setSerializer(new MockSerializer);
+
+        // Expected response.
+        $expectedXml = "
+<?xml version=\"1.0\"?>
+<GetServiceStatusResponse xmlns=\"http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/\">
+  <GetServiceStatusResult>
+    <Status>GREEN</Status>
+    <Timestamp>2016-06-13T20:29:44.583Z</Timestamp>
+  </GetServiceStatusResult>
+  <ResponseMetadata>
+    <RequestId>fbe5d604-978f-4ab6-bc6e-0aa38838d0dd</RequestId>
+  </ResponseMetadata>
+</GetServiceStatusResponse>";
+
+        $expected = new \DomDocument();
+        $expected->loadXml(trim($expectedXml));
+
+        // Actual response.
+        $reflection = new ReflectionMethod($client, 'post');
+        $reflection->setAccessible(true);
+        $actualXml = $reflection->invoke($client, new Requests\GetServiceStatusRequest, $this->passport);
+
+        $actual = new \DomDocument();
+        $actual->loadXml($actualXml);
+
+        $this->assertEqualXMLStructure($expected->documentElement, $actual->documentElement);
     }
 
     /**

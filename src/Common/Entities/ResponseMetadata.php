@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Entities;
+namespace SellerWorks\Amazon\MWS\Common\Entities;
 
 /**
  */

@@ -7,6 +7,7 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 use Closure;
 use ReflectionProperty;
 use Sabre\Xml\Reader;
+use SellerWorks\Amazon\MWS\Common\Entities\ResponseMetadata;
 use SellerWorks\Amazon\MWS\Common\Responses\ErrorResponse;
 use SellerWorks\Amazon\MWS\Common\Responses\GetServiceStatusResponse;
 use SellerWorks\Amazon\MWS\Common\Results\Error;
@@ -78,7 +79,7 @@ class XmlService extends \Sabre\Xml\Service
 
             // Type objects.
             "{$namespace}Amount" => $this->mapObject(Entities\Amount::class),
-            "{$namespace}ResponseMetadata" => $this->mapObject(Entities\ResponseMetadata::class),
+            "{$namespace}ResponseMetadata" => $this->mapObject(ResponseMetadata::class),
             "{$namespace}ShipFromAddress" => $this->mapObject(Entities\Address::class),
             "{$namespace}ShipToAddress" => $this->mapObject(Entities\Address::class),
 

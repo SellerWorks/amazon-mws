@@ -6,6 +6,8 @@ namespace SellerWorks\Amazon\MWS\Common\Mock;
 
 use SellerWorks\Amazon\MWS\Common\RequestInterface;
 use SellerWorks\Amazon\MWS\Common\ResponseInterface;
+use SellerWorks\Amazon\MWS\Common\Responses\GetServiceStatusResponse;
+use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
 use SellerWorks\Amazon\MWS\Common\SerializerInterface;
 
 /**
@@ -26,5 +28,11 @@ class MockSerializer implements SerializerInterface
      */
     public function unserialize(string $response): ResponseInterface
     {
+        $response = new GetServiceStatusResponse;
+        $response->GetServiceStatusResult = new GetServiceStatusResult;
+        $response->GetServiceStatusResult->Status = 'GREEN';
+        $response->GetServiceStatusResult->Timestamp = '1969-07-21T02:56:03Z';
+
+        return $response;
     }
 }
