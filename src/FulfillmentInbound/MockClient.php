@@ -7,13 +7,15 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 use Exception;
 use SellerWorks\Amazon\MWS\Common\AbstractClient;
 use SellerWorks\Amazon\MWS\Common\RecordIterator;
+use SellerWorks\Amazon\MWS\Common\Responses\ErrorResponse;
+use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
 use SellerWorks\Amazon\MWS\Common\Results\Error;
 use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
  * Mock client for unit testing.
  */
-class MockClient extends AbstractClient // implements FulfillmentInboundInterface
+class MockClient extends AbstractClient implements FulfillmentInboundInterface
 {
     /**
      * MWS Service definitions.
@@ -61,55 +63,79 @@ class MockClient extends AbstractClient // implements FulfillmentInboundInterfac
     /**
      * {@inheritDoc}
      */
-    public function createInboundShipment(
-        Requests\CreateInboundShipmentRequest $request
-    ):  Responses\CreateInboundShipmentResponse
+    function CreateInboundShipment(
+        Requests\CreateInboundShipmentRequest $request,
+        Passport $passport = null
+    ):  Results\CreateInboundShipmentResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentResponse.xml');
+        $response = $this->serializer->unserialize($xml);
 
-        return $this->serializer->unserialize($xml);
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->CreateInboundShipmentResult;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function updateInboundShipment(
-        Requests\UpdateInboundShipmentRequest $request
-    ):  Responses\UpdateInboundShipmentResponse
+    public function UpdateInboundShipment(
+        Requests\UpdateInboundShipmentRequest $request,
+        Passport $passport = null
+    ):  Results\UpdateInboundShipmentResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/UpdateInboundShipmentResponse.xml');
+        $response = $this->serializer->unserialize($xml);
 
-        return $this->serializer->unserialize($xml);
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->UpdateInboundShipmentResult;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPrepInstructionsForSKU(
-        Requests\GetPrepInstructionsForSKURequest $request
-    ):  Responses\GetPrepInstructionsForSKUResponse
+    function GetPrepInstructionsForSKU(
+        Requests\GetPrepInstructionsForSKURequest $request,
+        Passport $passport = null
+    ):  Results\GetPrepInstructionsForSKUResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/GetPrepInstructionsForSKUResponse.xml');
+        $response = $this->serializer->unserialize($xml);
 
-        return $this->serializer->unserialize($xml);
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->GetPrepInstructionsForSKUResult;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function GetPrepInstructionsForASIN(
-        Requests\GetPrepInstructionsForASINRequest $request
-    ):  Responses\GetPrepInstructionsForASINResponse
+    function GetPrepInstructionsForASIN(
+        Requests\GetPrepInstructionsForASINRequest $request,
+        Passport $passport = null
+    ):  Results\GetPrepInstructionsForASINResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/GetPrepInstructionsForASINResponse.xml');
+        $response = $this->serializer->unserialize($xml);
 
-        return $this->serializer->unserialize($xml);
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->GetPrepInstructionsForASINResult;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function listInboundShipments(
+    function ListInboundShipments(
         Requests\ListInboundShipmentsRequest $request,
         Passport $passport = null
     ):  RecordIterator
@@ -126,22 +152,68 @@ class MockClient extends AbstractClient // implements FulfillmentInboundInterfac
     /**
      * {@inheritDoc}
      */
-    public function listInboundShipmentItems(
-        Requests\ListInboundShipmentItemsRequest $request
-    ):  Responses\ListInboundShipmentItemsResponse
+    function ListInboundShipmentsByNextToken(
+        string $token,
+        Passport $passport = null
+    ):  Results\ListInboundShipmentsByNextTokenResult
     {
-        $xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentItemsResponse.xml');
+        $xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentsByNextTokenResponse.xml');
+        $response = $this->serializer->unserialize($xml);
 
-        return $this->serializer->unserialize($xml);
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->ListInboundShipmentsByNextTokenResult;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getServiceStatus(): Responses\GetServiceStatusResponse
+    function ListInboundShipmentItems(
+        Requests\ListInboundShipmentItemsRequest $request,
+        Passport $passport = null
+    ):  RecordIterator
+    {
+        $xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentItemsResponse.xml');
+        $response = $this->serializer->unserialize($xml);
+
+        $passport = new Passport('','','','');
+        $iterator = new RecordIterator($this, $passport, $response->getResult());
+
+        return $iterator;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    function ListInboundShipmentItemsByNextToken(
+        string $token,
+        Passport $passport = null
+    ):  Results\ListInboundShipmentItemsByNextTokenResult
+    {
+        $xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentItemsByNextTokenResponse.xml');
+        $response = $this->serializer->unserialize($xml);
+
+        if ($response instanceof Responses\ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->ListInboundShipmentItemsByNextTokenResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function GetServiceStatus(): GetServiceStatusResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/GetServiceStatusResponse.xml');
+        $response = $this->serializer->unserialize($xml);
 
-        return $this->serializer->unserialize($xml);
+        if ($response instanceof ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->GetServiceStatusResult;
     }
 }

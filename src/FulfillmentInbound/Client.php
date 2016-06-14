@@ -38,7 +38,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     /**
      * {@inheritDoc}
      */
-    public function createInboundShipmentPlan(
+    public function CreateInboundShipmentPlan(
         Requests\CreateInboundShipmentPlanRequest $request,
         Passport $passport = null
     ):  Results\CreateInboundShipmentPlanResult
@@ -55,51 +55,75 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     /**
      * {@inheritDoc}
      */
-    public function createInboundShipment(
+    function CreateInboundShipment(
         Requests\CreateInboundShipmentRequest $request,
         Passport $passport = null
-    ):  Responses\CreateInboundShipmentResponse
+    ):  Results\CreateInboundShipmentResult
     {
-        return $this->makeRequest($request);
+        $response = $this->makeRequest($request, $passport);
+
+        if ($response instanceof ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->CreateInboundShipmentResult;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function updateInboundShipment(
+    public function UpdateInboundShipment(
         Requests\UpdateInboundShipmentRequest $request,
         Passport $passport = null
-    ):  Responses\UpdateInboundShipmentResponse
+    ):  Results\UpdateInboundShipmentResult
     {
-        return $this->makeRequest($request);
+        $response = $this->makeRequest($request, $passport);
+
+        if ($response instanceof ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->UpdateInboundShipmentResult;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPrepInstructionsForSKU(
+    function GetPrepInstructionsForSKU(
         Requests\GetPrepInstructionsForSKURequest $request,
         Passport $passport = null
-    ):  Responses\GetPrepInstructionsForSKUResponse
+    ):  Results\GetPrepInstructionsForSKUResult
     {
-        return $this->makeRequest($request);
+        $response = $this->makeRequest($request, $passport);
+
+        if ($response instanceof ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->GetPrepInstructionsForSKUResult;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function GetPrepInstructionsForASIN(
+    function GetPrepInstructionsForASIN(
         Requests\GetPrepInstructionsForASINRequest $request,
         Passport $passport = null
-    ):  Responses\GetPrepInstructionsForASINResponse
+    ):  Results\GetPrepInstructionsForASINResult
     {
-        return $this->makeRequest($request);
+        $response = $this->makeRequest($request, $passport);
+
+        if ($response instanceof ErrorResponse) {
+            return $this->throwError($response);
+        }
+
+        return $response->GetPrepInstructionsForASINResult;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function listInboundShipments(
+    function ListInboundShipments(
         Requests\ListInboundShipmentsRequest $request,
         Passport $passport = null
     ):  RecordIterator
@@ -119,10 +143,10 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     /**
      * {@inheritDoc}
      */
-    public function listInboundShipmentsByNextToken(
+    public function ListInboundShipmentsByNextToken(
         string $token,
         Passport $passport = null
-    ):  Results\ListInboundShipmentsResult
+    ):  Results\ListInboundShipmentsByNextTokenResult
     {
         $request = new Requests\ListInboundShipmentsByNextTokenRequest;
         $request->NextToken = $token;
@@ -139,29 +163,27 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     /**
      * {@inheritDoc}
      */
-    function listInboundShipmentItems(
+    function ListInboundShipmentItems(
         Requests\ListInboundShipmentItemsRequest $request,
         Passport $passport = null
     ):  RecordIterator
     {
-        return $this->makeRequest($request);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function listInboundShipmentItemsByNextToken(
+    function ListInboundShipmentItemsByNextToken(
         string $token,
         Passport $passport = null
-    ):  Responses\ListInboundShipmentsResponse
+    ):  Results\ListInboundShipmentItemsByNextTokenResult
     {
-        
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getServiceStatus(): GetServiceStatusResult
+    public function GetServiceStatus(): GetServiceStatusResult
     {
         $response = $this->makeRequest(new GetServiceStatusRequest);
 

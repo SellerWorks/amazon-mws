@@ -41,28 +41,28 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_CreateInboundShipment.html
      *
-     * @param  Requests\CreateInboundShipmentRequest
+     * @param  CreateInboundShipmentRequest
      * @param  Passport $passport
-     * @return Responses\CreateInboundShipmentResponse
+     * @return CreateInboundShipmentResult
      */
     function CreateInboundShipment(
         Requests\CreateInboundShipmentRequest $request,
         Passport $passport = null
-    ):  Responses\CreateInboundShipmentResponse;
+    ):  Results\CreateInboundShipmentResult;
 
     /**
      * Updates an existing inbound shipment.
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_UpdateInboundShipment.html
      *
-     * @param  Requests\UpdateInboundShipmentRequest
+     * @param  UpdateInboundShipmentRequest
      * @param  Passport $passport
-     * @return Responses\UpdateInboundShipmentResponse
+     * @return UpdateInboundShipmentResult
      */
-    function UpdateInboundShipment(
+    public function UpdateInboundShipment(
         Requests\UpdateInboundShipmentRequest $request,
         Passport $passport = null
-    ):  Responses\UpdateInboundShipmentResponse;
+    ):  Results\UpdateInboundShipmentResult;
 
     // GetPreorderInfo
     // ConfirmPreorder
@@ -72,28 +72,28 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_GetPrepInstructionsForSKU.html
      *
-     * @param  Requests\GetPrepInstructionsForSKURequest
+     * @param  GetPrepInstructionsForSKURequest
      * @param  Passport $passport
-     * @return Responses\GetPrepInstructionsForSKUResponse
+     * @return GetPrepInstructionsForSKUResult
      */
     function GetPrepInstructionsForSKU(
         Requests\GetPrepInstructionsForSKURequest $request,
         Passport $passport = null
-    ):  Responses\GetPrepInstructionsForSKUResponse;
+    ):  Results\GetPrepInstructionsForSKUResult;
 
     /**
      * Returns item preparation instructions to help with item sourcing decisions.
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_GetPrepInstructionsForASIN.html
      *
-     * @param  Requests\GetPrepInstructionsForASINRequest
+     * @param  GetPrepInstructionsForASINRequest
      * @param  Passport $passport
-     * @return Responses\GetPrepInstructionsForASINResponse
+     * @return GetPrepInstructionsForASINResult
      */
     function GetPrepInstructionsForASIN(
         Requests\GetPrepInstructionsForASINRequest $request,
         Passport $passport = null
-    ):  Responses\GetPrepInstructionsForASINResponse;
+    ):  Results\GetPrepInstructionsForASINResult;
     
     // PutTransportContent
     // EstimateTransportRequest
@@ -131,7 +131,7 @@ interface FulfillmentInboundInterface
     function ListInboundShipmentsByNextToken(
         string $token,
         Passport $passport = null
-    ):  Results\ListInboundShipmentsResult;
+    ):  Results\ListInboundShipmentsByNextTokenResult;
 
     /**
      * Returns a list of items in a specified inbound shipment, or a list of items that were updated within a specified time frame.
@@ -152,16 +152,14 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItemsByNextToken.html
      *
-     * @param  ListInboundShipmentItemsByNextTokenRequest
+     * @param  string  $token
      * @param  Passport $passport
-     * @return ListInboundShipmentItemsByNextTokenResponse
+     * @return ListInboundShipmentItemsByNextTokenResult
      */
-/*
     function ListInboundShipmentItemsByNextToken(
-        Requests\ListInboundShipmentItemsByNextTokenRequest $request,
+        string $token,
         Passport $passport = null
-    ):  Responses\ListInboundShipmentItemsByNextTokenResponse;
-*/
+    ):  Results\ListInboundShipmentItemsByNextTokenResult;
 
     /**
      * Returns the operational status of the Fulfillment Inbound Shipment API section.

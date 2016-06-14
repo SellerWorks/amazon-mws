@@ -47,6 +47,7 @@ class XmlService extends \Sabre\Xml\Service
             "{$namespace}GetPrepInstructionsForASINResponse" => $this->mapObject(Responses\GetPrepInstructionsForASINResponse::class),
             "{$namespace}GetPrepInstructionsForSKUResponse" => $this->mapObject(Responses\GetPrepInstructionsForSKUResponse::class),
             "{$namespace}ListInboundShipmentItemsResponse" => $this->mapObject(Responses\ListInboundShipmentItemsResponse::class),
+            "{$namespace}ListInboundShipmentItemsByNextTokenResponse" => $this->mapObject(Responses\ListInboundShipmentItemsByNextTokenResponse::class),
             "{$namespace}ListInboundShipmentsResponse" => $this->mapObject(Responses\ListInboundShipmentsResponse::class),
             "{$namespace}ListInboundShipmentsByNextTokenResponse" => $this->mapObject(Responses\ListInboundShipmentsByNextTokenResponse::class),
             "{$namespace}UpdateInboundShipmentResponse" => $this->mapObject(Responses\UpdateInboundShipmentResponse::class),
@@ -54,14 +55,15 @@ class XmlService extends \Sabre\Xml\Service
 
             // Result objects.
             "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Results\CreateInboundShipmentPlanResult::class),
-//            "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Results\CreateInboundShipmentResult::class),
+            "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Results\CreateInboundShipmentResult::class),
 
-//            "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Results\GetPrepInstructionsForASINResult::class),
-//            "{$namespace}GetPrepInstructionsForSKUResult" => $this->mapObject(Results\GetPrepInstructionsForSKUResult::class),
-//            "{$namespace}ListInboundShipmentItemsResult" => $this->mapObject(Results\ListInboundShipmentItemsResult::class),
+            "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Results\GetPrepInstructionsForASINResult::class),
+            "{$namespace}GetPrepInstructionsForSKUResult" => $this->mapObject(Results\GetPrepInstructionsForSKUResult::class),
+            "{$namespace}ListInboundShipmentItemsResult" => $this->mapObject(Results\ListInboundShipmentItemsResult::class),
+            "{$namespace}ListInboundShipmentItemsByNextTokenResult" => $this->mapObject(Results\ListInboundShipmentItemsByNextTokenResult::class),
             "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
-            "{$namespace}ListInboundShipmentsByNextTokenResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
-//           "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Results\UpdateInboundShipmentResult::class),
+            "{$namespace}ListInboundShipmentsByNextTokenResult" => $this->mapObject(Results\ListInboundShipmentsByNextTokenResult::class),
+            "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Results\UpdateInboundShipmentResult::class),
 
 
             // Collection objects.

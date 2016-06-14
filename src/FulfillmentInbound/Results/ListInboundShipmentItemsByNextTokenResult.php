@@ -8,9 +8,9 @@ use SellerWorks\Amazon\MWS\Common\IterableInterface;
 use SellerWorks\Amazon\MWS\Common\ResultInterface;
 
 /**
- * ListInboundShipmentItems result object.
+ * ListInboundShipmentItemsByNextToken result object.
  */
-final class ListInboundShipmentItemsResult implements IterableInterface, ResultInterface
+final class ListInboundShipmentItemsByNextTokenResult implements IterableInterface, ResultInterface
 {
     /**
      * @var string
