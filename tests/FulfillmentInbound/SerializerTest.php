@@ -48,7 +48,7 @@ class SerializerTest extends TestCase
         $request->ShipFromAddress = new Entities\Address;
         $request->ShipFromAddress->Name                = $faker->name;
         $request->ShipFromAddress->AddressLine1        = $faker->streetAddress;
-        $request->ShipFromAddress->AddressLine2        = $faker->words(3);
+        $request->ShipFromAddress->AddressLine2        = $faker->word;
         $request->ShipFromAddress->City                = $faker->city;
         $request->ShipFromAddress->DistrictOrCounty    = $faker->word;
         $request->ShipFromAddress->StateOrProvinceCode = $faker->stateAbbr;

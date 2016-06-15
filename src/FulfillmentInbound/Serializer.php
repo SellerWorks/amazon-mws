@@ -42,6 +42,10 @@ class Serializer implements SerializerInterface
 
         // Validate request is valid type and set action.
         switch (true) {
+            case $request instanceof Requests\CreateInboundShipmentPlanRequest;
+                $action = 'CreateInboundShipmentPlan';
+                break;
+
             case $request instanceof Requests\ListInboundShipmentsRequest:
                 $action = 'ListInboundShipments';
                 break;
@@ -86,13 +90,37 @@ class Serializer implements SerializerInterface
     {
         $returnArr  = [];
         $reflection = new ReflectionClass($request);
-        $properties = $reflection->getProperties();  // ReflectionProperty::IS_PROTECTED
+        $properties = $reflection->getProperties();
 
         foreach ($properties as $property) {
             $propName  = $property->getName();
             $propValue = $property->getValue($request);
 
             switch ($propName) {
+                // Address properties.
+                case 'ShipFromAddress':
+                    if ($propValue instanceof Entities\Address) {
+                        $prefix = sprintf('%s.', $propName);
+                        $returnArr[$propName.'Name']         = $propValue->Name;
+                        $returnArr[$propName.'AddressLine1'] = $propValue->AddressLine1;
+                        $returnArr[$propName.'City']         = $propValue->City;
+                        $returnArr[$propName.'CountryCode']  = $propValue->CountryCode;
+
+                        if (!empty($propValue->AddressLine2)) {
+                            $returnArr[$propName.'AddressLine2'] = $propValue->AddressLine2;
+                        }
+                        if (!empty($propValue->DistrictOrCounty)) {
+                            $returnArr[$propName.'DistrictOrCounty'] = $propValue->DistrictOrCounty;
+                        }
+                        if (!empty($propValue->StateOrProvinceCode)) {
+                            $returnArr[$propName.'StateOrProvinceCode'] = $propValue->StateOrProvinceCode;
+                        }
+                        if (!empty($propValue->PostalCode)) {
+                            $returnArr[$propName.'PostalCode'] = $propValue->PostalCode;
+                        }
+                    }
+                    break;
+
                 // Array<string> properties.
                 case 'ShipmentIdList':
                 case 'ShipmentStatusList':
@@ -117,9 +145,14 @@ class Serializer implements SerializerInterface
                     break;
 
                 // String properties.
+                case 'LabelPrepPreference':
                 case 'NextToken':
                 case 'ShipmentId':
-                    $returnArr[$propName] = (string) $propValue;
+                case 'ShipToCountryCode':
+                case 'ShipToCountrySubdivisionCode':
+                    if (!empty($propValue)) {
+                        $returnArr[$propName] = (string) $propValue;
+                    }
                     break;
             }
         }
