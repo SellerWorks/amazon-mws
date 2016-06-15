@@ -34,7 +34,7 @@ final class CreateInboundShipmentPlanRequest implements RequestInterface
 	public $LabelPrepPreference;
 
 	/**
-	 * @var ArrayCollection<SellerWorks\Amazon\MWS\FulfillmentInbound\Types\InboundShipmentPlanRequestItem>
+	 * @var Array<InboundShipmentPlanRequestItem>
 	 */
 	public $InboundShipmentPlanRequestItems;
 }

@@ -90,7 +90,7 @@ class SerializerTest extends TestCase
         }
 
         $expected = array_merge($expected, [
-            'Action' => 'GetServiceStatus',
+            'Action'                              => 'CreateInboundShipmentPlan',
             'ShipFromAddress.Name'                => $request->ShipFromAddress->Name,
             'ShipFromAddress.AddressLine1'        => $request->ShipFromAddress->AddressLine1,
             'ShipFromAddress.AddressLine2'        => $request->ShipFromAddress->AddressLine2,

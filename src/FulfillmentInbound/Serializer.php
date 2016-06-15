@@ -101,22 +101,22 @@ class Serializer implements SerializerInterface
                 case 'ShipFromAddress':
                     if ($propValue instanceof Entities\Address) {
                         $prefix = sprintf('%s.', $propName);
-                        $returnArr[$propName.'Name']         = $propValue->Name;
-                        $returnArr[$propName.'AddressLine1'] = $propValue->AddressLine1;
-                        $returnArr[$propName.'City']         = $propValue->City;
-                        $returnArr[$propName.'CountryCode']  = $propValue->CountryCode;
+                        $returnArr[$prefix.'Name']         = $propValue->Name;
+                        $returnArr[$prefix.'AddressLine1'] = $propValue->AddressLine1;
+                        $returnArr[$prefix.'City']         = $propValue->City;
+                        $returnArr[$prefix.'CountryCode']  = $propValue->CountryCode;
 
                         if (!empty($propValue->AddressLine2)) {
-                            $returnArr[$propName.'AddressLine2'] = $propValue->AddressLine2;
+                            $returnArr[$prefix.'AddressLine2'] = $propValue->AddressLine2;
                         }
                         if (!empty($propValue->DistrictOrCounty)) {
-                            $returnArr[$propName.'DistrictOrCounty'] = $propValue->DistrictOrCounty;
+                            $returnArr[$prefix.'DistrictOrCounty'] = $propValue->DistrictOrCounty;
                         }
                         if (!empty($propValue->StateOrProvinceCode)) {
-                            $returnArr[$propName.'StateOrProvinceCode'] = $propValue->StateOrProvinceCode;
+                            $returnArr[$prefix.'StateOrProvinceCode'] = $propValue->StateOrProvinceCode;
                         }
                         if (!empty($propValue->PostalCode)) {
-                            $returnArr[$propName.'PostalCode'] = $propValue->PostalCode;
+                            $returnArr[$prefix.'PostalCode'] = $propValue->PostalCode;
                         }
                     }
                     break;
@@ -152,6 +152,43 @@ class Serializer implements SerializerInterface
                 case 'ShipToCountrySubdivisionCode':
                     if (!empty($propValue)) {
                         $returnArr[$propName] = (string) $propValue;
+                    }
+                    break;
+
+                // Unique cases.
+                case 'InboundShipmentPlanRequestItems':
+                    if (is_array($propValue) && !empty($propValue)) {
+                        $pos = 1;
+
+                        foreach ($propValue as $i) {
+                            $key = sprintf('%s.member.%s.', $propName, $pos);
+                            $returnArr[$key.'SellerSKU'] = $i->SellerSKU;
+                            $returnArr[$key.'Quantity']  = $i->Quantity;
+
+                            if (!empty($i->ASIN)) {
+                                $returnArr[$key.'ASIN'] = $i->ASIN;
+                            }
+                            if (!empty($i->Condition)) {
+                                $returnArr[$key.'Condition'] = $i->Condition;
+                            }
+                            if (!empty($i->QuantityInCase)) {
+                                $returnArr[$key.'QuantityInCase'] = $i->QuantityInCase;
+                            }
+
+                            if (is_array($i->PrepDetailsList) && !empty($i->PrepDetailsList)) {
+                                $pos2 = 1;
+
+                                foreach ($i->PrepDetailsList as $k) {
+                                    $key2 = sprintf('%sPrepDetailsList.PrepDetails.%s.', $key, $pos2);
+                                    $returnArr[$key2.'PrepInstruction'] = $k->PrepInstruction;
+                                    $returnArr[$key2.'PrepOwner']       = $k->PrepOwner;
+
+                                    ++$pos2;
+                                }
+                            }
+
+                            ++$pos;
+                        }
                     }
                     break;
             }
