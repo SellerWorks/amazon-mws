@@ -111,4 +111,12 @@ class SerializerTest extends TestCase
         ksort($actual);
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     *  test
+     */
+    public function test_()
+    {
+        
+    }
 }

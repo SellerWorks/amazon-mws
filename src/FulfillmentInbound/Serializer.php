@@ -46,6 +46,10 @@ class Serializer implements SerializerInterface
                 $action = 'CreateInboundShipmentPlan';
                 break;
 
+            case $request instanceof Requests\CreateInboundShipment;
+                $action = 'CreateInboundShipment';
+                break;
+
             case $request instanceof Requests\ListInboundShipmentsRequest:
                 $action = 'ListInboundShipments';
                 break;
@@ -67,7 +71,7 @@ class Serializer implements SerializerInterface
         }
 
         // Add properties.
-        $returnArr = array_merge(['Action' => $action], $this->serializeReflection($request));
+        $returnArr = ['Action' => $action] + $this->toArray($request);
 
         return $returnArr;
     }
@@ -81,15 +85,15 @@ class Serializer implements SerializerInterface
     }
 
     /**
-     * Serialize objects by reflection.
+     * Flatten Request object with dot-notation.
      *
      * @param  RequestInterface  $request
      * @return array
      */
-    protected function serializeReflection(RequestInterface $request): array
+    protected function toArray(RequestInterface $request): array
     {
         $returnArr  = [];
-        $reflection = new ReflectionClass($request);
+        $reflection = new ReflectionClass(get_class($request));
         $properties = $reflection->getProperties();
 
         foreach ($properties as $property) {
@@ -100,26 +104,10 @@ class Serializer implements SerializerInterface
                 // Address properties.
                 case 'ShipFromAddress':
                     if ($propValue instanceof Entities\Address) {
-                        $prefix = sprintf('%s.', $propName);
-                        $returnArr[$prefix.'Name']         = $propValue->Name;
-                        $returnArr[$prefix.'AddressLine1'] = $propValue->AddressLine1;
-                        $returnArr[$prefix.'City']         = $propValue->City;
-                        $returnArr[$prefix.'CountryCode']  = $propValue->CountryCode;
-
-                        if (!empty($propValue->AddressLine2)) {
-                            $returnArr[$prefix.'AddressLine2'] = $propValue->AddressLine2;
-                        }
-                        if (!empty($propValue->DistrictOrCounty)) {
-                            $returnArr[$prefix.'DistrictOrCounty'] = $propValue->DistrictOrCounty;
-                        }
-                        if (!empty($propValue->StateOrProvinceCode)) {
-                            $returnArr[$prefix.'StateOrProvinceCode'] = $propValue->StateOrProvinceCode;
-                        }
-                        if (!empty($propValue->PostalCode)) {
-                            $returnArr[$prefix.'PostalCode'] = $propValue->PostalCode;
-                        }
+                        $returnArr += $this->parseAddress($propValue, sprintf('%s.', $propName));
                     }
                     break;
+
 
                 // Array<string> properties.
                 case 'ShipmentIdList':
@@ -144,6 +132,7 @@ class Serializer implements SerializerInterface
                     }
                     break;
 
+
                 // String properties.
                 case 'LabelPrepPreference':
                 case 'NextToken':
@@ -155,6 +144,7 @@ class Serializer implements SerializerInterface
                     }
                     break;
 
+
                 // Unique cases.
                 case 'InboundShipmentPlanRequestItems':
                     if (is_array($propValue) && !empty($propValue)) {
@@ -165,13 +155,13 @@ class Serializer implements SerializerInterface
                             $returnArr[$key.'SellerSKU'] = $i->SellerSKU;
                             $returnArr[$key.'Quantity']  = $i->Quantity;
 
-                            if (!empty($i->ASIN)) {
+                            if (isset($i->ASIN)) {
                                 $returnArr[$key.'ASIN'] = $i->ASIN;
                             }
-                            if (!empty($i->Condition)) {
+                            if (isset($i->Condition)) {
                                 $returnArr[$key.'Condition'] = $i->Condition;
                             }
-                            if (!empty($i->QuantityInCase)) {
+                            if (isset($i->QuantityInCase)) {
                                 $returnArr[$key.'QuantityInCase'] = $i->QuantityInCase;
                             }
 
@@ -191,9 +181,86 @@ class Serializer implements SerializerInterface
                         }
                     }
                     break;
+
+
+                case 'InboundShipmentHeader':
+                    $prefix = sprintf('%s.', $propName);
+                    $returnArr[$prefix.'ShipmentName'] = $propValue->ShipmentName;
+                    $returnArr += $this->parseAddress($propValue->ShipFromAddress, $prefix);
+                    $returnArr[$prefix.'DestinationFulfillmentCenterId'] = $propValue->DestinationFulfillmentCenterId;
+                    $returnArr[$prefix.'LabelPrepPreference'] = $propValue->LabelPrepPreference;
+                    $returnArr[$prefix.'ShipmentStatus'] = $propValue->ShipmentStatus;
+
+                    if (isset($propValue->AreCasesRequired)) {
+                        $returnArr[$prefix.'AreCasesRequired'] = $propValue->AreCasesRequired;
+                    }
+                    break;
+
+
+                case 'InboundShipmentItems':
+                    if (is_array($propValue) && !empty($propValue)) {
+                        $pos = 1;
+
+                        foreach ($propValue as $i) {
+                            $key = sprintf('%s.member.%s.', $propName, $pos);
+                            $returnArr[$key.'SellerSKU'] = $i->SellerSKU;
+                            $returnArr[$key.'QuantityShipped'] = $i->QuantityShipped;
+
+                            if (isset($i->ShipmentId)) {
+                                $returnArr[$key.'ShipmentId'] = $i->ShipmentId;
+                            }
+                            if (isset($i->FulfillmentNetworkSKU)) {
+                                $returnArr[$key.'FulfillmentNetworkSKU'] = $i->FulfillmentNetworkSKU;
+                            }
+                            if (isset($i->QuantityReceived)) {
+                                $returnArr[$key.'QuantityReceived'] = $i->QuantityReceived;
+                            }
+                            if (isset($i->QuantityInCase)) {
+                                $returnArr[$key.'QuantityInCase'] = $i->QuantityInCase;
+                            }
+                            if (isset($i->ReleaseDate)) {
+                                $returnArr[$key.'ReleaseDate'] = $i->ReleaseDate;
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
         return $returnArr;
     }
+
+    /**
+     * Parse Address object.
+     *
+     * @param  Address  $address
+     * @param  string  $prefix
+     * @return array
+     */
+    protected function parseAddress(Entities\Address $address, string $prefix = ''): array
+    {
+        $results = [
+            $prefix.'Name'          => $address->Name,
+            $prefix.'AddressLine1'  => $address->AddressLine1,
+            $prefix.'City'          => $address->City,
+            $prefix.'CountryCode'   => $address->CountryCode,
+        ];
+
+        if (isset($address->AddressLine2)) {
+            $results[$prefix.'AddressLine2'] = $address->AddressLine2;
+        }
+        if (isset($address->DistrictOrCounty)) {
+            $results[$prefix.'DistrictOrCounty'] = $address->DistrictOrCounty;
+        }
+        if (isset($address->StateOrProvinceCode)) {
+            $results[$prefix.'StateOrProvinceCode'] = $address->StateOrProvinceCode;
+        }
+        if (isset($address->PostalCode)) {
+            $results[$prefix.'PostalCode'] = $address->PostalCode;
+        }
+
+        return $results;
+    }
+
+
 }
