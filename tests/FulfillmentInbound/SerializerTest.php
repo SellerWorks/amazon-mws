@@ -8,17 +8,31 @@ use Error;
 use Faker;
 use PHPUnit\Framework\TestCase;
 use SellerWorks\Amazon\MWS\Common\Requests\GetServiceStatusRequest;
+use SellerWorks\Amazon\MWS\Common\Requests\NullRequest;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Entities;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Results;
 use SellerWorks\Amazon\MWS\FulfillmentInbound\Serializer;
+use UnexpectedValueException;
 
 /**
  * Serializer tests
  */
 class SerializerTest extends TestCase
 {
+    /**
+     * Test exception
+     */
+    public function test_exception()
+    {
+        $this->expectException(UnexpectedValueException::class);
+
+        $request    = new NullRequest;
+        $serializer = new Serializer;
+        $serializer->serialize($request);
+    }
+
     /**
      * Test Error
      */
@@ -191,6 +205,23 @@ class SerializerTest extends TestCase
         ]);
 
         $serializer = new Serializer;
+        $actual = $serializer->serialize($request);
+
+        ksort($expected);
+        ksort($actual);
+        $this->assertEquals($expected, $actual);
+
+        // Check with DateTimeInterfaace.
+        $pos = 1;
+
+        foreach ($request->InboundShipmentItems as $i) {
+            $i->ReleaseDate = $faker->dateTimeThisYear();
+            
+            $key = sprintf('InboundShipmentItems.member.%s.ReleaseDate', $pos);
+            $expected[$key] = $i->ReleaseDate->format('Y-m-d');
+            ++$pos;
+        }
+
         $actual = $serializer->serialize($request);
 
         ksort($expected);
@@ -385,6 +416,19 @@ class SerializerTest extends TestCase
         ksort($expected);
         ksort($actual);
         $this->assertEquals($expected, $actual);
+
+
+        // Test with date time strings.
+        $request->LastUpdatedAfter     = $faker->dateTimeThisYear()->format(Serializer::DATE_FORMAT);
+        $request->LastUpdatedBefore    = $faker->dateTimeThisYear()->format(Serializer::DATE_FORMAT);
+        $expected['LastUpdatedAfter']  = $request->LastUpdatedAfter;
+        $expected['LastUpdatedBefore'] = $request->LastUpdatedBefore;
+
+        $actual = $serializer->serialize($request);
+
+        ksort($expected);
+        ksort($actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -431,6 +475,19 @@ class SerializerTest extends TestCase
             'LastUpdatedAfter'  => $request->LastUpdatedAfter->format(Serializer::DATE_FORMAT),
             'LastUpdatedBefore' => $request->LastUpdatedBefore->format(Serializer::DATE_FORMAT),
         ];
+
+        ksort($expected);
+        ksort($actual);
+        $this->assertEquals($expected, $actual);
+
+
+        // Test with date time strings.
+        $request->LastUpdatedAfter     = $faker->dateTimeThisYear()->format(Serializer::DATE_FORMAT);
+        $request->LastUpdatedBefore    = $faker->dateTimeThisYear()->format(Serializer::DATE_FORMAT);
+        $expected['LastUpdatedAfter']  = $request->LastUpdatedAfter;
+        $expected['LastUpdatedBefore'] = $request->LastUpdatedBefore;
+
+        $actual = $serializer->serialize($request);
 
         ksort($expected);
         ksort($actual);
