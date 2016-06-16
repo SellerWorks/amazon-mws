@@ -39,7 +39,7 @@ final class InboundShipmentItem
     public $QuantityInCase;
 
     /**
-     * @var ArrayCollection<>
+     * @var Array<PrepDetails>
      */
     public $PrepDetailsList;
 

@@ -24,7 +24,7 @@ final class CreateInboundShipmentRequest implements RequestInterface
 	public $InboundShipmentHeader;
 
 	/**
-	 * @var InboundShipmentItem
+	 * @var Array<InboundShipmentItem>
 	 */
 	public $InboundShipmentItems;
 }

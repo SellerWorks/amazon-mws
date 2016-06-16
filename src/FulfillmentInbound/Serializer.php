@@ -15,6 +15,8 @@ use UnexpectedValueException;
 
 /**
  * FulfillmentInboundShipment serializer.
+ *
+ * Premature optimization? I think not!
  */
 class Serializer implements SerializerInterface
 {
@@ -38,42 +40,41 @@ class Serializer implements SerializerInterface
      */
     public function serialize(RequestInterface $request): array
     {
-        $action = '';
-
         // Validate request is valid type and set action.
         switch (true) {
             case $request instanceof Requests\CreateInboundShipmentPlanRequest;
-                $action = 'CreateInboundShipmentPlan';
-                break;
+                return $this->serializeCreateInboundShipmentPlan($request);
 
-            case $request instanceof Requests\CreateInboundShipment;
-                $action = 'CreateInboundShipment';
-                break;
+            case $request instanceof Requests\CreateInboundShipmentRequest;
+                return $this->serializeCreateInboundShipment($request);
+
+            case $request instanceof Requests\UpdateInboundShipmentRequest:
+                return $this->serializeUpdateInboundShipment($request);
+
+            case $request instanceof Requests\GetPrepInstructionsForSKURequest:
+                return $this->serializeGetPrepInstructionsForSKU($request);
+
+            case $request instanceof Requests\GetPrepInstructionsForASINRequest:
+                return $this->serializeGetPrepInstructionsForASIN($request);
 
             case $request instanceof Requests\ListInboundShipmentsRequest:
-                $action = 'ListInboundShipments';
-                break;
+                return $this->serializeListInboundShipments($request);
 
             case $request instanceof Requests\ListInboundShipmentsByNextTokenRequest:
-                $action = 'ListInboundShipmentsByNextToken';
-                break;
+                return $this->serializeListInboundShipmentsByNextToken($request);
 
             case $request instanceof Requests\ListInboundShipmentItemsRequest:
-                $action = 'ListInboundShipmentItems';
-                break;
+                return $this->serializeListInboundShipmentItems($request);
+
+            case $request instanceof Requests\ListInboundShipmentItemsByNextTokenRequest:
+                return $this->serializeListInboundShipmentItemsByNextToken($request);
 
             case $request instanceof GetServiceStatusRequest:
-                $action = 'GetServiceStatus';
-                break;
+                return $this->serializeGetServiceStatus($request);
 
             default:
                 throw new UnexpectedValueException(getType($request) . ' is not supported.');
         }
-
-        // Add properties.
-        $returnArr = ['Action' => $action] + $this->toArray($request);
-
-        return $returnArr;
     }
 
     /**
@@ -85,149 +86,348 @@ class Serializer implements SerializerInterface
     }
 
     /**
-     * Flatten Request object with dot-notation.
+     * Serialize CreateInboundShipmentPlan
      *
-     * @param  RequestInterface  $request
+     * @param  CreateInboundShipmentPlanRequest  $request
      * @return array
      */
-    protected function toArray(RequestInterface $request): array
+    protected function serializeCreateInboundShipmentPlan(Requests\CreateInboundShipmentPlanRequest $request): array
     {
-        $returnArr  = [];
-        $reflection = new ReflectionClass(get_class($request));
-        $properties = $reflection->getProperties();
+        $array  = ['Action' => 'CreateInboundShipmentPlan'];
+        $array += $this->parseAddress($request->ShipFromAddress, 'ShipFromAddress.');
 
-        foreach ($properties as $property) {
-            $propName  = $property->getName();
-            $propValue = $property->getValue($request);
+        if (isset($request->ShipToCountryCode)) {
+            $array['ShipToCountryCode'] = $request->ShipToCountryCode;
+        }
 
-            switch ($propName) {
-                // Address properties.
-                case 'ShipFromAddress':
-                    if ($propValue instanceof Entities\Address) {
-                        $returnArr += $this->parseAddress($propValue, sprintf('%s.', $propName));
+        if (isset($request->ShipToCountrySubdivisionCode)) {
+            $array['ShipToCountrySubdivisionCode'] = $request->ShipToCountrySubdivisionCode;
+        }
+
+        if (isset($request->LabelPrepPreference)) {
+            $array['LabelPrepPreference'] = $request->LabelPrepPreference;
+        }
+
+        if (is_array($request->InboundShipmentPlanRequestItems) && !empty($request->InboundShipmentPlanRequestItems)) {
+            $pos = 1;
+
+            foreach ($request->InboundShipmentPlanRequestItems as $i) {
+                $key = sprintf('InboundShipmentPlanRequestItems.member.%s.', $pos);
+                $array[$key.'SellerSKU'] = $i->SellerSKU;
+                $array[$key.'Quantity']  = $i->Quantity;
+
+                if (isset($i->ASIN)) {
+                    $array[$key.'ASIN'] = $i->ASIN;
+                }
+
+                if (isset($i->Condition)) {
+                    $array[$key.'Condition'] = $i->Condition;
+                }
+
+                if (isset($i->QuantityInCase)) {
+                    $array[$key.'QuantityInCase'] = $i->QuantityInCase;
+                }
+
+                if (is_array($i->PrepDetailsList) && !empty($i->PrepDetailsList)) {
+                    $pos2 = 1;
+
+                    foreach ($i->PrepDetailsList as $k) {
+                        $key2 = sprintf('%sPrepDetailsList.PrepDetails.%s.', $key, $pos2);
+                        $array[$key2.'PrepInstruction'] = $k->PrepInstruction;
+                        $array[$key2.'PrepOwner']       = $k->PrepOwner;
+
+                        ++$pos2;
                     }
-                    break;
+                }
 
-
-                // Array<string> properties.
-                case 'ShipmentIdList':
-                case 'ShipmentStatusList':
-                    if (is_array($propValue) && !empty($propValue)) {
-                        $pos = 1;
-
-                        foreach ($propValue as $value) {
-                            $key = sprintf('%s.member.%s', $propName, $pos);
-                            $returnArr[$key] = $value;
-                            ++$pos;
-                        }
-                    }
-                    break;
-
-
-                // DateTime properties.
-                case 'LastUpdatedAfter':
-                case 'LastUpdatedBefore':
-                    if ($propValue instanceof DateTimeInterface) {
-                        $returnArr[$propName] = $propValue->format(static::DATE_FORMAT);
-                    }
-                    break;
-
-
-                // String properties.
-                case 'LabelPrepPreference':
-                case 'NextToken':
-                case 'ShipmentId':
-                case 'ShipToCountryCode':
-                case 'ShipToCountrySubdivisionCode':
-                    if (!empty($propValue)) {
-                        $returnArr[$propName] = (string) $propValue;
-                    }
-                    break;
-
-
-                // Unique cases.
-                case 'InboundShipmentPlanRequestItems':
-                    if (is_array($propValue) && !empty($propValue)) {
-                        $pos = 1;
-
-                        foreach ($propValue as $i) {
-                            $key = sprintf('%s.member.%s.', $propName, $pos);
-                            $returnArr[$key.'SellerSKU'] = $i->SellerSKU;
-                            $returnArr[$key.'Quantity']  = $i->Quantity;
-
-                            if (isset($i->ASIN)) {
-                                $returnArr[$key.'ASIN'] = $i->ASIN;
-                            }
-                            if (isset($i->Condition)) {
-                                $returnArr[$key.'Condition'] = $i->Condition;
-                            }
-                            if (isset($i->QuantityInCase)) {
-                                $returnArr[$key.'QuantityInCase'] = $i->QuantityInCase;
-                            }
-
-                            if (is_array($i->PrepDetailsList) && !empty($i->PrepDetailsList)) {
-                                $pos2 = 1;
-
-                                foreach ($i->PrepDetailsList as $k) {
-                                    $key2 = sprintf('%sPrepDetailsList.PrepDetails.%s.', $key, $pos2);
-                                    $returnArr[$key2.'PrepInstruction'] = $k->PrepInstruction;
-                                    $returnArr[$key2.'PrepOwner']       = $k->PrepOwner;
-
-                                    ++$pos2;
-                                }
-                            }
-
-                            ++$pos;
-                        }
-                    }
-                    break;
-
-
-                case 'InboundShipmentHeader':
-                    $prefix = sprintf('%s.', $propName);
-                    $returnArr[$prefix.'ShipmentName'] = $propValue->ShipmentName;
-                    $returnArr += $this->parseAddress($propValue->ShipFromAddress, $prefix);
-                    $returnArr[$prefix.'DestinationFulfillmentCenterId'] = $propValue->DestinationFulfillmentCenterId;
-                    $returnArr[$prefix.'LabelPrepPreference'] = $propValue->LabelPrepPreference;
-                    $returnArr[$prefix.'ShipmentStatus'] = $propValue->ShipmentStatus;
-
-                    if (isset($propValue->AreCasesRequired)) {
-                        $returnArr[$prefix.'AreCasesRequired'] = $propValue->AreCasesRequired;
-                    }
-                    break;
-
-
-                case 'InboundShipmentItems':
-                    if (is_array($propValue) && !empty($propValue)) {
-                        $pos = 1;
-
-                        foreach ($propValue as $i) {
-                            $key = sprintf('%s.member.%s.', $propName, $pos);
-                            $returnArr[$key.'SellerSKU'] = $i->SellerSKU;
-                            $returnArr[$key.'QuantityShipped'] = $i->QuantityShipped;
-
-                            if (isset($i->ShipmentId)) {
-                                $returnArr[$key.'ShipmentId'] = $i->ShipmentId;
-                            }
-                            if (isset($i->FulfillmentNetworkSKU)) {
-                                $returnArr[$key.'FulfillmentNetworkSKU'] = $i->FulfillmentNetworkSKU;
-                            }
-                            if (isset($i->QuantityReceived)) {
-                                $returnArr[$key.'QuantityReceived'] = $i->QuantityReceived;
-                            }
-                            if (isset($i->QuantityInCase)) {
-                                $returnArr[$key.'QuantityInCase'] = $i->QuantityInCase;
-                            }
-                            if (isset($i->ReleaseDate)) {
-                                $returnArr[$key.'ReleaseDate'] = $i->ReleaseDate;
-                            }
-                        }
-                    }
-                    break;
+                ++$pos;
             }
         }
 
-        return $returnArr;
+        return $array;
+    }
+
+    /**
+     * Serialize CreateInboundShipmentPlan
+     *
+     * @param  CreateInboundShipmentRequest  $request
+     * @return array
+     */
+    protected function serializeCreateInboundShipment(Requests\CreateInboundShipmentRequest $request): array
+    {
+        $header = $request->InboundShipmentHeader;
+        $array  = [
+            'Action'     => 'CreateInboundShipment',
+            'ShipmentId' => $request->ShipmentId,
+
+            'InboundShipmentHeader.ShipmentName'                    => $header->ShipmentName,
+            'InboundShipmentHeader.DestinationFulfillmentCenterId'  => $header->DestinationFulfillmentCenterId,
+            'InboundShipmentHeader.LabelPrepPreference'             => $header->LabelPrepPreference,
+            'InboundShipmentHeader.ShipmentStatus'                  => $header->ShipmentStatus,
+        ];
+        $array += $this->parseAddress($header->ShipFromAddress, 'InboundShipmentHeader.ShipFromAddress.');
+
+        if (isset($header->AreCasesRequired)) {
+            $array['InboundShipmentHeader.AreCasesRequired'] = $header->AreCasesRequired? 'true' : 'false';
+        }
+
+        if (is_array($request->InboundShipmentItems) && !empty($request->InboundShipmentItems)) {
+            $pos = 1;
+
+            foreach ($request->InboundShipmentItems as $i) {
+                $key = sprintf('InboundShipmentItems.member.%s.', $pos);
+                $array[$key.'SellerSKU']       = $i->SellerSKU;
+                $array[$key.'QuantityShipped'] = $i->QuantityShipped;
+
+                if (isset($i->ShipmentId)) {
+                    $array[$key.'ShipmentId'] = $i->ShipmentId;
+                }
+
+                if (isset($i->FulfillmentNetworkSKU)) {
+                    $array[$key.'FulfillmentNetworkSKU'] = $i->FulfillmentNetworkSKU;
+                }
+
+                if (isset($i->QuantityReceived)) {
+                    $array[$key.'QuantityReceived'] = $i->QuantityReceived;
+                }
+
+                if (isset($i->QuantityInCase)) {
+                    $array[$key.'QuantityInCase'] = $i->QuantityInCase;
+                }
+
+                if (isset($i->ReleaseDate)) {
+                    if ($i->ReleaseDate instanceof DateTimeInterface) {
+                        $array[$key.'ReleaseDate'] = $i->ReleaseDate->format('Y-m-d');
+                    }
+                    else {
+                        $array[$key.'ReleaseDate'] = $i->ReleaseDate;
+                    }
+                }
+
+                if (is_array($i->PrepDetailsList) && !empty($i->PrepDetailsList)) {
+                    $pos2 = 1;
+
+                    foreach ($i->PrepDetailsList as $k) {
+                        $key2 = sprintf('%sPrepDetailsList.PrepDetails.%s.', $key, $pos2);
+                        $array[$key2.'PrepInstruction'] = $k->PrepInstruction;
+                        $array[$key2.'PrepOwner']       = $k->PrepOwner;
+
+                        ++$pos2;
+                    }
+                }
+
+                ++$pos;
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Serialize UpdateInboundShipmentRequest
+     *
+     * @param  UpdateInboundShipmentRequest  $request
+     * @return array
+     */
+    protected function serializeUpdateInboundShipment(Requests\UpdateInboundShipmentRequest $request): array
+    {
+        $fakeRequest = new Requests\CreateInboundShipmentRequest;
+        $fakeRequest->ShipmentId = $request->ShipmentId;
+        $fakeRequest->InboundShipmentHeader = $request->InboundShipmentHeader;
+        $fakeRequest->InboundShipmentItems  = $request->InboundShipmentItems;
+
+        $array = $this->serializeCreateInboundShipment($fakeRequest);
+        $array['Action'] = 'UpdateInboundShipment';
+
+        return $array;
+    }
+
+    /**
+     * Serialize GetPrepInstructionsForSKURequest
+     *
+     * @param  GetPrepInstructionsForSKURequest  $request
+     * @return array
+     */
+    protected function serializeGetPrepInstructionsForSKU(Requests\GetPrepInstructionsForSKURequest $request): array
+    {
+        $array = [
+            'Action'            => 'GetPrepInstructionsForSKU',
+            'ShipToCountryCode' => $request->ShipToCountryCode,
+        ];
+
+        if (is_array($request->SellerSKUList) && !empty($request->SellerSKUList)) {
+            $pos = 1;
+
+            foreach ($request->SellerSKUList as $i) {
+                $key = sprintf('SellerSKUList.Id.%s', $pos);
+                $array[$key] = $i;
+
+                ++$pos;
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Serialize GetPrepInstructionsForASINRequest
+     *
+     * @param  GetPrepInstructionsForASINRequest  $request
+     * @return array
+     */
+    protected function serializeGetPrepInstructionsForASIN(Requests\GetPrepInstructionsForASINRequest $request): array
+    {
+        $array = [
+            'Action'            => 'GetPrepInstructionsForASIN',
+            'ShipToCountryCode' => $request->ShipToCountryCode,
+        ];
+
+        if (is_array($request->SellerASINList) && !empty($request->SellerASINList)) {
+            $pos = 1;
+
+            foreach ($request->SellerASINList as $i) {
+                $key = sprintf('SellerASINList.Id.%s', $pos);
+                $array[$key] = $i;
+
+                ++$pos;
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Serialize ListInboundShipmentsRequest
+     *
+     * @param  ListInboundShipmentsRequest  $request
+     * @return array
+     */
+    protected function serializeListInboundShipments(Requests\ListInboundShipmentsRequest $request): array
+    {
+        $array = [
+            'Action' => 'ListInboundShipments',
+        ];
+
+        if (is_array($request->ShipmentStatusList) && !empty($request->ShipmentStatusList)) {
+            $pos = 1;
+
+            foreach ($request->ShipmentStatusList as $i) {
+                $key = sprintf('ShipmentStatusList.member.%s', $pos);
+                $array[$key] = $i;
+
+                ++$pos;
+            }
+        }
+
+        if (is_array($request->ShipmentIdList) && !empty($request->ShipmentIdList)) {
+            $pos = 1;
+
+            foreach ($request->ShipmentIdList as $i) {
+                $key = sprintf('ShipmentIdList.member.%s', $pos);
+                $array[$key] = $i;
+
+                ++$pos;
+            }
+        }
+
+        if (isset($request->LastUpdatedAfter)) {
+            if ($request->LastUpdatedAfter instanceof DateTimeInterface) {
+                $array['LastUpdatedAfter'] = $request->LastUpdatedAfter->format(static::DATE_FORMAT);
+            }
+            else {
+                $array['LastUpdatedAfter'] = $request->LastUpdatedAfter;
+            }
+        }
+
+        if (isset($request->LastUpdatedBefore)) {
+            if ($request->LastUpdatedBefore instanceof DateTimeInterface) {
+                $array['LastUpdatedBefore'] = $request->LastUpdatedBefore->format(static::DATE_FORMAT);
+            }
+            else {
+                $array['LastUpdatedBefore'] = $request->LastUpdatedBefore;
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Serialize ListInboundShipmentsByNextTokenRequest
+     *
+     * @param  ListInboundShipmentsByNextTokenRequest  $request
+     * @return array
+     */
+    protected function serializeListInboundShipmentsByNextToken(Requests\ListInboundShipmentsByNextTokenRequest $request): array
+    {
+        $array = [
+            'Action'    => 'ListInboundShipmentsByNextToken',
+            'NextToken' => $request->NextToken,
+        ];
+
+        return $array;
+    }
+
+    /**
+     * Serialize ListInboundShipmentItemsRequest
+     *
+     * @param  ListInboundShipmentItemsRequest  $request
+     * @return array
+     */
+    protected function serializeListInboundShipmentItems(Requests\ListInboundShipmentItemsRequest $request): array
+    {
+        $array = [
+            'Action'     => 'ListInboundShipmentItems',
+            'ShipmentId' => $request->ShipmentId,
+        ];
+
+        if (isset($request->LastUpdatedAfter)) {
+            if ($request->LastUpdatedAfter instanceof DateTimeInterface) {
+                $array['LastUpdatedAfter'] = $request->LastUpdatedAfter->format(static::DATE_FORMAT);
+            }
+            else {
+                $array['LastUpdatedAfter'] = $request->LastUpdatedAfter;
+            }
+        }
+
+        if (isset($request->LastUpdatedBefore)) {
+            if ($request->LastUpdatedBefore instanceof DateTimeInterface) {
+                $array['LastUpdatedBefore'] = $request->LastUpdatedBefore->format(static::DATE_FORMAT);
+            }
+            else {
+                $array['LastUpdatedBefore'] = $request->LastUpdatedBefore;
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Serialize ListInboundShipmentItemsByNextTokenRequest
+     *
+     * @param  ListInboundShipmentItemsByNextTokenRequest  $request
+     * @return array
+     */
+    protected function serializeListInboundShipmentItemsByNextToken(Requests\ListInboundShipmentItemsByNextTokenRequest $request): array
+    {
+        $array = [
+            'Action'    => 'ListInboundShipmentItemsByNextToken',
+            'NextToken' => $request->NextToken,
+        ];
+
+        return $array;
+    }
+
+    /**
+     * Serialize GetServiceStatus
+     *
+     * @param  GetServiceStatusRequest  $request
+     * @return array
+     */
+    protected function serializeGetServiceStatus(GetServiceStatusRequest $request): array
+    {
+        $array = ['Action' => 'GetServiceStatus'];
+
+        return $array;
     }
 
     /**
@@ -261,6 +461,4 @@ class Serializer implements SerializerInterface
 
         return $results;
     }
-
-
 }
