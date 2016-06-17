@@ -35,7 +35,7 @@ final class ListInboundShipmentItemsByNextTokenResult implements IterableInterfa
      */
     public function getMethod(): string
     {
-        return 'ListInboundShipmentItems';
+        return 'ListInboundShipmentItemsByNextToken';
     }
 
     /**

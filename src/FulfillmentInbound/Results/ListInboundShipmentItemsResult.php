@@ -35,7 +35,7 @@ final class ListInboundShipmentItemsResult implements IterableInterface, ResultI
      */
     public function getMethod(): string
     {
-        return 'ListInboundShipmentItems';
+        return 'ListInboundShipmentItemsByNextToken';
     }
 
     /**

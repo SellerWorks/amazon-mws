@@ -7,7 +7,6 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 use SellerWorks\Amazon\MWS\Common\AbstractClient;
 use SellerWorks\Amazon\MWS\Common\RecordIterator;
 use SellerWorks\Amazon\MWS\Common\Requests\GetServiceStatusRequest;
-use SellerWorks\Amazon\MWS\Common\Responses\ErrorResponse;
 use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
 use SellerWorks\Amazon\MWS\Common\Passport;
 
@@ -45,10 +44,6 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     {
         $response = $this->makeRequest($request, $passport);
 
-        if ($response instanceof ErrorResponse) {
-            return $this->throwError($response);
-        }
-
         return $response->CreateInboundShipmentPlanResult;
     }
 
@@ -61,10 +56,6 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     ):  Results\CreateInboundShipmentResult
     {
         $response = $this->makeRequest($request, $passport);
-
-        if ($response instanceof ErrorResponse) {
-            return $this->throwError($response);
-        }
 
         return $response->CreateInboundShipmentResult;
     }
@@ -79,10 +70,6 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     {
         $response = $this->makeRequest($request, $passport);
 
-        if ($response instanceof ErrorResponse) {
-            return $this->throwError($response);
-        }
-
         return $response->UpdateInboundShipmentResult;
     }
 
@@ -95,10 +82,6 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     ):  Results\GetPrepInstructionsForSKUResult
     {
         $response = $this->makeRequest($request, $passport);
-
-        if ($response instanceof ErrorResponse) {
-            return $this->throwError($response);
-        }
 
         return $response->GetPrepInstructionsForSKUResult;
     }
@@ -113,10 +96,6 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     {
         $response = $this->makeRequest($request, $passport);
 
-        if ($response instanceof ErrorResponse) {
-            return $this->throwError($response);
-        }
-
         return $response->GetPrepInstructionsForASINResult;
     }
 
@@ -129,11 +108,6 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     ):  RecordIterator
     {
         $response = $this->makeRequest($request, $passport);
-
-        if ($response instanceof ErrorResponse) {
-            return $this->throwError($response);
-        }
-
         $passport = $passport?: $this->getPassport();
         $iterator = new RecordIterator($this, $passport, $response->getResult());
 
@@ -150,12 +124,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     {
         $request = new Requests\ListInboundShipmentsByNextTokenRequest;
         $request->NextToken = $token;
-
         $response = $this->makeRequest($request, $passport);
-
-        if ($response instanceof ErrorResponse) {
-            return $this->throwError($response);
-        }
 
         return $response->getResult();
     }
@@ -168,6 +137,11 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
         Passport $passport = null
     ):  RecordIterator
     {
+        $response = $this->makeRequest($request, $passport);
+        $passport = $passport?: $this->getPassport();
+        $iterator = new RecordIterator($this, $passport, $response->getResult());
+
+        return $iterator;
     }
 
     /**
@@ -178,6 +152,11 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
         Passport $passport = null
     ):  Results\ListInboundShipmentItemsByNextTokenResult
     {
+        $request = new Requests\ListInboundShipmentItemsByNextTokenRequest;
+        $request->NextToken = $token;
+        $response = $this->makeRequest($request, $passport);
+
+        return $response->getResult();
     }
 
     /**
@@ -186,10 +165,6 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     public function GetServiceStatus(): GetServiceStatusResult
     {
         $response = $this->makeRequest(new GetServiceStatusRequest);
-
-        if ($response instanceof ErrorResponse) {
-            return $this->throwError($response);
-        }
 
         return $response->GetServiceStatusResult;
     }

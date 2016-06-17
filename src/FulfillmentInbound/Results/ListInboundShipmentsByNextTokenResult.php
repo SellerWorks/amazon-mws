@@ -43,6 +43,6 @@ final class ListInboundShipmentsByNextTokenResult implements IterableInterface, 
      */
     public function getNextToken(): string
     {
-        return $this->NextToken;
+        return (string) $this->NextToken;
     }
 }

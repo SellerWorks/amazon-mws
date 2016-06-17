@@ -162,6 +162,10 @@ abstract class AbstractClient implements ClientInterface
         $response = $this->post($request, $usePassport);
         $this->lastResponse = $this->serializer->unserialize($response);
 
+        if ($response instanceof ErrorResponse) {
+            return $this->throwError($response);
+        }
+
         return $this->lastResponse;
     }
 
