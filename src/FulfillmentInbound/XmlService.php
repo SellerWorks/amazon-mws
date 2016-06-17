@@ -12,9 +12,6 @@ use SellerWorks\Amazon\MWS\Common\Responses\ErrorResponse;
 use SellerWorks\Amazon\MWS\Common\Responses\GetServiceStatusResponse;
 use SellerWorks\Amazon\MWS\Common\Results\Error;
 use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
-use SellerWorks\Amazon\MWS\FulfillmentInbound\Responses;
-use SellerWorks\Amazon\MWS\FulfillmentInbound\Results;
-use SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
 
 /**
  * Defines how to deserialize xml using Sabre\Xml

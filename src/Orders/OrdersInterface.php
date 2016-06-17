@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
+namespace SellerWorks\Amazon\MWS\Orders;
 
 use SellerWorks\Amazon\MWS\Common\RecordIterator;
 use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
@@ -29,7 +29,7 @@ interface OrdersInterface
      * @param  Passport $passport
      * @return RecordIterator
      */
-    function ListOrders(Requests\ListOrdersRequest $request, Passport $passport = null): RecordIterator;
+//     function ListOrders(Requests\ListOrdersRequest $request, Passport $passport = null): RecordIterator;
 
     /**
      * Returns the next page of orders using the NextToken parameter.
@@ -40,7 +40,7 @@ interface OrdersInterface
      * @param  Passport  $passport
      * @return ListOrdersByNextTokenResult
      */
-    function ListOrdersByNextToken(string $NextToken, Passport $passport = null): Results\ListOrdersByNextTokenResult;
+//     function ListOrdersByNextToken(string $NextToken, Passport $passport = null): Results\ListOrdersByNextTokenResult;
 
     /**
      * Returns orders based on the AmazonOrderId values that you specify.
@@ -51,7 +51,7 @@ interface OrdersInterface
      * @param  Passport  $passport
      * @return GetOrderResult
      */
-    function GetOrder(Requests\GetOrderRequest $request, Passport $passport = null): Results\GetOrderResult;
+//     function GetOrder(Requests\GetOrderRequest $request, Passport $passport = null): Results\GetOrderResult;
 
     /**
      * Returns order items based on the AmazonOrderId that you specify.
@@ -62,7 +62,7 @@ interface OrdersInterface
      * @param  Passport  $passport
      * @return RecordIterator
      */
-    function ListOrderItems(Requests\ListOrderItemsRequest $request, Passport $passport = null): RecordIterator;
+//     function ListOrderItems(Requests\ListOrderItemsRequest $request, Passport $passport = null): RecordIterator;
 
     /**
      * Returns the next page of order items using the NextToken parameter.
@@ -73,7 +73,7 @@ interface OrdersInterface
      * @param  Passport  $passport
      * @return ListOrderItemsByNextTokenResult
      */
-    function ListOrderItemsByNextToken(string $NextToken, Passport $passport = null): Results\ListOrderItemsByNextTokenResult;
+//     function ListOrderItemsByNextToken(string $NextToken, Passport $passport = null): Results\ListOrderItemsByNextTokenResult;
 
     /**
      * Returns the operational status of the Orders API section.
