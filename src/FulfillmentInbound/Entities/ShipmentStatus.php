@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Entities;
 
 /**
+ * Enumorated values for ShipmentStatus
  */
 final class ShipmentStatus
 {
