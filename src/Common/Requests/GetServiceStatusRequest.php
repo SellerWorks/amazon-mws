@@ -11,6 +11,6 @@ use SellerWorks\Amazon\MWS\Common\RequestInterface;
  *
  * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/MWS_GetServiceStatus.html
  */
-final class GetServiceStatusRequest implements RequestInterface
+final class GetServiceStatusRequest extends Request implements RequestInterface
 {
 }

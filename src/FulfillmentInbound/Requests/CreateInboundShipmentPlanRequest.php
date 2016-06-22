@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 
 use SellerWorks\Amazon\MWS\Common\RequestInterface;
+use SellerWorks\Amazon\MWS\Common\Requests\Request;
 
 /**
  * Returns the information required to create an inbound shipment.
  *
  * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_CreateInboundShipmentPlan.html
  */
-final class CreateInboundShipmentPlanRequest implements RequestInterface
+final class CreateInboundShipmentPlanRequest extends Request implements RequestInterface
 {
 	/**
 	 * @var SellerWorks\Amazon\MWS\FulfillmentInbound\Types\Address

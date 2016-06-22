@@ -38,8 +38,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function CreateInboundShipmentPlan(
-        Requests\CreateInboundShipmentPlanRequest $request,
-        Passport $passport = null
+        Requests\CreateInboundShipmentPlanRequest $request
     ):  Results\CreateInboundShipmentPlanResult
     {
         $response = $this->makeRequest($request, $passport);
@@ -51,8 +50,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function CreateInboundShipment(
-        Requests\CreateInboundShipmentRequest $request,
-        Passport $passport = null
+        Requests\CreateInboundShipmentRequest $request
     ):  Results\CreateInboundShipmentResult
     {
         $response = $this->makeRequest($request, $passport);
@@ -64,8 +62,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function UpdateInboundShipment(
-        Requests\UpdateInboundShipmentRequest $request,
-        Passport $passport = null
+        Requests\UpdateInboundShipmentRequest $request
     ):  Results\UpdateInboundShipmentResult
     {
         $response = $this->makeRequest($request, $passport);
@@ -77,8 +74,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function GetPrepInstructionsForSKU(
-        Requests\GetPrepInstructionsForSKURequest $request,
-        Passport $passport = null
+        Requests\GetPrepInstructionsForSKURequest $request
     ):  Results\GetPrepInstructionsForSKUResult
     {
         $response = $this->makeRequest($request, $passport);
@@ -90,8 +86,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function GetPrepInstructionsForASIN(
-        Requests\GetPrepInstructionsForASINRequest $request,
-        Passport $passport = null
+        Requests\GetPrepInstructionsForASINRequest $request
     ):  Results\GetPrepInstructionsForASINResult
     {
         $response = $this->makeRequest($request, $passport);
@@ -103,8 +98,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function ListInboundShipments(
-        Requests\ListInboundShipmentsRequest $request,
-        Passport $passport = null
+        Requests\ListInboundShipmentsRequest $request
     ):  RecordIterator
     {
         $response = $this->makeRequest($request, $passport);
@@ -118,8 +112,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function ListInboundShipmentsByNextToken(
-        string $token,
-        Passport $passport = null
+        string $token
     ):  Results\ListInboundShipmentsByNextTokenResult
     {
         $request = new Requests\ListInboundShipmentsByNextTokenRequest;
@@ -133,8 +126,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function ListInboundShipmentItems(
-        Requests\ListInboundShipmentItemsRequest $request,
-        Passport $passport = null
+        Requests\ListInboundShipmentItemsRequest $request
     ):  RecordIterator
     {
         $response = $this->makeRequest($request, $passport);
@@ -148,8 +140,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function ListInboundShipmentItemsByNextToken(
-        string $token,
-        Passport $passport = null
+        string $token
     ):  Results\ListInboundShipmentItemsByNextTokenResult
     {
         $request = new Requests\ListInboundShipmentItemsByNextTokenRequest;

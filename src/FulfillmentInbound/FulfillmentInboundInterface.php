@@ -6,7 +6,6 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
 use SellerWorks\Amazon\MWS\Common\RecordIterator;
 use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
-use SellerWorks\Amazon\MWS\Common\Passport;
 
 /**
  * Amazon MWS Fulfillment Inbound Shipment
@@ -28,12 +27,10 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_CreateInboundShipmentPlan.html
      *
      * @param  CreateInboundShipmentPlanRequest $request
-     * @param  Passport $passport
      * @return CreateInboundShipmentPlanResponse
      */
     function CreateInboundShipmentPlan(
-        Requests\CreateInboundShipmentPlanRequest $request,
-        Passport $passport = null
+        Requests\CreateInboundShipmentPlanRequest $request
     ):  Results\CreateInboundShipmentPlanResult;
 
     /**
@@ -42,12 +39,10 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_CreateInboundShipment.html
      *
      * @param  CreateInboundShipmentRequest
-     * @param  Passport $passport
      * @return CreateInboundShipmentResult
      */
     function CreateInboundShipment(
-        Requests\CreateInboundShipmentRequest $request,
-        Passport $passport = null
+        Requests\CreateInboundShipmentRequest $request
     ):  Results\CreateInboundShipmentResult;
 
     /**
@@ -56,12 +51,10 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_UpdateInboundShipment.html
      *
      * @param  UpdateInboundShipmentRequest
-     * @param  Passport $passport
      * @return UpdateInboundShipmentResult
      */
     public function UpdateInboundShipment(
-        Requests\UpdateInboundShipmentRequest $request,
-        Passport $passport = null
+        Requests\UpdateInboundShipmentRequest $request
     ):  Results\UpdateInboundShipmentResult;
 
     // GetPreorderInfo
@@ -73,12 +66,10 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_GetPrepInstructionsForSKU.html
      *
      * @param  GetPrepInstructionsForSKURequest
-     * @param  Passport $passport
      * @return GetPrepInstructionsForSKUResult
      */
     function GetPrepInstructionsForSKU(
-        Requests\GetPrepInstructionsForSKURequest $request,
-        Passport $passport = null
+        Requests\GetPrepInstructionsForSKURequest $request
     ):  Results\GetPrepInstructionsForSKUResult;
 
     /**
@@ -87,12 +78,10 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_GetPrepInstructionsForASIN.html
      *
      * @param  GetPrepInstructionsForASINRequest
-     * @param  Passport $passport
      * @return GetPrepInstructionsForASINResult
      */
     function GetPrepInstructionsForASIN(
-        Requests\GetPrepInstructionsForASINRequest $request,
-        Passport $passport = null
+        Requests\GetPrepInstructionsForASINRequest $request
     ):  Results\GetPrepInstructionsForASINResult;
     
     // PutTransportContent
@@ -111,12 +100,10 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipments.html
      *
      * @param  ListInboundShipmentsRequest $request
-     * @param  Passport $passport
      * @return RecordIterator
      */
     function ListInboundShipments(
-        Requests\ListInboundShipmentsRequest $request,
-        Passport $passport = null
+        Requests\ListInboundShipmentsRequest $request
     ):  RecordIterator;
 
     /**
@@ -125,12 +112,10 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentsByNextToken.html
      *
      * @param  string $token
-     * @param  Passport $passport
      * @return ListInboundShipmentsResult
      */
     function ListInboundShipmentsByNextToken(
-        string $token,
-        Passport $passport = null
+        string $token
     ):  Results\ListInboundShipmentsByNextTokenResult;
 
     /**
@@ -139,12 +124,10 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItems.html
      *
      * @param  ListInboundShipmentItemsRequest
-     * @param  Passport $passport
      * @return RecordIterator
      */
     function ListInboundShipmentItems(
-        Requests\ListInboundShipmentItemsRequest $request,
-        Passport $passport = null
+        Requests\ListInboundShipmentItemsRequest $request
     ):  RecordIterator;
 
     /**
@@ -153,12 +136,10 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItemsByNextToken.html
      *
      * @param  string  $token
-     * @param  Passport $passport
      * @return ListInboundShipmentItemsByNextTokenResult
      */
     function ListInboundShipmentItemsByNextToken(
-        string $token,
-        Passport $passport = null
+        string $token
     ):  Results\ListInboundShipmentItemsByNextTokenResult;
 
     /**

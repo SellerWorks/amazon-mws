@@ -46,8 +46,7 @@ class MockClient extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function CreateInboundShipmentPlan(
-        Requests\CreateInboundShipmentPlanRequest $request,
-        Passport $passport = null
+        Requests\CreateInboundShipmentPlanRequest $request
     ):  Results\CreateInboundShipmentPlanResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentPlanResponse.xml');
@@ -64,8 +63,7 @@ class MockClient extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function CreateInboundShipment(
-        Requests\CreateInboundShipmentRequest $request,
-        Passport $passport = null
+        Requests\CreateInboundShipmentRequest $request
     ):  Results\CreateInboundShipmentResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentResponse.xml');
@@ -82,8 +80,7 @@ class MockClient extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     public function UpdateInboundShipment(
-        Requests\UpdateInboundShipmentRequest $request,
-        Passport $passport = null
+        Requests\UpdateInboundShipmentRequest $request
     ):  Results\UpdateInboundShipmentResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/UpdateInboundShipmentResponse.xml');
@@ -100,8 +97,7 @@ class MockClient extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function GetPrepInstructionsForSKU(
-        Requests\GetPrepInstructionsForSKURequest $request,
-        Passport $passport = null
+        Requests\GetPrepInstructionsForSKURequest $request
     ):  Results\GetPrepInstructionsForSKUResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/GetPrepInstructionsForSKUResponse.xml');
@@ -118,8 +114,7 @@ class MockClient extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function GetPrepInstructionsForASIN(
-        Requests\GetPrepInstructionsForASINRequest $request,
-        Passport $passport = null
+        Requests\GetPrepInstructionsForASINRequest $request
     ):  Results\GetPrepInstructionsForASINResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/GetPrepInstructionsForASINResponse.xml');
@@ -136,8 +131,7 @@ class MockClient extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function ListInboundShipments(
-        Requests\ListInboundShipmentsRequest $request,
-        Passport $passport = null
+        Requests\ListInboundShipmentsRequest $request
     ):  RecordIterator
     {
         $xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentsResponse.xml');
@@ -153,8 +147,7 @@ class MockClient extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function ListInboundShipmentsByNextToken(
-        string $token,
-        Passport $passport = null
+        string $token
     ):  Results\ListInboundShipmentsByNextTokenResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentsByNextTokenResponse.xml');
@@ -171,8 +164,7 @@ class MockClient extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function ListInboundShipmentItems(
-        Requests\ListInboundShipmentItemsRequest $request,
-        Passport $passport = null
+        Requests\ListInboundShipmentItemsRequest $request
     ):  RecordIterator
     {
         $xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentItemsResponse.xml');
@@ -188,8 +180,7 @@ class MockClient extends AbstractClient implements FulfillmentInboundInterface
      * {@inheritDoc}
      */
     function ListInboundShipmentItemsByNextToken(
-        string $token,
-        Passport $passport = null
+        string $token
     ):  Results\ListInboundShipmentItemsByNextTokenResult
     {
         $xml = file_get_contents(__DIR__.'/Mock/ListInboundShipmentItemsByNextTokenResponse.xml');
