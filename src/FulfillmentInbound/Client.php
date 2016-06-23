@@ -155,8 +155,9 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      */
     public function GetServiceStatus(): GetServiceStatusResult
     {
-        $response = $this->makeRequest(new GetServiceStatusRequest);
+        $promise = $this->makeRequest(new GetServiceStatusRequest);
+//        $promise->wait();
 
-        return $response->GetServiceStatusResult;
+        return $promise->GetServiceStatusResult;
     }
 }

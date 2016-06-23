@@ -41,7 +41,7 @@ final class CreateInboundShipmentPlanRequest extends Request implements RequestI
 	public $InboundShipmentPlanRequestItems;
 
     /**
-     * Create statically.
+     * Optional create by constructor.
      *
      * @param  Address  $ShipFromAddress
      * @param  string   $ShipToCountryCode
@@ -49,21 +49,18 @@ final class CreateInboundShipmentPlanRequest extends Request implements RequestI
      * @param  string   $LabelPrepPreference
      * @param  array    $InboundShipmentPlanRequestItems
      */
-    public static function create(
-        Entities\Address $ShipFromAddress,
+    public function __construct(
+        Entities\Address $ShipFromAddress = null,
         string $ShipToCountryCode = null,
         string $ShipToCountrySubdivisionCode = null,
-        string $LabelPrepPreference = Entities\LabelPrepPreference::SELLER_LABEL,
-        array $InboundShipmentPlanRequestItems
+        string $LabelPrepPreference = null,
+        array $InboundShipmentPlanRequestItems = []
     )
     {
-        $obj = new self;
         $this->ShipFromAddress                 = $ShipFromAddress;
         $this->ShipToCountryCode               = $ShipToCountryCode;
         $this->ShipToCountrySubdivisionCode    = $ShipToCountrySubdivisionCode;
         $this->LabelPrepPreference             = $LabelPrepPreference;
         $this->InboundShipmentPlanRequestItems = $InboundShipmentPlanRequestItems;
-
-        return $obj;
     }
 }

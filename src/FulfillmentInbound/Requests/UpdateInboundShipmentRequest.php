@@ -6,6 +6,7 @@ namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 
 use SellerWorks\Amazon\MWS\Common\RequestInterface;
 use SellerWorks\Amazon\MWS\Common\Requests\Request;
+use SellerWorks\Amazon\MWS\FulfillmentInbound\Entities;
 
 /**
  * Updates an existing inbound shipment.
@@ -25,7 +26,25 @@ final class UpdateInboundShipmentRequest extends Request implements RequestInter
     public $InboundShipmentHeader;
 
     /**
-     * @var InboundShipmentItems
+     * @var Array<InboundShipmentItem>
      */
     public $InboundShipmentItems;
+
+    /**
+     * Optional create by constructor.
+     *
+     * @param  string  $ShipmentId
+     * @param  InboundShipmentHeader  $InboundShipmentHeader
+     * @param  array  $InboundShipmentItems
+     */
+    public function __construct(
+        string $ShipmentId = null,
+        Entities\InboundShipmentHeader $InboundShipmentHeader = null,
+        array $InboundShipmentItems = []
+    )
+    {
+        $this->ShipmentId            = $ShipFromAddress;
+        $this->InboundShipmentHeader = $ShipToCountryCode;
+        $this->InboundShipmentItems  = $InboundShipmentItems;
+    }
 }

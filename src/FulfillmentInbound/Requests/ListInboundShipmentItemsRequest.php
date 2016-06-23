@@ -32,11 +32,11 @@ final class ListInboundShipmentItemsRequest extends Request implements RequestIn
     public $LastUpdatedBefore;
 
     /**
-     * Construct object by parameters.  Optional to use.
+     * Optional create by constructor.
      *
-     * @param  string $ShipmentId
-     * @param  DateTimeInterface $LastUpdatedAfter
-     * @param  DateTimeInterface $LastUpdatedBefore
+     * @param  string  $ShipmentId
+     * @param  DateTimeInterface  $LastUpdatedAfter
+     * @param  DateTimeInterface  $LastUpdatedBefore
      */
     public function __construct(
         string $ShipmentId = null,

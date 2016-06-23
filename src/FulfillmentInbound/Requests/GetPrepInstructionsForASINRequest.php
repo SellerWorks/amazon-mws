@@ -15,7 +15,7 @@ use SellerWorks\Amazon\MWS\Common\Requests\Request;
 final class GetPrepInstructionsForASINRequest extends Request implements RequestInterface
 {
 	/**
-	 * @var string
+	 * @var Array<string>
 	 */
 	public $ASINList;
 
@@ -23,4 +23,19 @@ final class GetPrepInstructionsForASINRequest extends Request implements Request
 	 * @var string
 	 */
 	public $ShipToCountryCode;
+
+    /**
+     * Optional create by constructor.
+     *
+     * @param  array   $ASINList
+     * @param  string  $ShipToCountryCode
+     */
+    public function __construct(
+        array $ASINList = [],
+        string $ShipToCountryCode = null
+    )
+    {
+        $this->ASINList          = $ASINList;
+        $this->ShipToCountryCode = $ShipToCountryCode;
+    }
 }

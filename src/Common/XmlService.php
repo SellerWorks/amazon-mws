@@ -20,17 +20,10 @@ use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
 abstract class XmlService extends Service
 {
     /**
-     * @const string
-     */
-    const NS = '';
-
-    /**
      * Add all objects to the service.
      */
-    public function __construct()
+    public function __construct($namespace)
     {
-        $namespace = sprintf('{%s}', static::NS);
-
         $this->elementMap = [
             // Common objects.
             "{$namespace}Error" => $this->mapObject(Error::class),

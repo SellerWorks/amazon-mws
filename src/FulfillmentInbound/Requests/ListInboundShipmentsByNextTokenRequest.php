@@ -18,4 +18,16 @@ final class ListInboundShipmentsByNextTokenRequest extends Request implements Re
      * @var string
      */
     public $NextToken;
+
+    /**
+     * Optional create by constructor.
+     *
+     * @param  string  $NextToken
+     */
+    public function __construct(
+        string $NextToken = null
+    )
+    {
+        $this->NextToken = $NextToken;
+    }
 }

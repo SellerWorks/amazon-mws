@@ -15,7 +15,7 @@ use SellerWorks\Amazon\MWS\Common\Requests\Request;
 final class GetPrepInstructionsForSKURequest extends Request implements RequestInterface
 {
 	/**
-	 * @var string
+	 * @var Array<string>
 	 */
 	public $SellerSKUList;
 
@@ -23,4 +23,19 @@ final class GetPrepInstructionsForSKURequest extends Request implements RequestI
 	 * @var string
 	 */
 	public $ShipToCountryCode;
+
+    /**
+     * Optional create by constructor.
+     *
+     * @param  array   $SellerSKUList
+     * @param  string  $ShipToCountryCode
+     */
+    public function __construct(
+        array $SellerSKUList = [],
+        string $ShipToCountryCode = null
+    )
+    {
+        $this->SellerSKUList     = $SellerSKUList;
+        $this->ShipToCountryCode = $ShipToCountryCode;
+    }
 }

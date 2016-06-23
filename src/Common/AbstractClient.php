@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\Common;
 
 use Error;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
+use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
 /**
@@ -15,16 +18,13 @@ use RuntimeException;
  */
 abstract class AbstractClient implements ClientInterface
 {
+    use PassportAwareTrait;
+
     /**
      * MWS Service definitions.
      */
 	const MWS_PATH    = '';
 	const MWS_VERSION = '';
-
-    /**
-     * @var Passport
-     */
-    protected $passport;
 
     /**
      * @var string
@@ -37,14 +37,9 @@ abstract class AbstractClient implements ClientInterface
     protected $serializer;
 
     /**
-     * @var ResponseInterface
-     */
-    protected $lastResponse;
-
-    /**
      * Constructor.
      *
-     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
+     * @param  Passport  $passport
      * @return void
      */
     public function __construct(Passport $passport = null)
@@ -87,35 +82,14 @@ abstract class AbstractClient implements ClientInterface
             $this->host = $countryInfo[$countryCode]['host'];
         }
         else {
-            throw new InvalidArgumentException($countryCode);
+            throw new InvalidArgumentException('Invalid country code:  ' . $countryCode);
         }
 
         return $this;
     }
 
     /**
-     * @return Passport
-     */
-    public function getPassport(): Passport
-    {
-        return $this->passport;
-    }
-
-    /**
-     * @param  Passport
-     * @return self
-     */
-    public function setPassport(Passport $passport = null): self
-    {
-        $this->passport = $passport;
-
-        return $this;
-    }
-
-    /**
-     * Set the Sabre\XML\Service object.
-     *
-     * @param  SellerWorks\Amazon\MWS\Common\SerializerInterface $serializer
+     * @param  SerializerInterface $serializer
      * @return self
      */
     public function setSerializer(SerializerInterface $serializer): self
@@ -125,48 +99,44 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * Return the last Response object.
-     *
-     * @return ResponseInterface
-     */
-    public function getLastResponse(): ResponseInterface
-    {
-        return $this->lastResponse?: new Responses\NullResponse;
-    }
-
-    /**
-     * Return the last Result object.
-     *
-     * @return ResultInterface
-     */
-    public function getLastResult(): ResultInterface
-    {
-        return $this->lastResponse? $this->lastResponse->getResult() : new Results\NullResult;
-    }
-
-    /**
      * Make request to Amazon.
      *
      * @param  RequestInterface  $request
-     * @param  Passport  $passport
      * @return ResultInterface
      */
-    protected function makeRequest(RequestInterface $request, Passport $passport = null): ResponseInterface
+    protected function makeRequest(RequestInterface $request)
     {
-        $usePassport = $passport?: $this->passport;
+        $usePassport = $request->getPassport()?: $this->passport;
 
         if (!($usePassport instanceof Passport)) {
             throw new RuntimeException('A valid Passport must be provided.');
         }
 
-        $response = $this->post($request, $usePassport);
-        $this->lastResponse = $this->serializer->unserialize($response);
+        $response = $this->post($request, $usePassport)->getBody()->getContents();
+        $obj = $this->serializer->unserialize($response);
 
-        if ($response instanceof ErrorResponse) {
+        if ($obj instanceof ErrorResponse) {
             return $this->throwError($response);
         }
 
-        return $this->lastResponse;
+        return $obj;
+
+/*
+        $promise->then(
+            function (ResponseInterface $response) {
+                $xml = $response->getBody()->getContents();
+                $obj = $this->serializer->unserialize($xml);
+
+                if ($obj instanceof ErrorResponse) {
+                    return $this->throwError($response);
+                }
+
+                return $obj;
+            }
+        );
+
+        return $promise;
+*/
     }
 
     /**
@@ -176,11 +146,18 @@ abstract class AbstractClient implements ClientInterface
      * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
      * @return string
      */
-    protected function post(RequestInterface $request, Passport $passport): string
+    protected function post(RequestInterface $request, Passport $passport)
     {
-        $url = sprintf('https://%s/%s', $this->host, trim(static::MWS_PATH, '/'));
-        $qs  = $this->buildQuery($request, $passport);
+        $url     = $this->buildUrl();
+        $query   = $this->buildQuery($request, $passport);
+//         $body    = $this->buildBody();
+        $headers = $this->buildRequestHeaders();
 
+        $guzzleReq = new Request('POST', $url, $headers, $query);
+        $guzzle = new Client();
+
+        return $guzzle->send($guzzleReq);
+/*
         $headers = [
             'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
             'Expect: ',
@@ -194,14 +171,37 @@ abstract class AbstractClient implements ClientInterface
             CURLOPT_SSL_VERIFYHOST  => 2,
             CURLOPT_USERAGENT       => static::USER_AGENT,
             CURLOPT_POST            => true,
-            CURLOPT_POSTFIELDS      => $qs,
+            CURLOPT_POSTFIELDS      => $query,
             CURLOPT_HTTPHEADER      => $headers,
             CURLOPT_RETURNTRANSFER  => true,
+            CURLOPT_VERBOSE  => true,
         ]);
 
         $response = curl_exec($ch);
-
+print_r($response); die;
         return $response;
+*/
+    }
+
+    /**
+     * @return string
+     */
+    private function buildUrl(): string
+    {
+        return sprintf('https://%s/%s', $this->host, trim(static::MWS_PATH, '/'));
+    }
+
+    /**
+     * @return array
+     */
+    private function buildRequestHeaders(): array
+    {
+        $headers = [
+            'Content-Type'  => 'application/x-www-form-urlencoded; charset=utf-8',
+            'Expect'        => '',
+        ];
+
+        return $headers;
     }
 
     /**

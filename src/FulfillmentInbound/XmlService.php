@@ -22,6 +22,7 @@ class XmlService extends BaseXmlService
     public function __construct()
     {
         $namespace = sprintf('{%s}', static::NS);
+        parent::__construct($namespace);
 
         $this->elementMap = array_merge($this->elementMap, [
             // Response objects.

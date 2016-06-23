@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
 
+use DateTimeInterface;
 use SellerWorks\Amazon\MWS\Common\RequestInterface;
 use SellerWorks\Amazon\MWS\Common\Requests\Request;
 
@@ -33,4 +34,25 @@ final class ListInboundShipmentsRequest extends Request implements RequestInterf
      * @var DateTimeInterface
      */
     public $LastUpdatedBefore;
+
+    /**
+     * Optional create by constructor.
+     *
+     * @param  array  $ShipmentStatusList
+     * @param  array  $ShipmentIdList
+     * @param  DateTimeInterface  $LastUpdatedAfter
+     * @param  DateTimeInterface  $LastUpdatedBefore
+     */
+    public function __construct(
+        array $ShipmentStatusList = [],
+        array $ShipmentIdList = [],
+        DateTimeInterface $LastUpdatedAfter = null,
+        DateTimeInterface $LastUpdatedBefore = null
+    )
+    {
+        $this->ShipmentStatusList = $ShipmentStatusList;
+        $this->ShipmentIdList     = $ShipmentIdList;
+        $this->LastUpdatedAfter   = $LastUpdatedAfter;
+        $this->LastUpdatedBefore  = $LastUpdatedBefore;
+    }
 }
