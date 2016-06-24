@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use SellerWorks\Amazon\MWS\Common\RecordIterator;
 use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
 
@@ -34,6 +35,15 @@ interface FulfillmentInboundInterface
     ):  Results\CreateInboundShipmentPlanResult;
 
     /**
+     * @param  CreateInboundShipmentPlanRequest $request
+     * @return PromiseInterface
+     */
+    function CreateInboundShipmentPlanAsync(
+        Requests\CreateInboundShipmentPlanRequest $request
+    ):  PromiseInterface;
+
+
+    /**
      * Creates an inbound shipment.
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_CreateInboundShipment.html
@@ -44,6 +54,15 @@ interface FulfillmentInboundInterface
     function CreateInboundShipment(
         Requests\CreateInboundShipmentRequest $request
     ):  Results\CreateInboundShipmentResult;
+
+    /**
+     * @param  CreateInboundShipmentRequest $request
+     * @return PromiseInterface
+     */
+    function CreateInboundShipmentAsync(
+        Requests\CreateInboundShipmentRequest $request
+    ):  PromiseInterface;
+
 
     /**
      * Updates an existing inbound shipment.
@@ -57,8 +76,6 @@ interface FulfillmentInboundInterface
         Requests\UpdateInboundShipmentRequest $request
     ):  Results\UpdateInboundShipmentResult;
 
-    // GetPreorderInfo
-    // ConfirmPreorder
 
     /**
      * Returns labeling requirements and item preparation instructions to help you prepare items for an inbound shipment.
@@ -72,6 +89,7 @@ interface FulfillmentInboundInterface
         Requests\GetPrepInstructionsForSKURequest $request
     ):  Results\GetPrepInstructionsForSKUResult;
 
+
     /**
      * Returns item preparation instructions to help with item sourcing decisions.
      *
@@ -84,15 +102,6 @@ interface FulfillmentInboundInterface
         Requests\GetPrepInstructionsForASINRequest $request
     ):  Results\GetPrepInstructionsForASINResult;
     
-    // PutTransportContent
-    // EstimateTransportRequest
-    // GetTransportContent
-    // ConfirmTransportRequest
-    // VoidTransportRequest
-    // GetPackageLabels
-    // GetUniquePackageLabels
-    // GetPalletLabels
-    // GetBillOfLading
 
     /**
      * Returns a list of inbound shipments based on criteria that you specify.
@@ -106,6 +115,7 @@ interface FulfillmentInboundInterface
         Requests\ListInboundShipmentsRequest $request
     ):  RecordIterator;
 
+
     /**
      * Returns the next page of inbound shipments using the NextToken parameter.
      *
@@ -117,6 +127,7 @@ interface FulfillmentInboundInterface
     function ListInboundShipmentsByNextToken(
         string $token
     ):  Results\ListInboundShipmentsByNextTokenResult;
+
 
     /**
      * Returns a list of items in a specified inbound shipment, or a list of items that were updated within a specified time frame.
@@ -130,6 +141,7 @@ interface FulfillmentInboundInterface
         Requests\ListInboundShipmentItemsRequest $request
     ):  RecordIterator;
 
+
     /**
      * Returns the next page of inbound shipment items using the NextToken parameter.
      *
@@ -141,6 +153,7 @@ interface FulfillmentInboundInterface
     function ListInboundShipmentItemsByNextToken(
         string $token
     ):  Results\ListInboundShipmentItemsByNextTokenResult;
+
 
     /**
      * Returns the operational status of the Fulfillment Inbound Shipment API section.

@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace SellerWorks\Amazon\MWS\Common;
 
 use Error;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
-use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Abstract Amazon MWS API Client
@@ -25,6 +28,11 @@ abstract class AbstractClient implements ClientInterface
      */
 	const MWS_PATH    = '';
 	const MWS_VERSION = '';
+
+    /**
+     * @var GuzzleHttp\Client
+     */
+    protected $guzzle;
 
     /**
      * @var string
@@ -47,6 +55,8 @@ abstract class AbstractClient implements ClientInterface
         // Configure MWS.
         $this->setCountry(static::COUNTRY_US);
         $this->setPassport($passport);
+
+        $this->guzzle = new Client;
     }
 
     /**
@@ -99,33 +109,30 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * Make request to Amazon.
+     * Send request to Amazon.
      *
      * @param  RequestInterface  $request
-     * @return ResultInterface
+     * @return PromiseInterface
      */
-    protected function makeRequest(RequestInterface $request)
+    protected function send(RequestInterface $request): PromiseInterface
     {
-        $usePassport = $request->getPassport()?: $this->passport;
+        // Build request parts.
+        $url     = $this->buildUrl();
+        $query   = $this->buildQuery($request);
+//         $body    = $this->buildBody();
+        $headers = $this->buildRequestHeaders();
 
-        if (!($usePassport instanceof Passport)) {
-            throw new RuntimeException('A valid Passport must be provided.');
-        }
 
-        $response = $this->post($request, $usePassport)->getBody()->getContents();
-        $obj = $this->serializer->unserialize($response);
+        // Send request.
+        $postRequest = new Request('POST', $url, $headers, $query);
 
-        if ($obj instanceof ErrorResponse) {
-            return $this->throwError($response);
-        }
 
-        return $obj;
-
-/*
-        $promise->then(
+        // Create promise.
+        $promise = $this->guzzle->sendAsync($postRequest)->then(
+            // onFulfilled
             function (ResponseInterface $response) {
-                $xml = $response->getBody()->getContents();
-                $obj = $this->serializer->unserialize($xml);
+                $raw = $response->getBody()->getContents();
+                $obj = $this->serializer->unserialize($raw);
 
                 if ($obj instanceof ErrorResponse) {
                     return $this->throwError($response);
@@ -136,51 +143,6 @@ abstract class AbstractClient implements ClientInterface
         );
 
         return $promise;
-*/
-    }
-
-    /**
-     * Post request to Amazon.
-     *
-     * @param  SellerWorks\Amazon\MWS\Common\RequestInterface  $request
-     * @param  SellerWorks\Amazon\MWS\Common\Passport  $passport
-     * @return string
-     */
-    protected function post(RequestInterface $request, Passport $passport)
-    {
-        $url     = $this->buildUrl();
-        $query   = $this->buildQuery($request, $passport);
-//         $body    = $this->buildBody();
-        $headers = $this->buildRequestHeaders();
-
-        $guzzleReq = new Request('POST', $url, $headers, $query);
-        $guzzle = new Client();
-
-        return $guzzle->send($guzzleReq);
-/*
-        $headers = [
-            'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
-            'Expect: ',
-        ];
-
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL             => $url,
-            CURLOPT_PORT            => 443,
-            CURLOPT_SSL_VERIFYPEER  => true,
-            CURLOPT_SSL_VERIFYHOST  => 2,
-            CURLOPT_USERAGENT       => static::USER_AGENT,
-            CURLOPT_POST            => true,
-            CURLOPT_POSTFIELDS      => $query,
-            CURLOPT_HTTPHEADER      => $headers,
-            CURLOPT_RETURNTRANSFER  => true,
-            CURLOPT_VERBOSE  => true,
-        ]);
-
-        $response = curl_exec($ch);
-print_r($response); die;
-        return $response;
-*/
     }
 
     /**
@@ -208,11 +170,16 @@ print_r($response); die;
      * Return query string of request.
      *
      * @param  RequestInterface $request
-     * @param  Passport $passport
-     * @return array
+     * @return string
      */
-    protected function buildQuery(RequestInterface $request, Passport $passport): string
+    protected function buildQuery(RequestInterface $request): string
     {
+        $passport = $request->getPassport()?: $this->passport;
+
+        if (!($passport instanceof Passport)) {
+            throw new RuntimeException('A valid Passport must be provided.');
+        }
+
         if (!($this->serializer instanceof SerializerInterface)) {
             throw new RuntimeException('Serializer must be configured.');
         }
