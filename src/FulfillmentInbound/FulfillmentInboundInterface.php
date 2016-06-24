@@ -101,7 +101,7 @@ interface FulfillmentInboundInterface
     function GetPrepInstructionsForASIN(
         Requests\GetPrepInstructionsForASINRequest $request
     ):  Results\GetPrepInstructionsForASINResult;
-    
+
 
     /**
      * Returns a list of inbound shipments based on criteria that you specify.
@@ -111,9 +111,7 @@ interface FulfillmentInboundInterface
      * @param  ListInboundShipmentsRequest $request
      * @return RecordIterator
      */
-    function ListInboundShipments(
-        Requests\ListInboundShipmentsRequest $request
-    ):  RecordIterator;
+//     function ListInboundShipments(Requests\ListInboundShipmentsRequest $request): RecordIterator;
 
 
     /**
@@ -137,9 +135,7 @@ interface FulfillmentInboundInterface
      * @param  ListInboundShipmentItemsRequest
      * @return RecordIterator
      */
-    function ListInboundShipmentItems(
-        Requests\ListInboundShipmentItemsRequest $request
-    ):  RecordIterator;
+//     function ListInboundShipmentItems(Requests\ListInboundShipmentItemsRequest $request): RecordIterator;
 
 
     /**

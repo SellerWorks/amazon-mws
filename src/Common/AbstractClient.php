@@ -16,8 +16,6 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Abstract Amazon MWS API Client
- *
- * @author Steve Nebes <snebes@gmail.com>
  */
 abstract class AbstractClient implements ClientInterface
 {
