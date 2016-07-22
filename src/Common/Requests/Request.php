@@ -1,15 +1,20 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Common\Requests;
 
-namespace SellerWorks\Amazon\MWS\Common\Requests;
-
-use SellerWorks\Amazon\MWS\Common\PassportAwareTrait;
+use SellerWorks\Amazon\Passport\PassportAwareInterface;
+use SellerWorks\Amazon\Passport\PassportAwareTrait;
 
 /**
  * Base class for all Requests.
  */
-abstract class Request
+abstract class Request implements RequestInterface, PassportAwareInterface
 {
+    /**
+     * @property $passport
+     *
+     * @method  PassportInterface  getPassport()
+     * @method  self  setPassport(PassportInterface $passport)
+     */
     use PassportAwareTrait;
 }

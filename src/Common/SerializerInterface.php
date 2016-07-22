@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace SellerWorks\Amazon\MWS\Common;
+namespace SellerWorks\Amazon\Common;
 
 /**
  * Interface for compatible serializers.
@@ -20,7 +18,7 @@ interface SerializerInterface
      * @param  RequestInterface  $request
      * @return array
      */
-    function serialize(RequestInterface $request): array;
+    function serialize(RequestInterface $request);
 
     /**
      * Deserialize response into objects.
@@ -28,5 +26,5 @@ interface SerializerInterface
      * @param  string  $response
      * @return ResponseInterface
      */
-    function unserialize(string $response): ResponseInterface;
+    function unserialize(string $response);
 }

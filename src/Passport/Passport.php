@@ -28,17 +28,30 @@ final class Passport implements PassportInterface
     protected $MwsAuthToken;
 
     /**
-     * @param  string  $SellerId
-     * @param  string  $SellerId
-     * @param  string  $SellerId
-     * @param  string  $SellerId
+     * @var string
      */
-    public function __construct(string $SellerId, string $AccessKey, string $SecretKey, string $MwsAuthToken = '')
+    protected $Region;
+
+    /**
+     * @param  string  $SellerId
+     * @param  string  $AccessKey
+     * @param  string  $SecretKey
+     * @param  string  $MwsAuthToken
+     * @param  string  $Region
+     */
+    public function __construct(
+        string $SellerId,
+        string $AccessKey,
+        string $SecretKey,
+        string $MwsAuthToken = '',
+        string $Region = Region::US
+    )
     {
         $this->SellerId     = $SellerId;
         $this->AccessKey    = $AccessKey;
         $this->SecretKey    = $SecretKey;
         $this->MwsAuthToken = $MwsAuthToken;
+        $this->Region       = $Region;
     }
 
     /**
@@ -71,5 +84,13 @@ final class Passport implements PassportInterface
     public function getMwsAuthToken()
     {
         return $this->MwsAuthToken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegion()
+    {
+        return $this->Region;
     }
 }
