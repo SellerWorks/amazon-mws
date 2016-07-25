@@ -13,11 +13,10 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ResponseInterface;
 
-use SellerWorks\Amazon\Passport\PassportAwareInterface;
-use SellerWorks\Amazon\Passport\PassportAwareTrait;
-use SellerWorks\Amazon\Passport\PassportException;
-use SellerWorks\Amazon\Passport\PassportInterface;
-use SellerWorks\Amazon\Passport\Region;
+use SellerWorks\Amazon\Credentials\CredentialsAwareInterface;
+use SellerWorks\Amazon\Credentials\CredentialsAwareTrait;
+use SellerWorks\Amazon\Credentials\CredentialsException;
+use SellerWorks\Amazon\Credentials\CredentialsInterface;
 
 /**
  * Abstract MWS client implementation.
@@ -45,9 +44,9 @@ class AbstractClient implements ClientInterface
     /**
      * Constructor.
      *
-     * @param  PassportInterface  $passport
+     * @param  CredentialsInterface  $credentials
      */
-    public function __construct()
+    public function __construct(CredentialsInterface $credentials = null)
     {
         $this->guzzle = new Client;
     }
