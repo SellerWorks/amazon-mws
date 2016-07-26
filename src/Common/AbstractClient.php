@@ -2,34 +2,47 @@
 
 namespace SellerWorks\Amazon\Common;
 
-use Error;
-use InvalidArgumentException;
-use RuntimeException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\Event;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Uri;
-use Psr\Http\Message\ResponseInterface;
-
+use SellerWorks\Amazon\Credentials\Credentials;
 use SellerWorks\Amazon\Credentials\CredentialsAwareInterface;
 use SellerWorks\Amazon\Credentials\CredentialsAwareTrait;
-use SellerWorks\Amazon\Credentials\CredentialsException;
 use SellerWorks\Amazon\Credentials\CredentialsInterface;
 
 /**
- * Abstract MWS client implementation.
- *
- * 
+ * Base client class for all MWS endponints.
  */
-class AbstractClient implements ClientInterface
+class AbstractClient implements CredentialsAwareInterface
 {
     /**
-     * MWS Service definitions.
+     * @property $credentials
+     * @method   CredentialsInterface  getCredentials()
+     * @method   self  setCredentials(CredentialsInterface $credentials)
      */
-	const MWS_PATH    = '';
-	const MWS_VERSION = '';
+    use CredentialsAwareTrait;
+
+    /**
+     * MWS service definitions.
+     */
+    const MWS_PATH    = '';
+    const MWS_VERSION = '';
+
+    /**
+     * @var string
+     */
+    protected $baseUri;
+
+    /**
+     * @var string
+     */
+    protected $defaultMarketplaceId;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
 
     /**
      * @var GuzzleHttp\Client
@@ -37,81 +50,127 @@ class AbstractClient implements ClientInterface
     protected $guzzle;
 
     /**
+     * @var string
+     */
+    protected $region;
+
+    /**
      * @var SerializerInterface
      */
     protected $serializer;
 
     /**
-     * Constructor.
-     *
-     * @param  CredentialsInterface  $credentials
      */
     public function __construct(CredentialsInterface $credentials = null)
     {
-        $this->guzzle = new Client;
+        $this->credentials = $credentials?: null;
+
+        $this->setRegion(Enum\Region::US);
+    }
+
+    /**
+     * @param  string  $region
+     * @return self
+     */
+    public function setRegion($region)
+    {
+        static $regionInfo = [
+            // NA region
+            Enum\Region::CA => ['host' => 'mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
+            Enum\Region::MX => ['host' => 'mws.amazonservices.com.mx', 'marketplaceId' => 'A1AM78C64UM0Y8'],
+            Enum\Region::US => ['host' => 'mws.amazonservices.com',    'marketplaceId' => 'ATVPDKIKX0DER'],
+
+            // EU region
+            Enum\Region::DE => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
+            Enum\Region::ES => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
+            Enum\Region::FR => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
+            Enum\Region::IN => ['host' => 'mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
+            Enum\Region::IT => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
+            Enum\Region::UK => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
+
+            // FE region
+            Enum\Region::JP => ['host' => 'mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
+
+            // CN region
+            Enum\Region::CN => ['host' => 'mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
+        ];
+
+        $region = strtolower($region);
+
+        if (array_key_exists($region, $regionInfo)) {
+            $this->host = $regionInfo[$region]['host'];
+            $this->defaultMarketplaceId = $regionInfo[$region]['marketplaceId'];
+        }
+        else {
+            throw new InvalidArgumentException(sprintf('Invalid region: "%s"', $region));
+        }
+
+        return $this;
     }
 
     /**
      * @param  RequestInterface  $request
      * @return ResponseInterface
      */
-    public function send(RequestInterface $request)
+    protected function send(RequestInterface $request)
     {
-        $uri   = $this->getUri();
-        $query = $this->getQuery($uri, $request);
+        $uri = $this->buildUri();
     }
 
     /**
      * @param  RequestInterface  $request
      * @return PromiseInterface
      */
-    public function sendAsync(RequestInterface $request)
+    protected function sendAsync(RequestInterface $request)
     {
     }
 
     /**
-     * Get the Uri to which the client is configured to send requests.
-     *
-     * @return Uri
-     */
-    private function getUri()
-    {
-        switch ($this->region) {
-            // NA region
-            case Region::CA: return new Uri('https://mws.amazonservices.ca');
-            case Region::MX: return new Uri('https://mws.amazonservices.com.mx');
-            case Region::US: return new Uri('https://mws.amazonservices.com');
-
-            // EU region
-            case Region::DE: return new Uri('https://mws-eu.amazonservices.com');
-            case Region::ES: return new Uri('https://mws-eu.amazonservices.com');
-            case Region::FR: return new Uri('https://mws-eu.amazonservices.com');
-            case Region::IN: return new Uri('https://mws.amazonservices.in');
-            case Region::IT: return new Uri('https://mws-eu.amazonservices.com');
-            case Region::UK: return new Uri('https://mws-eu.amazonservices.com');
-
-            // FE region
-            case Region::JP: return new Uri('https://mws.amazonservices.jp');
-
-            // CN region
-            case Region::CN: return new Uri('https://mws.amazonservices.com.cn');
-        }
-
-        return new Uri('https://mws.amazonservices.com');
-    }
-
-    /**
-     * Get the query for which the client is to request.
-     *
      * @param  RequestInterface  $request
-     * @param  UriInterface  $uri
-     * @return ...
+     * @param  CredentialsInterface  $credentials
+     * @return GuzzleHttp\Psr7\Requeste
      */
-    private function getQuery(RequestInterface $request)
+    private function buildRequest(RequestInterface $request, CredentialsInterface $credentials)
     {
-        // Validate passport.
-        if (!$this->passport instanceof PassportInterface) {
-            throw new PassportException('Passport is Required');
+        
+    }
+
+    /**
+     * Get event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        if (null === $this->eventDispatcher) {
+            $this->eventDispatcher = new EventDispatcher;
         }
+
+        return $this->eventDispatcher;
+    }
+
+    /**
+     * Set event dispatcher.
+     *
+     * @param  EventDispatcherInterface  $eventDispatcher
+     * @return self
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
+    }
+
+    /**
+     * Dispatch an event.
+     *
+     * @param  string  $name
+     * @param  Event  $event
+     * @return Event
+     */
+    protected function dispatch($name, Event $event)
+    {
+        return $this->getEventDispatcher()->dispatch($name, $event);
     }
 }

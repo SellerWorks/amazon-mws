@@ -1,6 +1,6 @@
 <?php
 
-namespace SellerWorks\Amazon\Common\Requests;
+namespace SellerWorks\Amazon\Common;
 
 /**
  * Interface for all Request objects.

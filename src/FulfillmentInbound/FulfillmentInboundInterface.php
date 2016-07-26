@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
+namespace SellerWorks\Amazon\FulfillmentInbound;
 
 use GuzzleHttp\Promise\PromiseInterface;
-use SellerWorks\Amazon\MWS\Common\RecordIterator;
-use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
+use SellerWorks\Amazon\Common\RecordIterator;
+use SellerWorks\Amazon\Common\Results\GetServiceStatusResult;
 
 /**
  * Amazon MWS Fulfillment Inbound Shipment
@@ -30,17 +28,13 @@ interface FulfillmentInboundInterface
      * @param  CreateInboundShipmentPlanRequest $request
      * @return CreateInboundShipmentPlanResponse
      */
-    function CreateInboundShipmentPlan(
-        Requests\CreateInboundShipmentPlanRequest $request
-    ):  Results\CreateInboundShipmentPlanResult;
+//     function CreateInboundShipmentPlan(Requests\CreateInboundShipmentPlanRequest $request);
 
     /**
      * @param  CreateInboundShipmentPlanRequest $request
      * @return PromiseInterface
      */
-    function CreateInboundShipmentPlanAsync(
-        Requests\CreateInboundShipmentPlanRequest $request
-    ):  PromiseInterface;
+//     function CreateInboundShipmentPlanAsync(Requests\CreateInboundShipmentPlanRequest $request);
 
 
     /**
@@ -51,17 +45,13 @@ interface FulfillmentInboundInterface
      * @param  CreateInboundShipmentRequest
      * @return CreateInboundShipmentResult
      */
-    function CreateInboundShipment(
-        Requests\CreateInboundShipmentRequest $request
-    ):  Results\CreateInboundShipmentResult;
+//     function CreateInboundShipment(Requests\CreateInboundShipmentRequest $request);
 
     /**
      * @param  CreateInboundShipmentRequest $request
      * @return PromiseInterface
      */
-    function CreateInboundShipmentAsync(
-        Requests\CreateInboundShipmentRequest $request
-    ):  PromiseInterface;
+//     function CreateInboundShipmentAsync(Requests\CreateInboundShipmentRequest $request);
 
 
     /**
@@ -72,9 +62,7 @@ interface FulfillmentInboundInterface
      * @param  UpdateInboundShipmentRequest
      * @return UpdateInboundShipmentResult
      */
-    public function UpdateInboundShipment(
-        Requests\UpdateInboundShipmentRequest $request
-    ):  Results\UpdateInboundShipmentResult;
+//     public function UpdateInboundShipment(Requests\UpdateInboundShipmentRequest $request);
 
 
     /**
@@ -85,9 +73,7 @@ interface FulfillmentInboundInterface
      * @param  GetPrepInstructionsForSKURequest
      * @return GetPrepInstructionsForSKUResult
      */
-    function GetPrepInstructionsForSKU(
-        Requests\GetPrepInstructionsForSKURequest $request
-    ):  Results\GetPrepInstructionsForSKUResult;
+//     function GetPrepInstructionsForSKU(Requests\GetPrepInstructionsForSKURequest $request);
 
 
     /**
@@ -98,9 +84,7 @@ interface FulfillmentInboundInterface
      * @param  GetPrepInstructionsForASINRequest
      * @return GetPrepInstructionsForASINResult
      */
-    function GetPrepInstructionsForASIN(
-        Requests\GetPrepInstructionsForASINRequest $request
-    ):  Results\GetPrepInstructionsForASINResult;
+//     function GetPrepInstructionsForASIN(Requests\GetPrepInstructionsForASINRequest $request);
 
 
     /**
@@ -111,7 +95,7 @@ interface FulfillmentInboundInterface
      * @param  ListInboundShipmentsRequest $request
      * @return RecordIterator
      */
-//     function ListInboundShipments(Requests\ListInboundShipmentsRequest $request): RecordIterator;
+//     function ListInboundShipments(Requests\ListInboundShipmentsRequest $request);
 
 
     /**
@@ -122,9 +106,7 @@ interface FulfillmentInboundInterface
      * @param  string $token
      * @return ListInboundShipmentsResult
      */
-    function ListInboundShipmentsByNextToken(
-        string $token
-    ):  Results\ListInboundShipmentsByNextTokenResult;
+//     function ListInboundShipmentsByNextToken(string $token);
 
 
     /**
@@ -135,7 +117,13 @@ interface FulfillmentInboundInterface
      * @param  ListInboundShipmentItemsRequest
      * @return RecordIterator
      */
-//     function ListInboundShipmentItems(Requests\ListInboundShipmentItemsRequest $request): RecordIterator;
+//     function ListInboundShipmentItems(Requests\ListInboundShipmentItemsRequest $request);
+
+    /**
+     * @param  ListInboundShipmentItemsRequest
+     * @return PromiseInterface
+     */
+//     function ListInboundShipmentItemsAsync(Requests\ListInboundShipmentItemsRequest $request);
 
 
     /**
@@ -146,9 +134,7 @@ interface FulfillmentInboundInterface
      * @param  string  $token
      * @return ListInboundShipmentItemsByNextTokenResult
      */
-    function ListInboundShipmentItemsByNextToken(
-        string $token
-    ):  Results\ListInboundShipmentItemsByNextTokenResult;
+//     function ListInboundShipmentItemsByNextToken(string $token);
 
 
     /**
@@ -158,5 +144,10 @@ interface FulfillmentInboundInterface
      *
      * @return GetServiceStatusResponse
      */
-    function GetServiceStatus(): GetServiceStatusResult;
+    function GetServiceStatus();
+
+    /**
+     * @return PromiseInterface
+     */
+    function GetServiceStatusAsync();
 }
