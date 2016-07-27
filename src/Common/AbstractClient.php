@@ -4,7 +4,9 @@ namespace SellerWorks\Amazon\Common;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -34,9 +36,9 @@ class AbstractClient implements CredentialsAwareInterface
     const MWS_VERSION = '';
 
     /**
-     * @var string
+     * @var UriInterface
      */
-    protected $baseUri;
+    protected $defaultUri;
 
     /**
      * @var string
@@ -54,22 +56,16 @@ class AbstractClient implements CredentialsAwareInterface
     protected $guzzle;
 
     /**
-     * @var string
-     */
-    protected $region;
-
-    /**
      * @var SerializerInterface
      */
     protected $serializer;
 
     /**
+     * Configure the client defaults.
      */
-    public function __construct(CredentialsInterface $credentials = null)
+    public function __construct()
     {
-        $this->credentials = $credentials?: null;
         $this->guzzle = new GuzzleClient;
-
         $this->setRegion(Enum\Region::US);
     }
 
@@ -103,7 +99,7 @@ class AbstractClient implements CredentialsAwareInterface
         $region = strtolower($region);
 
         if (array_key_exists($region, $regionInfo)) {
-            $this->host = $regionInfo[$region]['host'];
+            $this->defaultUri           = $this->buildUri($regionInfo[$region]['host']);
             $this->defaultMarketplaceId = $regionInfo[$region]['marketplaceId'];
         }
         else {
@@ -119,19 +115,7 @@ class AbstractClient implements CredentialsAwareInterface
      */
     public function send(RequestInterface $request)
     {
-        $uri   = $this->buildUri();
-        $headers = ['Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8', 'Expect' => ''];
-        $query = $this->buildQuery($request);
-
-        $gzRequest = new GuzzleRequest('POST', $uri, $headers, $query);
-        $promise   = $this->guzzle->sendAsync($gzRequest)->then(
-            // onFulfilled
-            function (ResponseInterface $response) {
-                return $response->getBody()->getContents();
-            }
-        );
-
-        print_r($promise->wait()); die;
+        return $this->sendAsync($request)->wait();
     }
 
     /**
@@ -140,21 +124,36 @@ class AbstractClient implements CredentialsAwareInterface
      */
     public function sendAsync(RequestInterface $request)
     {
+        $headers = ['Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8', 'Expect' => ''];
+        $query   = $this->buildQuery($request);
+
+        $gzRequest = new GuzzleRequest('POST', $this->defaultUri, $headers, $query);
+        $promise   = $this->guzzle->sendAsync($gzRequest)->then(
+            // onFulfilled
+            function (ResponseInterface $response) {
+                return $response->getBody()->getContents();
+            }
+        );
+
+        return $promise;
     }
 
-    private function buildUri()
+    /**
+     * @return UriInterface
+     */
+    private function buildUri($host)
     {
-        return sprintf('https://%s/%s', 'mws.amazonservices.com', trim(static::MWS_PATH, '/'));
+        return new Uri(sprintf('https://%s/%s', $host, trim(static::MWS_PATH, '/')));
     }
 
+    /**
+     * Build and return the query string.
+     *
+     * @param  RequestInterface  $request
+     * @return string
+     */
     private function buildQuery(RequestInterface $request)
     {
-        $credentials = new Credentials(
-            'A26ZB1WO0VA04S',
-            'AKIAJGTQ7B7MLUBUDL5A',
-            'p7ESOpI1Z7xDG/Q5ARmhncl4KE/4ohuVV3bHBcaf',
-            'amzn.mws.1ea8b6aa-6511-0fce-b2fc-4cdbe35f137a');
-
         $parameters = [];
         $parameters['Action'] = 'GetServiceStatus';
 
@@ -185,13 +184,42 @@ class AbstractClient implements CredentialsAwareInterface
     }
 
     /**
-     * @param  RequestInterface  $request
-     * @param  CredentialsInterface  $credentials
-     * @return GuzzleHttp\Psr7\Requeste
+     * Calculate the signature based on Hmac SHA256.
+     *
+     * @param  string  $query
+     * @param  string  $secretKey
+     * @return string
      */
-    private function buildRequest(RequestInterface $request, CredentialsInterface $credentials)
+    private function calculateSignature($query, $secretKey)
     {
-        
+        $path = trim(static::MWS_PATH, '/');
+        $head = sprintf("POST\n%s\n/%s\n%s", 'mws.amazonservices.com', $path, $query);
+        $sig  = hash_hmac('sha256', $head, $secretKey, true);
+
+        return $this->urlencode_rfc3986(base64_encode($sig));
+    }
+
+    /**
+     * Return RFC 3986 compliant string.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    private function urlencode_rfc3986($value)
+    {
+        return str_replace(['+', '%7E'], [' ', '~'], rawurlencode($value));
+    }
+
+    /**
+     * Return UTC timestamp.
+     *
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    private function gmdate()
+    {
+        return gmdate(SerializerInterface::DATE_FORMAT);
     }
 
     /**
@@ -231,37 +259,5 @@ class AbstractClient implements CredentialsAwareInterface
     protected function dispatch($name, Event $event)
     {
         return $this->getEventDispatcher()->dispatch($name, $event);
-    }
-
-    private function calculateSignature($query, $secretKey)
-    {
-        $path = trim(static::MWS_PATH, '/');
-        $head = sprintf("POST\n%s\n/%s\n%s", 'mws.amazonservices.com', $path, $query);
-        $sig  = hash_hmac('sha256', $head, $secretKey, true);
-
-        return $this->urlencode_rfc3986(base64_encode($sig));
-    }
-
-    /**
-     * Return RFC 3986 compliant string.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    private function urlencode_rfc3986($value)
-    {
-        return str_replace(['+', '%7E'], [' ', '~'], rawurlencode($value));
-    }
-
-    /**
-     * Return UTC timestamp.
-     *
-     * @return string
-     *
-     * @codeCoverageIgnore
-     */
-    private function gmdate()
-    {
-        return gmdate(SerializerInterface::DATE_FORMAT);
     }
 }

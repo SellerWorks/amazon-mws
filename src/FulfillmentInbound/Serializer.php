@@ -82,9 +82,7 @@ class Serializer implements SerializerInterface
      */
     public function unserialize(string $response): ResponseInterface
     {
-        $r = $this->xmlService->parse($response);
-
-        return $r;
+        return $this->xmlService->parse($response);
     }
 
     /**
