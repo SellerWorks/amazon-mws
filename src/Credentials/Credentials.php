@@ -33,7 +33,7 @@ final class Credentials implements CredentialsInterface
      * @param  string  $SecretKey
      * @param  string  $MwsAuthToken
      */
-    public function __construct(string $SellerId, string $AccessKey, string $SecretKey, string $MwsAuthToken = '')
+    public function __construct($SellerId, $AccessKey, $SecretKey, $MwsAuthToken = '')
     {
         $this->SellerId     = trim($SellerId);
         $this->AccessKey    = trim($AccessKey);

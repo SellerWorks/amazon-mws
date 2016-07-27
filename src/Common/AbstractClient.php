@@ -2,6 +2,10 @@
 
 namespace SellerWorks\Amazon\Common;
 
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use Psr\Http\Message\ResponseInterface;
+
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
@@ -64,6 +68,7 @@ class AbstractClient implements CredentialsAwareInterface
     public function __construct(CredentialsInterface $credentials = null)
     {
         $this->credentials = $credentials?: null;
+        $this->guzzle = new GuzzleClient;
 
         $this->setRegion(Enum\Region::US);
     }
@@ -112,17 +117,71 @@ class AbstractClient implements CredentialsAwareInterface
      * @param  RequestInterface  $request
      * @return ResponseInterface
      */
-    protected function send(RequestInterface $request)
+    public function send(RequestInterface $request)
     {
-        $uri = $this->buildUri();
+        $uri   = $this->buildUri();
+        $headers = ['Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8', 'Expect' => ''];
+        $query = $this->buildQuery($request);
+
+        $gzRequest = new GuzzleRequest('POST', $uri, $headers, $query);
+        $promise   = $this->guzzle->sendAsync($gzRequest)->then(
+            // onFulfilled
+            function (ResponseInterface $response) {
+                return $response->getBody()->getContents();
+            }
+        );
+
+        print_r($promise->wait()); die;
     }
 
     /**
      * @param  RequestInterface  $request
      * @return PromiseInterface
      */
-    protected function sendAsync(RequestInterface $request)
+    public function sendAsync(RequestInterface $request)
     {
+    }
+
+    private function buildUri()
+    {
+        return sprintf('https://%s/%s', 'mws.amazonservices.com', trim(static::MWS_PATH, '/'));
+    }
+
+    private function buildQuery(RequestInterface $request)
+    {
+        $credentials = new Credentials(
+            'A26ZB1WO0VA04S',
+            'AKIAJGTQ7B7MLUBUDL5A',
+            'p7ESOpI1Z7xDG/Q5ARmhncl4KE/4ohuVV3bHBcaf',
+            'amzn.mws.1ea8b6aa-6511-0fce-b2fc-4cdbe35f137a');
+
+        $parameters = [];
+        $parameters['Action'] = 'GetServiceStatus';
+
+        // Credentials.
+        $parameters['SellerId']       = $credentials->getSellerId();
+        $parameters['AWSAccessKeyId'] = $credentials->getAccessKey();
+        $parameters['MWSAuthToken']   = $credentials->getMwsAuthToken();
+
+        // Standard parameters.
+        $parameters['SignatureMethod']  = 'HmacSHA256';
+        $parameters['SignatureVersion'] = 2;
+        $parameters['Timestamp']        = $this->gmdate();
+        $parameters['Version']          = static::MWS_VERSION;
+
+        // Sign query.
+        unset($parameters['Signature']);
+        uksort($parameters, 'strcmp');
+        $query = [];
+
+        foreach ($parameters as $k => $v) {
+            $query[] = sprintf('%s=%s', $k, $this->urlencode_rfc3986((string) $v));
+        }
+
+        $query  = implode('&', $query);
+        $query .= '&Signature=' . $this->calculateSignature($query, $credentials->getSecretKey());
+
+        return $query;
     }
 
     /**
@@ -172,5 +231,37 @@ class AbstractClient implements CredentialsAwareInterface
     protected function dispatch($name, Event $event)
     {
         return $this->getEventDispatcher()->dispatch($name, $event);
+    }
+
+    private function calculateSignature($query, $secretKey)
+    {
+        $path = trim(static::MWS_PATH, '/');
+        $head = sprintf("POST\n%s\n/%s\n%s", 'mws.amazonservices.com', $path, $query);
+        $sig  = hash_hmac('sha256', $head, $secretKey, true);
+
+        return $this->urlencode_rfc3986(base64_encode($sig));
+    }
+
+    /**
+     * Return RFC 3986 compliant string.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    private function urlencode_rfc3986($value)
+    {
+        return str_replace(['+', '%7E'], [' ', '~'], rawurlencode($value));
+    }
+
+    /**
+     * Return UTC timestamp.
+     *
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    private function gmdate()
+    {
+        return gmdate(SerializerInterface::DATE_FORMAT);
     }
 }

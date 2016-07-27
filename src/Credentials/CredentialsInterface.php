@@ -5,7 +5,7 @@ namespace SellerWorks\Amazon\Credentials;
 /**
  * Credentials interface.
  */
-namespace CredentialsInterface
+interface CredentialsInterface
 {
     /**
      * Get Seller Id.

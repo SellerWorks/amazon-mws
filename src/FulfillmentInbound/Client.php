@@ -31,8 +31,8 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
      */
     public function __construct(CredentialsInterface $credentials = null)
     {
-        parent::__construct($passport);
-        $this->setSerializer(new Serializer);
+        parent::__construct($credentials);
+//         $this->setSerializer(new Serializer);
     }
 
     /**

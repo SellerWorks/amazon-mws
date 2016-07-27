@@ -2,13 +2,12 @@
 
 namespace SellerWorks\Amazon\Common\Requests;
 
-use SellerWorks\Amazon\Passport\PassportAwareInterface;
-use SellerWorks\Amazon\Passport\PassportAwareTrait;
+use SellerWorks\Amazon\Common\RequestInterface;
 
 /**
  * Base class for all Requests.
  */
-abstract class Request implements RequestInterface, PassportAwareInterface
+abstract class Request implements RequestInterface // , PassportAwareInterface
 {
     /**
      * @property $passport
@@ -16,5 +15,5 @@ abstract class Request implements RequestInterface, PassportAwareInterface
      * @method  PassportInterface  getPassport()
      * @method  self  setPassport(PassportInterface $passport)
      */
-    use PassportAwareTrait;
+//     use PassportAwareTrait;
 }
