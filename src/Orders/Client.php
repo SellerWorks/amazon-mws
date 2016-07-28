@@ -3,8 +3,8 @@
 namespace SellerWorks\Amazon\Orders;
 
 use SellerWorks\Amazon\Common\AbstractClient;
-use SellerWorks\Amazon\Common\Requests\GetServiceStatusRequest;
-use SellerWorks\Amazon\Common\Results\GetServiceStatusResult;
+use SellerWorks\Amazon\Common\Request\GetServiceStatusRequest;
+use SellerWorks\Amazon\Common\Result\GetServiceStatusResult;
 use SellerWorks\Amazon\Credentials\CredentialsInterface;
 
 /**
@@ -31,7 +31,7 @@ class Client extends AbstractClient implements OrdersInterface
     public function __construct(CredentialsInterface $credentials = null)
     {
         parent::__construct($credentials);
-//         $this->setSerializer(new Serializer);
+        $this->setSerializer(new Serializer\Serializer);
     }
 
     /**
@@ -49,6 +49,7 @@ class Client extends AbstractClient implements OrdersInterface
     {
         $promise = $this->send(new GetServiceStatusRequest)->then(
             function ($response) {
+                $response = $this->serializer->unserialize($response);
                 return $response; //->GetServiceStatusResult;
             }
         );

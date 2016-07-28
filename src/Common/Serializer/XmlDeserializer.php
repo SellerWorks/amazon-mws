@@ -1,57 +1,56 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Common\Serializer;
 
-namespace SellerWorks\Amazon\MWS\Orders;
-
-use Closure;
 use ReflectionProperty;
+use Sabre\Xml\Deserializer;
 use Sabre\Xml\Reader;
-use SellerWorks\Amazon\MWS\Common\Entities\ResponseMetadata;
-use SellerWorks\Amazon\MWS\Common\Responses\ErrorResponse;
-use SellerWorks\Amazon\MWS\Common\Responses\GetServiceStatusResponse;
-use SellerWorks\Amazon\MWS\Common\Results\Error;
-use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
+use Sabre\Xml\Service;
+
+use SellerWorks\Amazon\Common\Entity\ResponseMetadata;
+use SellerWorks\Amazon\Common\Response\ErrorResponse;
+use SellerWorks\Amazon\Common\Response\GetServiceStatusResponse;
+use SellerWorks\Amazon\Common\Result\Error;
+use SellerWorks\Amazon\Common\Result\GetServiceStatusResult;
 
 /**
  * Defines how to deserialize xml using Sabre\Xml
  */
-class XmlService extends \Sabre\Xml\Service
+abstract class XmlDeserializer extends Service
 {
     /**
-     * @const string
+     * @const string Namespace
      */
-    const NS = 'https://mws.amazonservices.com/Orders/2013-09-01';
+    const NS = '';
 
     /**
      * Add all objects to the service.
      */
     public function __construct()
     {
-        $namespace = sprintf('{%s}', static::NS);
-
-        $this->elementMap = [
+        $namespace = static::NS;
+        $commentElements = [
             // Common objects.
             "{$namespace}Error" => $this->mapObject(Error::class),
             "{$namespace}ErrorResponse" => $this->mapObject(ErrorResponse::class),
             "{$namespace}GetServiceStatusResponse" => $this->mapObject(GetServiceStatusResponse::class),
             "{$namespace}GetServiceStatusResult" => $this->mapObject(GetServiceStatusResult::class),
 
-
-            // Response objects.
-
-
-            // Result objects.
-
-
-            // Collection objects.
-
-
-            // Type objects.
-
-
-            // Lists.
+            // Types,
+            "{$namespace}ResponseMetadata" => $this->mapObject(ResponseMetadata::class),
         ];
+
+        $this->elementMap = array_merge($commentElements, $this->getElementMap());
+    }
+
+    /**
+     * Local element map.
+     *
+     * @return array
+     */
+    public function getElementMap()
+    {
+        return [];
     }
 
     /**
@@ -60,13 +59,13 @@ class XmlService extends \Sabre\Xml\Service
      * @param  string $className
      * @return Closure
      */
-    protected function mapObject(string $className): Closure
+    protected function mapObject($className)
     {
         $namespace = static::NS;
 
         return function(Reader $reader) use ($namespace, $className) {
             $object = new $className;
-            $values = \Sabre\Xml\Deserializer\keyValue($reader, $namespace);
+            $values = Deserializer\keyValue($reader, $namespace);
 
             foreach ($values as $property => $value) {
                 if (property_exists($object, $property)) {
@@ -87,7 +86,7 @@ class XmlService extends \Sabre\Xml\Service
      * @param  string $className
      * @return Closure
      */
-    protected function mapCollectionObject(string $childElementName, string $className): Closure
+    protected function mapCollectionObject($childElementName, $className)
     {
         $namespace = static::NS;
 

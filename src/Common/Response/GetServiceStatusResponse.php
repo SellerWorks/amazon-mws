@@ -1,11 +1,8 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Common\Response;
 
-namespace SellerWorks\Amazon\MWS\Common\Responses;
-
-use SellerWorks\Amazon\MWS\Common\ResponseInterface;
-use SellerWorks\Amazon\MWS\Common\ResultInterface;
+use SellerWorks\Amazon\Common\ResponseInterface;
 
 /**
  * GetServiceStatus response object.
@@ -25,7 +22,7 @@ final class GetServiceStatusResponse implements ResponseInterface
     /**
      * {@inheritDoc}
      */
-    public function getResult(): ResultInterface
+    public function getResult()
     {
         return $this->GetServiceStatusResult;
     }

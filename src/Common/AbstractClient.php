@@ -36,9 +36,19 @@ class AbstractClient implements CredentialsAwareInterface
     const MWS_VERSION = '';
 
     /**
+     * @var GuzzleHttp\Client
+     */
+    protected $guzzle;
+
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
+    /**
      * @var UriInterface
      */
-    protected $defaultUri;
+    protected $uri;
 
     /**
      * @var string
@@ -51,22 +61,12 @@ class AbstractClient implements CredentialsAwareInterface
     protected $eventDispatcher;
 
     /**
-     * @var GuzzleHttp\Client
-     */
-    protected $guzzle;
-
-    /**
-     * @var SerializerInterface
-     */
-    protected $serializer;
-
-    /**
      * Configure the client defaults.
      */
     public function __construct()
     {
         $this->guzzle = new GuzzleClient;
-        $this->setRegion(Enum\Region::US);
+        $this->setRegion(Region::US);
     }
 
     /**
@@ -77,34 +77,45 @@ class AbstractClient implements CredentialsAwareInterface
     {
         static $regionInfo = [
             // NA region
-            Enum\Region::CA => ['host' => 'mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
-            Enum\Region::MX => ['host' => 'mws.amazonservices.com.mx', 'marketplaceId' => 'A1AM78C64UM0Y8'],
-            Enum\Region::US => ['host' => 'mws.amazonservices.com',    'marketplaceId' => 'ATVPDKIKX0DER'],
+            Region::CA => ['host' => 'mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
+            Region::MX => ['host' => 'mws.amazonservices.com.mx', 'marketplaceId' => 'A1AM78C64UM0Y8'],
+            Region::US => ['host' => 'mws.amazonservices.com',    'marketplaceId' => 'ATVPDKIKX0DER'],
 
             // EU region
-            Enum\Region::DE => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
-            Enum\Region::ES => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
-            Enum\Region::FR => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
-            Enum\Region::IN => ['host' => 'mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
-            Enum\Region::IT => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
-            Enum\Region::UK => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
+            Region::DE => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
+            Region::ES => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
+            Region::FR => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
+            Region::IN => ['host' => 'mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
+            Region::IT => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
+            Region::UK => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
 
             // FE region
-            Enum\Region::JP => ['host' => 'mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
+            Region::JP => ['host' => 'mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
 
             // CN region
-            Enum\Region::CN => ['host' => 'mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
+            Region::CN => ['host' => 'mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
         ];
 
         $region = strtolower($region);
 
         if (array_key_exists($region, $regionInfo)) {
-            $this->defaultUri           = $this->buildUri($regionInfo[$region]['host']);
+            $this->uri                  = $this->buildUri($regionInfo[$region]['host']);
             $this->defaultMarketplaceId = $regionInfo[$region]['marketplaceId'];
         }
         else {
             throw new InvalidArgumentException(sprintf('Invalid region: "%s"', $region));
         }
+
+        return $this;
+    }
+
+    /**
+     * @param  SerializerInterface  $serializer
+     * @return self
+     */
+    protected function setSerializer(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
 
         return $this;
     }
@@ -118,7 +129,7 @@ class AbstractClient implements CredentialsAwareInterface
         $headers = ['Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8', 'Expect' => ''];
         $query   = $this->buildQuery($request);
 
-        $gzRequest = new GuzzleRequest('POST', $this->defaultUri, $headers, $query);
+        $gzRequest = new GuzzleRequest('POST', $this->uri, $headers, $query);
         $promise   = $this->guzzle->sendAsync($gzRequest)->then(
             // onFulfilled
             function (ResponseInterface $response) {
@@ -153,8 +164,7 @@ class AbstractClient implements CredentialsAwareInterface
             throw new \UnexpectedValueException('Set credentials to use this service.');
         }
 
-        $parameters = [];
-        $parameters['Action'] = 'GetServiceStatus';
+        $parameters = $this->serializer->serialize($request);
 
         // Credentials.
         $parameters['SellerId']       = $credentials->getSellerId();

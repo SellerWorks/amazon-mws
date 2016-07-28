@@ -1,16 +1,10 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Orders\Serializer;
 
-namespace SellerWorks\Amazon\MWS\Orders;
-
-use DateTimeInterface;
-use ReflectionClass;
-use ReflectionProperty;
-use SellerWorks\Amazon\MWS\Common\RequestInterface;
-use SellerWorks\Amazon\MWS\Common\Requests\GetServiceStatusRequest;
-use SellerWorks\Amazon\MWS\Common\ResponseInterface;
-use SellerWorks\Amazon\MWS\Common\SerializerInterface;
+use SellerWorks\Amazon\Common\RequestInterface;
+use SellerWorks\Amazon\Common\Request\GetServiceStatusRequest;
+use SellerWorks\Amazon\Common\SerializerInterface;
 use UnexpectedValueException;
 
 /**
@@ -21,22 +15,22 @@ use UnexpectedValueException;
 class Serializer implements SerializerInterface
 {
     /**
-     * @var  Sabre\Xml\Service
+     * @var Sabre\Xml\Service
      */
-    protected $xmlService;
+    protected $xmlDeserializer;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->xmlService = new XmlService;
+        $this->xmlDeserializer = new XmlDeserializer;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function serialize(RequestInterface $request): array
+    public function serialize(RequestInterface $request)
     {
         // Validate request is valid type and set action.
         switch (true) {
@@ -51,9 +45,9 @@ class Serializer implements SerializerInterface
     /**
      * {@inheritDoc}
      */
-    public function unserialize(string $response): ResponseInterface
+    public function unserialize($response)
     {
-        return $this->xmlService->parse($response);
+        return $this->xmlDeserializer->parse($response);
     }
 
     /**
@@ -62,7 +56,7 @@ class Serializer implements SerializerInterface
      * @param  GetServiceStatusRequest  $request
      * @return array
      */
-    protected function serializeGetServiceStatus(GetServiceStatusRequest $request): array
+    protected function serializeGetServiceStatus(GetServiceStatusRequest $request)
     {
         $array = ['Action' => 'GetServiceStatus'];
 

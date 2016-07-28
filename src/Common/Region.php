@@ -1,6 +1,6 @@
 <?php
 
-namespace SellerWorks\Amazon\Common\Enum;
+namespace SellerWorks\Amazon\Common;
 
 /**
  * Valid Region values.
