@@ -3,17 +3,19 @@
 namespace SellerWorks\Amazon\Common\Requests;
 
 use SellerWorks\Amazon\Common\RequestInterface;
+// use SellerWorks\Amazon\Credentials\CredentialsAwareInterface;
+// use SellerWorks\Amazon\Credentials\CredentialsAwareTrait;
 
 /**
  * Base class for all Requests.
  */
-abstract class Request implements RequestInterface // , PassportAwareInterface
+abstract class Request implements RequestInterface // , CredentialsAwareInterface
 {
     /**
-     * @property $passport
+     * @property $credentials
      *
-     * @method  PassportInterface  getPassport()
-     * @method  self  setPassport(PassportInterface $passport)
+     * @method  CredentialsInterface  getCredentials()
+     * @method  self  setCredentials(CredentialsInterface $$credentials)
      */
-//     use PassportAwareTrait;
+//      use CredentialsAwareTrait;
 }

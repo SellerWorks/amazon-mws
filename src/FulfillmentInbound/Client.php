@@ -50,7 +50,7 @@ class Client extends AbstractClient implements FulfillmentInboundInterface
     {
         $promise = $this->send(new GetServiceStatusRequest)->then(
             function ($response) {
-                return $response->GetServiceStatusResult;
+                return $response; //->GetServiceStatusResult;
             }
         );
 

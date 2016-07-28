@@ -111,18 +111,9 @@ class AbstractClient implements CredentialsAwareInterface
 
     /**
      * @param  RequestInterface  $request
-     * @return ResponseInterface
-     */
-    public function send(RequestInterface $request)
-    {
-        return $this->sendAsync($request)->wait();
-    }
-
-    /**
-     * @param  RequestInterface  $request
      * @return PromiseInterface
      */
-    public function sendAsync(RequestInterface $request)
+    public function send(RequestInterface $request)
     {
         $headers = ['Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8', 'Expect' => ''];
         $query   = $this->buildQuery($request);
@@ -151,9 +142,17 @@ class AbstractClient implements CredentialsAwareInterface
      *
      * @param  RequestInterface  $request
      * @return string
+     * @throws UnexpectedValueException
      */
     private function buildQuery(RequestInterface $request)
     {
+        if ($this->credentials instanceof CredentialsInterface) {
+            $credentials = $this->credentials;
+        }
+        else {
+            throw new \UnexpectedValueException('Set credentials to use this service.');
+        }
+
         $parameters = [];
         $parameters['Action'] = 'GetServiceStatus';
 
