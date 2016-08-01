@@ -28,7 +28,7 @@ abstract class XmlDeserializer extends Service
      */
     public function __construct()
     {
-        $namespace = static::NS;
+        $namespace = sprintf('{%s}', static::NS);
         $commentElements = [
             // Common objects.
             "{$namespace}Error" => $this->mapObject(Error::class),

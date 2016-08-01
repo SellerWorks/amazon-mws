@@ -50,7 +50,7 @@ class Client extends AbstractClient implements OrdersInterface
         $promise = $this->send(new GetServiceStatusRequest)->then(
             function ($response) {
                 $response = $this->serializer->unserialize($response);
-                return $response; //->GetServiceStatusResult;
+                return $response->GetServiceStatusResult;
             }
         );
 

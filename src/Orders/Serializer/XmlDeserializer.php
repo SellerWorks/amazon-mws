@@ -12,7 +12,7 @@ final class XmlDeserializer extends BaseXmlDeserializer
     /**
      * @const string
      */
-    const NS = '{https://mws.amazonservices.com/Orders/2013-09-01}';
+    const NS = 'https://mws.amazonservices.com/Orders/2013-09-01';
 
     /**
      * Local element map.

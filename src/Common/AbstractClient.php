@@ -16,6 +16,7 @@ use SellerWorks\Amazon\Credentials\Credentials;
 use SellerWorks\Amazon\Credentials\CredentialsAwareInterface;
 use SellerWorks\Amazon\Credentials\CredentialsAwareTrait;
 use SellerWorks\Amazon\Credentials\CredentialsInterface;
+use SellerWorks\Amazon\Events;
 
 /**
  * Base client class for all MWS endponints.
@@ -126,6 +127,9 @@ class AbstractClient implements CredentialsAwareInterface
      */
     public function send(RequestInterface $request)
     {
+        $requestEvent = new Event\RequestEvent($request);
+        $this->dispatch(Events::REQUEST, $requestEvent);
+
         $headers = ['Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8', 'Expect' => ''];
         $query   = $this->buildQuery($request);
 
@@ -136,6 +140,9 @@ class AbstractClient implements CredentialsAwareInterface
                 return $response->getBody()->getContents();
             }
         );
+
+        $responseEvent = new Event\ResponseEvent($promise);
+        $this->dispatch(Events::RESPONSE, $responseEvent);
 
         return $promise;
     }
