@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace SellerWorks\Amazon\MWS\Common;
+namespace SellerWorks\Amazon\Common;
 
 /**
  * Interface for all Response objects.
@@ -14,5 +12,5 @@ interface ResponseInterface
      *
      * @return ResultInterface
      */
-    function getResult(): ResultInterface;
+    function getResult();
 }

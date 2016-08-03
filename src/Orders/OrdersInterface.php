@@ -1,12 +1,8 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Orders;
 
-namespace SellerWorks\Amazon\MWS\Orders;
-
-use SellerWorks\Amazon\MWS\Common\RecordIterator;
-use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
-use SellerWorks\Amazon\MWS\Common\Passport;
+use SellerWorks\Amazon\Common\Results\GetServiceStatusResult;
 
 /**
  * Amazon MWS Orders
@@ -80,9 +76,12 @@ interface OrdersInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/MWS_GetServiceStatus.html
      *
-     * @param  GetServiceStatusRequest  $request
-     * @param  Passport  $passport
-     * @return GetServiceStatusResult
+     * @return GetServiceStatusResponse
      */
-    function GetServiceStatus(): GetServiceStatusResult;
+    function GetServiceStatus();
+
+    /**
+     * @return PromiseInterface
+     */
+    function GetServiceStatusAsync();
 }

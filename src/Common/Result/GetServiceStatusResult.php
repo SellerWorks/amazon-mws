@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Common\Result;
 
-namespace SellerWorks\Amazon\MWS\Common\Results;
-
-use SellerWorks\Amazon\MWS\Common\ResultInterface;
+use SellerWorks\Amazon\Common\ResultInterface;
 
 /**
  * GetServiceStatus result object.

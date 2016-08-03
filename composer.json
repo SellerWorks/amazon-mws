@@ -1,7 +1,7 @@
 {
     "name": "sellerworks/amazon-mws",
     "description": "A PHP client for the Amazon Marketplace Web Services (MWS) API",
-    "keywords": ["Amazon MWS", "SellerCentral"],
+    "keywords": ["Amazon", "MWS", "SellerCentral"],
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=5.5.0",
         "ext-curl": "*",
         "ext-soap": "*",
         "ext-openssl": "*",
@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SellerWorks\\Amazon\\MWS\\": "src/"
+            "SellerWorks\\Amazon\\": "src/"
         }
     }
 }

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
+namespace SellerWorks\Amazon\FulfillmentInbound;
 
-use SellerWorks\Amazon\MWS\Common\XmlService as BaseXmlService;
+use SellerWorks\Amazon\Common\XmlService as BaseXmlService;
 
 /**
  * Defines how to deserialize xml using Sabre\Xml

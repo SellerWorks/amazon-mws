@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Common\Request;
 
-namespace SellerWorks\Amazon\MWS\Common\Requests;
-
-use SellerWorks\Amazon\MWS\Common\RequestInterface;
+use SellerWorks\Amazon\Common\RequestInterface;
 
 /**
  * Returns the operational status of the Fulfillment Inbound Shipment API section.

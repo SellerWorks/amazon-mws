@@ -1,14 +1,11 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Orders;
 
-namespace SellerWorks\Amazon\MWS\Orders;
-
-use SellerWorks\Amazon\MWS\Common\AbstractClient;
-use SellerWorks\Amazon\MWS\Common\RecordIterator;
-use SellerWorks\Amazon\MWS\Common\Requests\GetServiceStatusRequest;
-use SellerWorks\Amazon\MWS\Common\Results\GetServiceStatusResult;
-use SellerWorks\Amazon\MWS\Common\Passport;
+use SellerWorks\Amazon\Common\AbstractClient;
+use SellerWorks\Amazon\Common\Request\GetServiceStatusRequest;
+use SellerWorks\Amazon\Common\Result\GetServiceStatusResult;
+use SellerWorks\Amazon\Credentials\CredentialsInterface;
 
 /**
  * Amazon MWS Orders
@@ -31,25 +28,32 @@ class Client extends AbstractClient implements OrdersInterface
     /**
      * {@inheritDoc}
      */
-    public function __construct(Passport $passport = null)
+    public function __construct(CredentialsInterface $credentials = null)
     {
-        parent::__construct($passport);
-        $this->setSerializer(new Serializer);
+        parent::__construct($credentials);
+        $this->setSerializer(new Serializer\Serializer);
     }
 
     /**
-     * Returns the operational status of the Orders API section.
-     *
-     * @see http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/MWS_GetServiceStatus.html
-     *
-     * @param  GetServiceStatusRequest  $request
-     * @param  Passport  $passport
      * @return GetServiceStatusResult
      */
-    function GetServiceStatus(): GetServiceStatusResult
+    public function GetServiceStatus()
     {
-        $response = $this->makeRequest(new GetServiceStatusRequest);
+        return $this->GetServiceStatusAsync()->wait();
+    }
 
-        return $response->GetServiceStatusResult;
+    /**
+     * @return PromiseInterface
+     */
+    public function GetServiceStatusAsync()
+    {
+        $promise = $this->send(new GetServiceStatusRequest)->then(
+            function ($response) {
+                $response = $this->serializer->unserialize($response);
+                return $response->GetServiceStatusResult;
+            }
+        );
+
+        return $promise;
     }
 }

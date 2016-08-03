@@ -1,31 +1,40 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Common;
 
-namespace SellerWorks\Amazon\MWS\Common;
-
-use Error;
-use InvalidArgumentException;
-use RuntimeException;
-
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
+
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\Event;
+
+use SellerWorks\Amazon\Credentials\Credentials;
+use SellerWorks\Amazon\Credentials\CredentialsAwareInterface;
+use SellerWorks\Amazon\Credentials\CredentialsAwareTrait;
+use SellerWorks\Amazon\Credentials\CredentialsInterface;
+use SellerWorks\Amazon\Events;
 
 /**
- * Abstract Amazon MWS API Client
+ * Base client class for all MWS endponints.
  */
-abstract class AbstractClient implements ClientInterface
+class AbstractClient implements CredentialsAwareInterface
 {
-    use PassportAwareTrait;
+    /**
+     * @property $credentials
+     * @method   CredentialsInterface  getCredentials()
+     * @method   self  setCredentials(CredentialsInterface $credentials)
+     */
+    use CredentialsAwareTrait;
 
     /**
-     * MWS Service definitions.
+     * MWS service definitions.
      */
-	const MWS_PATH    = '';
-	const MWS_VERSION = '';
+    const MWS_PATH    = '';
+    const MWS_VERSION = '';
 
     /**
      * @var GuzzleHttp\Client
@@ -33,199 +42,174 @@ abstract class AbstractClient implements ClientInterface
     protected $guzzle;
 
     /**
-     * @var string
-     */
-    protected $host;
-
-    /**
      * @var SerializerInterface
      */
     protected $serializer;
 
     /**
-     * Constructor.
-     *
-     * @param  Passport  $passport
-     * @return void
+     * @var UriInterface
      */
-    public function __construct(Passport $passport = null)
-    {
-        // Configure MWS.
-        $this->setCountry(static::COUNTRY_US);
-        $this->setPassport($passport);
+    protected $uri;
 
-        $this->guzzle = new Client;
+    /**
+     * @var string
+     */
+    protected $defaultMarketplaceId;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
+     * Configure the client defaults.
+     */
+    public function __construct()
+    {
+        $this->guzzle = new GuzzleClient;
+        $this->setRegion(Region::US);
     }
 
     /**
-     * Set country to use.
-     *
-     * @param  string  $countryCode
+     * @param  string  $region
      * @return self
      */
-    public function setCountry(string $countryCode): self
+    public function setRegion($region)
     {
-        $countryInfo = [
-            // NA Region
-            static::COUNTRY_CA => ['host' => 'mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
-            static::COUNTRY_MX => ['host' => 'mws.amazonservices.com.mx', 'marketplaceId' => 'ATVPDKIKX0DER'],
-            static::COUNTRY_US => ['host' => 'mws.amazonservices.com',    'marketplaceId' => 'A1AM78C64UM0Y8'],
+        static $regionInfo = [
+            // NA region
+            Region::CA => ['host' => 'mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
+            Region::MX => ['host' => 'mws.amazonservices.com.mx', 'marketplaceId' => 'A1AM78C64UM0Y8'],
+            Region::US => ['host' => 'mws.amazonservices.com',    'marketplaceId' => 'ATVPDKIKX0DER'],
 
-            // EU Region
-            static::COUNTRY_DE => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
-            static::COUNTRY_ES => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
-            static::COUNTRY_FR => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
-            static::COUNTRY_IN => ['host' => 'mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
-            static::COUNTRY_IT => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
-            static::COUNTRY_UK => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
+            // EU region
+            Region::DE => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
+            Region::ES => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
+            Region::FR => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
+            Region::IN => ['host' => 'mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
+            Region::IT => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
+            Region::UK => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
 
-            // FE Region
-            static::COUNTRY_JP => ['host' => 'mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
+            // FE region
+            Region::JP => ['host' => 'mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
 
-            // CN Region
-            static::COUNTRY_CN => ['host' => 'mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
+            // CN region
+            Region::CN => ['host' => 'mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
         ];
 
-        if (array_key_exists($countryCode, $countryInfo)) {
-            $this->host = $countryInfo[$countryCode]['host'];
+        $region = strtolower($region);
+
+        if (array_key_exists($region, $regionInfo)) {
+            $this->uri                  = $this->buildUri($regionInfo[$region]['host']);
+            $this->defaultMarketplaceId = $regionInfo[$region]['marketplaceId'];
         }
         else {
-            throw new InvalidArgumentException('Invalid country code:  ' . $countryCode);
+            throw new InvalidArgumentException(sprintf('Invalid region: "%s"', $region));
         }
 
         return $this;
     }
 
     /**
-     * @param  SerializerInterface $serializer
+     * @param  SerializerInterface  $serializer
      * @return self
      */
-    public function setSerializer(SerializerInterface $serializer): self
+    protected function setSerializer(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
+
         return $this;
     }
 
     /**
-     * Send request to Amazon.
-     *
      * @param  RequestInterface  $request
      * @return PromiseInterface
      */
-    protected function send(RequestInterface $request): PromiseInterface
+    public function send(RequestInterface $request)
     {
-        // Build request parts.
-        $url     = $this->buildUrl();
+        $requestEvent = new Event\RequestEvent($request);
+        $this->dispatch(Events::REQUEST, $requestEvent);
+
+        $headers = ['Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8', 'Expect' => ''];
         $query   = $this->buildQuery($request);
-//         $body    = $this->buildBody();
-        $headers = $this->buildRequestHeaders();
 
-
-        // Send request.
-        $postRequest = new Request('POST', $url, $headers, $query);
-
-
-        // Create promise.
-        $promise = $this->guzzle->sendAsync($postRequest)->then(
+        $gzRequest = new GuzzleRequest('POST', $this->uri, $headers, $query);
+        $promise   = $this->guzzle->sendAsync($gzRequest)->then(
             // onFulfilled
             function (ResponseInterface $response) {
-                $raw = $response->getBody()->getContents();
-                $obj = $this->serializer->unserialize($raw);
-
-                if ($obj instanceof ErrorResponse) {
-                    return $this->throwError($response);
-                }
-
-                return $obj;
+                return $response->getBody()->getContents();
             }
         );
+
+        $responseEvent = new Event\ResponseEvent($promise);
+        $this->dispatch(Events::RESPONSE, $responseEvent);
 
         return $promise;
     }
 
     /**
-     * @return string
+     * @return UriInterface
      */
-    private function buildUrl(): string
+    private function buildUri($host)
     {
-        return sprintf('https://%s/%s', $this->host, trim(static::MWS_PATH, '/'));
+        return new Uri(sprintf('https://%s/%s', $host, trim(static::MWS_PATH, '/')));
     }
 
     /**
-     * @return array
-     */
-    private function buildRequestHeaders(): array
-    {
-        $headers = [
-            'Content-Type'  => 'application/x-www-form-urlencoded; charset=utf-8',
-            'Expect'        => '',
-        ];
-
-        return $headers;
-    }
-
-    /**
-     * Return query string of request.
+     * Build and return the query string.
      *
-     * @param  RequestInterface $request
+     * @param  RequestInterface  $request
      * @return string
+     * @throws UnexpectedValueException
      */
-    protected function buildQuery(RequestInterface $request): string
+    private function buildQuery(RequestInterface $request)
     {
-        $passport = $request->getPassport()?: $this->passport;
-
-        if (!($passport instanceof Passport)) {
-            throw new RuntimeException('A valid Passport must be provided.');
+        if ($this->credentials instanceof CredentialsInterface) {
+            $credentials = $this->credentials;
         }
-
-        if (!($this->serializer instanceof SerializerInterface)) {
-            throw new RuntimeException('Serializer must be configured.');
+        else {
+            throw new \UnexpectedValueException('Set credentials to use this service.');
         }
 
         $parameters = $this->serializer->serialize($request);
 
-        // Add authentication params.
-        $parameters['SellerId']       = $passport->getSellerId();
-        $parameters['AWSAccessKeyId'] = $passport->getAccessKey();
+        // Credentials.
+        $parameters['SellerId']       = $credentials->getSellerId();
+        $parameters['AWSAccessKeyId'] = $credentials->getAccessKey();
+        $parameters['MWSAuthToken']   = $credentials->getMwsAuthToken();
 
-        if (!empty($passport->getMwsAuthToken())) {
-            $parameters['MWSAuthToken'] = $passport->getMwsAuthToken();
-        }
-
-        // Add standard parameters.
+        // Standard parameters.
         $parameters['SignatureMethod']  = 'HmacSHA256';
         $parameters['SignatureVersion'] = 2;
         $parameters['Timestamp']        = $this->gmdate();
         $parameters['Version']          = static::MWS_VERSION;
 
-        // Build query.
+        // Sign query.
         unset($parameters['Signature']);
         uksort($parameters, 'strcmp');
-		$query = array();
+        $query = [];
 
-		foreach ($parameters as $k => $v)
-		{
-			$query[] = sprintf('%s=%s', $k, $this->urlencode_rfc3986((string) $v));
-		}
+        foreach ($parameters as $k => $v) {
+            $query[] = sprintf('%s=%s', $k, $this->urlencode_rfc3986((string) $v));
+        }
 
         $query  = implode('&', $query);
-        $query .= '&Signature=' . $this->calculateSignature($query, $passport->getSecretKey());
+        $query .= '&Signature=' . $this->calculateSignature($query, $credentials->getSecretKey());
 
         return $query;
     }
 
     /**
-     * Calculate signature of request.
+     * Calculate the signature based on Hmac SHA256.
      *
-     * @param  string $query
-     * @param  string $secretKey
+     * @param  string  $query
+     * @param  string  $secretKey
      * @return string
      */
-    protected function calculateSignature(string $query, string $secretKey): string
+    private function calculateSignature($query, $secretKey)
     {
-        // Calculate signature.
         $path = trim(static::MWS_PATH, '/');
-        $head = sprintf("POST\n%s\n/%s\n%s", $this->host, $path, $query);
+        $head = sprintf("POST\n%s\n/%s\n%s", 'mws.amazonservices.com', $path, $query);
         $sig  = hash_hmac('sha256', $head, $secretKey, true);
 
         return $this->urlencode_rfc3986(base64_encode($sig));
@@ -234,12 +218,12 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Return RFC 3986 compliant string.
      *
-     * @param  string  $s
+     * @param  string  $value
      * @return string
      */
-    protected function urlencode_rfc3986(string $s): string
+    private function urlencode_rfc3986($value)
     {
-        return str_replace(['+', '%7E'], [' ', '~'], rawurlencode($s));
+        return str_replace(['+', '%7E'], [' ', '~'], rawurlencode($value));
     }
 
     /**
@@ -249,19 +233,47 @@ abstract class AbstractClient implements ClientInterface
      *
      * @codeCoverageIgnore
      */
-    protected function gmdate()
+    private function gmdate()
     {
         return gmdate(SerializerInterface::DATE_FORMAT);
     }
 
     /**
-     * Throw Endpoint-specific error.
+     * Get event dispatcher.
      *
-     * @param  ErrorResponse
-     * @throws Error
+     * @return EventDispatcherInterface
      */
-    protected function throwError(Responses\ErrorResponse $error)
+    public function getEventDispatcher()
     {
-        throw new Error($error->Error->Message);
+        if (null === $this->eventDispatcher) {
+            $this->eventDispatcher = new EventDispatcher;
+        }
+
+        return $this->eventDispatcher;
+    }
+
+    /**
+     * Set event dispatcher.
+     *
+     * @param  EventDispatcherInterface  $eventDispatcher
+     * @return self
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
+    }
+
+    /**
+     * Dispatch an event.
+     *
+     * @param  string  $name
+     * @param  Event  $event
+     * @return Event
+     */
+    protected function dispatch($name, Event $event)
+    {
+        return $this->getEventDispatcher()->dispatch($name, $event);
     }
 }

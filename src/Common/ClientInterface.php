@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
+namespace SellerWorks\Amazon\Common;
 
-namespace SellerWorks\Amazon\MWS\Common;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Interface for all client objects.
@@ -10,29 +10,33 @@ namespace SellerWorks\Amazon\MWS\Common;
 interface ClientInterface
 {
     /**
-     * User-agent string for cURL.
+     * Set the region of service to use.
+     *
+     * @param  enum  $region
+     * @return self
      */
-	const USER_AGENT = 'SellerWorks Amazon MWS 2016.06';
+    function setRegion($region);
 
     /**
-     * Countries supported by api.
+     * Send an MWS request.
+     *
+     * @param  RequestInterface  $request
+     * @return PromiseInterface
      */
-    // NA Region
-    const COUNTRY_CA = 'CA';
-    const COUNTRY_MX = 'MX';
-    const COUNTRY_US = 'US';
+    function send(RequestInterface $request);
 
-    // EU Region
-    const COUNTRY_DE = 'DE';
-    const COUNTRY_ES = 'ES';
-    const COUNTRY_FR = 'FR';
-    const COUNTRY_IN = 'IN';
-    const COUNTRY_IT = 'IT';
-    const COUNTRY_UK = 'UK';
+    /**
+     * Get event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     */
+    function getEventDispatcher();
 
-    // FE Region
-    const COUNTRY_JP = 'JP';
-
-    // CN Region
-    const COUNTRY_CN = 'CN';
+    /**
+     * Set event dispatcher.
+     *
+     * @param  EventDispatcherInterface  $eventDispatcher
+     * @return self
+     */
+    function setEventDispatcher(EventDispatcherInterface $eventDispatcher);
 }
