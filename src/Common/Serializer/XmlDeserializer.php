@@ -7,12 +7,6 @@ use Sabre\Xml\Deserializer;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service;
 
-use SellerWorks\Amazon\Common\Entity\ResponseMetadata;
-use SellerWorks\Amazon\Common\Response\ErrorResponse;
-use SellerWorks\Amazon\Common\Response\GetServiceStatusResponse;
-use SellerWorks\Amazon\Common\Result\Error;
-use SellerWorks\Amazon\Common\Result\GetServiceStatusResult;
-
 /**
  * Defines how to deserialize xml using Sabre\Xml
  */
@@ -28,19 +22,7 @@ abstract class XmlDeserializer extends Service
      */
     public function __construct()
     {
-        $namespace = sprintf('{%s}', static::NS);
-        $commentElements = [
-            // Common objects.
-            "{$namespace}Error" => $this->mapObject(Error::class),
-            "{$namespace}ErrorResponse" => $this->mapObject(ErrorResponse::class),
-            "{$namespace}GetServiceStatusResponse" => $this->mapObject(GetServiceStatusResponse::class),
-            "{$namespace}GetServiceStatusResult" => $this->mapObject(GetServiceStatusResult::class),
-
-            // Types,
-            "{$namespace}ResponseMetadata" => $this->mapObject(ResponseMetadata::class),
-        ];
-
-        $this->elementMap = array_merge($commentElements, $this->getElementMap());
+        $this->elementMap = $this->getElementMap();
     }
 
     /**

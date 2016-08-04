@@ -62,49 +62,56 @@ class AbstractClient implements CredentialsAwareInterface
     protected $eventDispatcher;
 
     /**
+     * List of Amazon MWS URLs, indexed by country code.
+     *
+     * @var array
+     */
+    protected $countryInfo = [
+        // NA region
+        Country::CA => ['host' => 'mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
+        Country::MX => ['host' => 'mws.amazonservices.com.mx', 'marketplaceId' => 'A1AM78C64UM0Y8'],
+        Country::US => ['host' => 'mws.amazonservices.com',    'marketplaceId' => 'ATVPDKIKX0DER'],
+
+        // EU region
+        Country::DE => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
+        Country::ES => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
+        Country::FR => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
+        Country::IN => ['host' => 'mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
+        Country::IT => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
+        Country::UK => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
+
+        // FE region
+        Country::JP => ['host' => 'mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
+
+        // CN region
+        Country::CN => ['host' => 'mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
+    ];
+
+    /**
      * Configure the client defaults.
      */
-    public function __construct()
+    public function __construct(Credentials $credentials, $countryCode = Country::US)
     {
         $this->guzzle = new GuzzleClient;
-        $this->setRegion(Region::US);
+
+        $this->setCredentials($credentials);
+        $this->setCountry($countryCode);
     }
 
     /**
-     * @param  string  $region
+     * @param  string  $countryCode
      * @return self
      */
-    public function setRegion($region)
+    public function setCountry($countryCode)
     {
-        static $regionInfo = [
-            // NA region
-            Region::CA => ['host' => 'mws.amazonservices.ca',     'marketplaceId' => 'A2EUQ1WTGCTBG2'],
-            Region::MX => ['host' => 'mws.amazonservices.com.mx', 'marketplaceId' => 'A1AM78C64UM0Y8'],
-            Region::US => ['host' => 'mws.amazonservices.com',    'marketplaceId' => 'ATVPDKIKX0DER'],
+        $countryCode = strtolower($countryCode);
 
-            // EU region
-            Region::DE => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1PA6795UKMFR9'],
-            Region::ES => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1RKKUPIHCS9HS'],
-            Region::FR => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A13V1IB3VIYZZH'],
-            Region::IN => ['host' => 'mws.amazonservices.in',     'marketplaceId' => 'A21TJRUUN4KGV'],
-            Region::IT => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'APJ6JRA9NG5V4'],
-            Region::UK => ['host' => 'mws-eu.amazonservices.com', 'marketplaceId' => 'A1F83G8C2ARO7P'],
-
-            // FE region
-            Region::JP => ['host' => 'mws.amazonservices.jp',     'marketplaceId' => 'A1VC38T7YXB528'],
-
-            // CN region
-            Region::CN => ['host' => 'mws.amazonservices.com.cn', 'marketplaceId' => 'AAHKV2X7AFYLW'],
-        ];
-
-        $region = strtolower($region);
-
-        if (array_key_exists($region, $regionInfo)) {
-            $this->uri                  = $this->buildUri($regionInfo[$region]['host']);
-            $this->defaultMarketplaceId = $regionInfo[$region]['marketplaceId'];
+        if (array_key_exists($countryCode, $this->countryInfo)) {
+            $this->uri                  = $this->buildUri($this->countryInfo[$countryCode]['host']);
+            $this->defaultMarketplaceId = $this->countryInfo[$countryCode]['marketplaceId'];
         }
         else {
-            throw new InvalidArgumentException(sprintf('Invalid region: "%s"', $region));
+            throw new InvalidArgumentException(sprintf('Unknown country code: "%s"', $countryCode));
         }
 
         return $this;
@@ -137,7 +144,10 @@ class AbstractClient implements CredentialsAwareInterface
         $promise   = $this->guzzle->sendAsync($gzRequest)->then(
             // onFulfilled
             function (ResponseInterface $response) {
-                return $response->getBody()->getContents();
+                $contents = $response->getBody()->getContents();
+                $contents = $this->serializer->unserialize($contents);
+
+                return $contents;
             }
         );
 

@@ -3,9 +3,9 @@
 namespace SellerWorks\Amazon\Common;
 
 /**
- * Valid Region values.
+ * Valid Country values.
  */
-class Region
+class Country
 {
     // NA region
     const CA = 'ca';

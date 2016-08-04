@@ -2,15 +2,14 @@
 
 namespace SellerWorks\Amazon\Orders\Serializer;
 
-use SellerWorks\Amazon\Common\RequestInterface;
-use SellerWorks\Amazon\Common\Request\GetServiceStatusRequest;
-use SellerWorks\Amazon\Common\SerializerInterface;
 use UnexpectedValueException;
 
+use SellerWorks\Amazon\Common\RequestInterface;
+use SellerWorks\Amazon\Common\SerializerInterface;
+use SellerWorks\Amazon\Orders\Request;
+
 /**
- * FulfillmentInboundShipment serializer.
- *
- * Premature optimization? I think not!
+ * Request Serializer / Response Deserializer.
  */
 class Serializer implements SerializerInterface
 {
@@ -34,7 +33,7 @@ class Serializer implements SerializerInterface
     {
         // Validate request is valid type and set action.
         switch (true) {
-            case $request instanceof GetServiceStatusRequest:
+            case $request instanceof Request\GetServiceStatusRequest:
                 return $this->serializeGetServiceStatus($request);
 
             default:
@@ -56,7 +55,7 @@ class Serializer implements SerializerInterface
      * @param  GetServiceStatusRequest  $request
      * @return array
      */
-    protected function serializeGetServiceStatus(GetServiceStatusRequest $request)
+    protected function serializeGetServiceStatus(Request\GetServiceStatusRequest $request)
     {
         $array = ['Action' => 'GetServiceStatus'];
 

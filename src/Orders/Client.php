@@ -3,18 +3,23 @@
 namespace SellerWorks\Amazon\Orders;
 
 use SellerWorks\Amazon\Common\AbstractClient;
-use SellerWorks\Amazon\Common\Request\GetServiceStatusRequest;
-use SellerWorks\Amazon\Common\Result\GetServiceStatusResult;
 use SellerWorks\Amazon\Credentials\CredentialsInterface;
 
 /**
- * Amazon MWS Orders
+ * Orders API
  *
  * With the Orders API section of Amazon Marketplace Web Service (Amazon MWS), you can build simple applications that
  * retrieve only the order information that you need. This enables you to develop fast, flexible, custom applications in
  * areas like order synchronization, order research, and demand-based decision support tools.
  *
- * @url http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/
+ * @method  ListOrders                 Returns orders created or updated during a time frame that you specify.
+ * @method  ListOrdersByNextToken      Returns the next page of orders using the NextToken parameter.
+ * @method  GetOrder                   Returns orders based on the AmazonOrderId values that you specify.
+ * @method  ListOrderItems             Returns order items based on the AmazonOrderId that you specify.
+ * @method  ListOrderItemsByNextToken  Returns the next page of order items using the NextToken parameter.
+ * @method  GetServiceStatus           Returns the operational status of the Orders API section.
+ *
+ * @url http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/Orders_Overview.html
  * @version 2013-09-01
  */
 class Client extends AbstractClient implements OrdersInterface
@@ -35,6 +40,15 @@ class Client extends AbstractClient implements OrdersInterface
     }
 
     /**
+     * @para   ListOrdersRequest  $request
+     * @return ListOrdersResult
+     */
+    public function ListOrders(Request\ListOrdersRequest $request)
+    {
+        return $this->ListOrdersAsync($request)->wait();
+    }
+
+    /**
      * @return GetServiceStatusResult
      */
     public function GetServiceStatus()
@@ -47,13 +61,13 @@ class Client extends AbstractClient implements OrdersInterface
      */
     public function GetServiceStatusAsync()
     {
-        $promise = $this->send(new GetServiceStatusRequest)->then(
+        return $this->send(new Request\GetServiceStatusRequest)->then(
+            // onFulfilled
             function ($response) {
-                $response = $this->serializer->unserialize($response);
-                return $response->GetServiceStatusResult;
+                $obj = $this->serializer->unserialize($response);
+
+                return $obj;
             }
         );
-
-        return $promise;
     }
 }
