@@ -19,7 +19,8 @@
 
         "guzzlehttp/guzzle": "6.x",
         "psr/log": "1.0.x",
-        "sabre/xml": "1.x"
+        "sabre/xml": "1.x",
+        "symfony/event-dispatcher": "^3.1"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.6",

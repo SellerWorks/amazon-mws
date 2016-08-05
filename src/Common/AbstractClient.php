@@ -18,6 +18,7 @@ use SellerWorks\Amazon\Credentials\Credentials;
 use SellerWorks\Amazon\Credentials\CredentialsAwareInterface;
 use SellerWorks\Amazon\Credentials\CredentialsAwareTrait;
 use SellerWorks\Amazon\Credentials\CredentialsInterface;
+use SellerWorks\Amazon\Common\Event\RequestEvent;
 use SellerWorks\Amazon\Common\Exception\ErrorException;
 use SellerWorks\Amazon\Events;
 
@@ -128,8 +129,8 @@ class AbstractClient implements ClientInterface, CredentialsAwareInterface
      */
     protected function send(RequestInterface $request, $throttle = 30)
     {
-//         $requestEvent = new RequestEvent($request);
-//         $this->dispatch(Events::REQUEST, $requestEvent);
+        $requestEvent = new RequestEvent($request);
+        $this->dispatch(Events::REQUEST, $requestEvent);
 
         $headers = ['Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8', 'Expect' => ''];
         $query   = $this->buildQuery($request);
