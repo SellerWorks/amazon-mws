@@ -1,6 +1,6 @@
 <?php
 
-namespace SellerWorks\Amazon\MWS\Common;
+namespace SellerWorks\Amazon\Common;
 
 use Countable;
 use Iterator;

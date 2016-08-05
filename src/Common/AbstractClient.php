@@ -3,6 +3,7 @@
 namespace SellerWorks\Amazon\Common;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ResponseInterface;
@@ -16,12 +17,13 @@ use SellerWorks\Amazon\Credentials\Credentials;
 use SellerWorks\Amazon\Credentials\CredentialsAwareInterface;
 use SellerWorks\Amazon\Credentials\CredentialsAwareTrait;
 use SellerWorks\Amazon\Credentials\CredentialsInterface;
+use SellerWorks\Amazon\Common\Exception\ErrorException;
 use SellerWorks\Amazon\Events;
 
 /**
  * Base client class for all MWS endponints.
  */
-class AbstractClient implements CredentialsAwareInterface
+class AbstractClient implements ClientInterface, CredentialsAwareInterface
 {
     /**
      * @property $credentials
@@ -148,6 +150,19 @@ class AbstractClient implements CredentialsAwareInterface
                 $contents = $this->serializer->unserialize($contents);
 
                 return $contents;
+            },
+            // onRejected
+            function (ClientException $e) {
+                $contents = $e->getResponse()->getBody()->getContents();
+
+                if (false !== preg_match_all('#<(Type|Code|Message)>(.*?)</#si', $contents, $matches)) {
+                    $error = array_combine($matches[1], $matches[2]);
+
+                    throw new ErrorException($error['Message']);
+                }
+                else {
+                    throw new ErrorException($e->getMessage());
+                }
             }
         );
 
@@ -253,7 +268,7 @@ class AbstractClient implements CredentialsAwareInterface
      *
      * @return EventDispatcherInterface
      */
-    public function getEventDispatcher()
+    protected function getEventDispatcher()
     {
         if (null === $this->eventDispatcher) {
             $this->eventDispatcher = new EventDispatcher;

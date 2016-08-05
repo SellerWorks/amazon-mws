@@ -22,7 +22,12 @@ trait OrdersTrait
      */
     public function ListOrdersAsync(Request\ListOrdersRequest $request)
     {
-        return $this->send($request);
+        return $this->send($request)->then(
+            // onFulfilled
+            function ($result) {
+                
+            }
+        );
     }
 
     /**
