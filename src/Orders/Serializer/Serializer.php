@@ -33,11 +33,13 @@ class Serializer implements SerializerInterface
     {
         // Validate request is valid type and set action.
         switch (true) {
+            case $request instanceof Request\ListOrdersRequest:
+                return $this->serializeListOrders($request);
             case $request instanceof Request\GetServiceStatusRequest:
                 return $this->serializeGetServiceStatus($request);
 
             default:
-                throw new UnexpectedValueException(getType($request) . ' is not supported.');
+                throw new UnexpectedValueException(getclass($request) . ' is not supported.');
         }
     }
 
@@ -46,7 +48,19 @@ class Serializer implements SerializerInterface
      */
     public function unserialize($response)
     {
-        return $this->xmlDeserializer->parse($response);
+        return $this->xmlDeserializer->parse($response)->getResult();
+    }
+
+    /**
+     * @param  ListOrdersRequest  $request
+     * @return array
+     */
+    protected function serializeListOrders(Request\ListOrdersRequest $request)
+    {
+        $array = ['Action' => 'ListOrders'];
+        $reflection = new \ReflectionClass(get_class($request));
+        
+        return $array;
     }
 
     /**

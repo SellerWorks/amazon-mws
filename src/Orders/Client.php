@@ -40,12 +40,21 @@ class Client extends AbstractClient implements OrdersInterface
     }
 
     /**
-     * @para   ListOrdersRequest  $request
+     * @param  ListOrdersRequest  $request
      * @return ListOrdersResult
      */
     public function ListOrders(Request\ListOrdersRequest $request)
     {
         return $this->ListOrdersAsync($request)->wait();
+    }
+
+    /**
+     * @param  ListOrdersRequest  $request
+     * @return PromiseInterface
+     */
+    public function ListOrdersAsync(Request\ListOrdersRequest $request)
+    {
+        return $this->send($request);
     }
 
     /**
@@ -61,13 +70,6 @@ class Client extends AbstractClient implements OrdersInterface
      */
     public function GetServiceStatusAsync()
     {
-        return $this->send(new Request\GetServiceStatusRequest)->then(
-            // onFulfilled
-            function ($response) {
-                $obj = $this->serializer->unserialize($response);
-
-                return $obj;
-            }
-        );
+        return $this->send(new Request\GetServiceStatusRequest);
     }
 }

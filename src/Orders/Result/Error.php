@@ -5,17 +5,22 @@ namespace SellerWorks\Amazon\Orders\Result;
 use SellerWorks\Amazon\Common\ResultInterface;
 
 /**
- * GetServiceStatus result object.
+ * Error message.
  */
-final class GetServiceStatusResult implements ResultInterface
+final class Error implements ResultInterface
 {
     /**
      * @var string
      */
-    public $Status;
-    
+    public $Type;
+
     /**
      * @var string
      */
-    public $Timestamp;
+    public $Code;
+
+    /**
+     * @var string
+     */
+    public $Message;
 }
