@@ -62,17 +62,15 @@ abstract class XmlDeserializer extends Service
     }
 
     /**
-     * Return new collection by closure.
+     * Collection of objects.
      *
      * @param  string $childElementName
      * @param  string $className
      * @return Closure
      */
-    protected function mapCollectionObject($childElementName, $className)
+    protected function mapCollection($childElementName, $className)
     {
-        $namespace = static::NS;
-
-        return function(Reader $reader) use ($childElementName, $className, $namespace) {
+        return function(Reader $reader) use ($childElementName, $className) {
             $elementMap = $reader->elementMap;
             $elementMap[$childElementName] = $this->mapObject($className);
             $result = [];
@@ -84,6 +82,19 @@ abstract class XmlDeserializer extends Service
             }
 
             return $result;
+        };
+    }
+
+    /**
+     * Collection of strings.
+     *
+     * @param  string  $childElementName
+     * @return Closure
+     */
+    protected function mapList($childElementName)
+    {
+        return function (Reader $reader) use ($childElementName) {
+            return Deserializer\repeatingElements($reader, $childElementName);
         };
     }
 }
