@@ -2,6 +2,8 @@
 
 namespace SellerWorks\Amazon\Orders;
 
+use SellerWorks\Amazon\Common\RecordIterator;
+
 /**
  * Implements the methods of OrdersInterface.
  */
@@ -22,10 +24,10 @@ trait OrdersTrait
      */
     public function ListOrdersAsync(Request\ListOrdersRequest $request)
     {
-        return $this->send($request)->then(
+        return $this->send($request, 10)->then(
             // onFulfilled
             function ($result) {
-                
+                return new RecordIterator($this, $result);
             }
         );
     }
@@ -45,7 +47,7 @@ trait OrdersTrait
      */
     public function ListOrdersByNextTokenAsync(Request\ListOrdersByNextTokenRequest $request)
     {
-        return $this->send($request);
+        return $this->send($request, 10);
     }
 
     /**
@@ -63,7 +65,7 @@ trait OrdersTrait
      */
     public function GetOrderAsync(Request\GetOrderRequest $request)
     {
-        return $this->send($request);
+        return $this->send($request, 3);
     }
 
     /**
@@ -81,7 +83,7 @@ trait OrdersTrait
      */
     public function ListOrderItemsAsync(Request\ListOrderItemsRequest $request)
     {
-        return $this->send($request);
+        return $this->send($request, 10);
     }
 
     /**
@@ -99,7 +101,7 @@ trait OrdersTrait
      */
     public function ListOrderItemsByNextTokenAsync(Request\ListOrderItemsByNextTokenRequest $request)
     {
-        return $this->send($request);
+        return $this->send($request, 10);
     }
 
     /**

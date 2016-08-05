@@ -2,11 +2,12 @@
 
 namespace SellerWorks\Amazon\Common;
 
+use Exception;
+
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Uri;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Psr\Http\Message\UriInterface;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -94,7 +95,8 @@ class AbstractClient implements ClientInterface, CredentialsAwareInterface
      */
     public function __construct(Credentials $credentials, $countryCode = Country::US)
     {
-        $this->guzzle = new GuzzleClient;
+        $this->guzzle     = new GuzzleClient;
+        $this->serializer = new Serializer\Serializer;
 
         $this->setCredentials($credentials);
         $this->setCountry($countryCode);
@@ -104,7 +106,7 @@ class AbstractClient implements ClientInterface, CredentialsAwareInterface
      * @param  string  $countryCode
      * @return self
      */
-    public function setCountry($countryCode)
+    protected function setCountry($countryCode)
     {
         $countryCode = strtolower($countryCode);
 
@@ -120,21 +122,11 @@ class AbstractClient implements ClientInterface, CredentialsAwareInterface
     }
 
     /**
-     * @param  SerializerInterface  $serializer
-     * @return self
-     */
-    protected function setSerializer(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
-
-        return $this;
-    }
-
-    /**
      * @param  RequestInterface  $request
+     * @param  int  $throttle
      * @return PromiseInterface
      */
-    public function send(RequestInterface $request)
+    protected function send(RequestInterface $request, $throttle = 30)
     {
 //         $requestEvent = new RequestEvent($request);
 //         $this->dispatch(Events::REQUEST, $requestEvent);
@@ -145,18 +137,28 @@ class AbstractClient implements ClientInterface, CredentialsAwareInterface
         $gzRequest = new GuzzleRequest('POST', $this->uri, $headers, $query);
         $promise   = $this->guzzle->sendAsync($gzRequest)->then(
             // onFulfilled
-            function (ResponseInterface $response) {
+            function (PsrResponseInterface $response) {
                 $contents = $response->getBody()->getContents();
                 $contents = $this->serializer->unserialize($contents);
 
-                return $contents;
+                if ($contents instanceof ResponseInterface) {
+                    return $contents->getResult();
+                }
+                else {
+                    return $contents;
+                }
             },
             // onRejected
-            function (ClientException $e) {
+            function (Exception $e) use ($request, $throttle) {
                 $contents = $e->getResponse()->getBody()->getContents();
 
                 if (false !== preg_match_all('#<(Type|Code|Message)>(.*?)</#si', $contents, $matches)) {
                     $error = array_combine($matches[1], $matches[2]);
+
+                    if ($error['Code'] == 'RequestThrottled') {
+                        sleep($throttle);
+                        return $this->send($request, $throttle);
+                    }
 
                     throw new ErrorException($error['Message']);
                 }

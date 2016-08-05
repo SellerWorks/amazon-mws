@@ -103,7 +103,7 @@ class Serializer implements SerializerInterface
      */
     public function unserialize($response)
     {
-        return $this->xmlDeserializer->parse($response)->getResult();
+        return $this->xmlDeserializer->parse($response);
     }
 
     /**
@@ -121,7 +121,7 @@ class Serializer implements SerializerInterface
             $propName  = $p->getName();
             $propValue = $p->getValue($request);
 
-            printf("Checking %s = %s\n", $propName, implode(',', (array) $propValue));
+//             printf("Checking %s = %s\n", $propName, implode(',', (array) $propValue));
 
             if (empty($propValue)) {
                 continue;

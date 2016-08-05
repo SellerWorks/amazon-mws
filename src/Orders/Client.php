@@ -52,9 +52,10 @@ class Client extends AbstractClient implements OrdersInterface
     /**
      * {@inheritDoc}
      */
-    public function __construct(CredentialsInterface $credentials = null)
+    public function __construct(CredentialsInterface $credentials)
     {
         parent::__construct($credentials);
-        $this->setSerializer(new Serializer\Serializer);
+
+        $this->serializer = new Serializer\Serializer;
     }
 }

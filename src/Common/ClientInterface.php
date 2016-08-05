@@ -10,14 +10,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 interface ClientInterface
 {
     /**
-     * Send an MWS request.
-     *
-     * @param  RequestInterface  $request
-     * @return PromiseInterface
-     */
-    function send(RequestInterface $request);
-
-    /**
      * Set event dispatcher.
      *
      * @param  EventDispatcherInterface  $eventDispatcher

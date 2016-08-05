@@ -4,34 +4,16 @@ namespace SellerWorks\Amazon\Common;
 
 use Countable;
 use Iterator;
-use SellerWorks\Amazon\MWS\Common\ClientInterface;
-use SellerWorks\Amazon\MWS\Common\Passport;
-use SellerWorks\Amazon\MWS\Common\ResultInterface;
 
 /**
  * Record iterator.
  */
-class RecordIterator implements Countable, Iterator
+class RecordIterator implements ResultInterface, Countable, Iterator
 {
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
-
-    /**
-     * @var Passport
-     */
-    protected $passport;
-
     /**
      * @var array
      */
     protected $records = [];
-
-    /**
-     * @var ResultInterface
-     */
-    protected $result;
 
     /**
      * @var int
@@ -39,19 +21,29 @@ class RecordIterator implements Countable, Iterator
     protected $pointer = 0;
 
     /**
+     * @var ClientInterface
+     */
+    protected $client;
+
+    /**
+     * @var ResultInterface
+     */
+    protected $result;
+
+    /**
      * Constructor.
      *
-     * @param  ClientInterface $client
-     * @param  Passport $passport
-     * @param  IterableInterface $result
-     * @param  string $operation
+     * @param  ClientInterface  $client
+     * @param  IterableResultInterface  $result
      */
-    public function __construct(ClientInterface $client, Passport $passport, IterableInterface $result)
+    public function __construct(
+        ClientInterface $client,
+        IterableResultInterface $result
+    )
     {
-        $this->client   = $client;
-        $this->passport = $passport;
-        $this->result   = $result;
-        $this->records  = $result->getRecords();
+        $this->client  = $client;
+        $this->result  = $result;
+        $this->records = $result->getRecords();
     }
 
     /**
@@ -66,8 +58,6 @@ class RecordIterator implements Countable, Iterator
 
     /**
      * Iterator::current
-     *
-     * {@inheritDoc}
      */
     public function current()
     {
@@ -76,8 +66,6 @@ class RecordIterator implements Countable, Iterator
 
     /**
      * Iterator::key
-     *
-     * {@inheritDoc}
      */
     public function key()
     {
@@ -86,8 +74,6 @@ class RecordIterator implements Countable, Iterator
 
     /**
      * Iterator::next
-     *
-     * {@inheritDoc}
      */
     public function next()
     {
@@ -96,8 +82,6 @@ class RecordIterator implements Countable, Iterator
 
     /**
      * Iterator::rewind
-     *
-     * {@inheritDoc}
      */
     public function rewind()
     {
@@ -106,8 +90,6 @@ class RecordIterator implements Countable, Iterator
 
     /**
      * Iterator::valid
-     *
-     * {@inheritDoc}
      */
     public function valid()
     {
@@ -126,15 +108,14 @@ class RecordIterator implements Countable, Iterator
      */
     protected function loadNextToken()
     {
-        if (empty($this->result->getNextToken())) {
+        if (empty($this->result->NextToken)) {
             return false;
         }
 
-        $method = $this->result->getMethod();
-        $result = $this->client->$method($this->result->getNextToken(), $this->passport);
-
-        $this->result  = $result;
-        $this->records = array_merge($this->records, $result->getRecords());
+        $method        = $this->result->getRequestMethod();
+        $request       = $this->result->getNextTokenRequest($this->result->NextToken);
+        $this->result  = $this->client->$method($request);
+        $this->records = array_merge($this->records, $this->result->getRecords());
 
         return true;
     }
