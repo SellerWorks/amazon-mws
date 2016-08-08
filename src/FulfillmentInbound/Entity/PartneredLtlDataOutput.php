@@ -42,4 +42,44 @@ final class PartneredLtlDataOutput
      * @var Amount
      */
     public $SellerDeclaredValue;
+
+    /**
+     * @var Amount
+     */
+    public $AmazonCalculatedValue;
+
+    /**
+     * @var string
+     */
+    public $PreviewPickupDate;
+
+    /**
+     * @var string
+     */
+    public $PreviewDeliveryDate;
+
+    /**
+     * @var string
+     */
+    public $PreviewFreightClass;
+
+    /**
+     * @var string
+     */
+    public $AmazonReferenceId;
+
+    /**
+     * @var bool
+     */
+    public $IsBillOfLadingAvailable;
+
+    /**
+     * @var PartneredEstimate
+     */
+    public $PartneredEstimate;
+
+    /**
+     * @var string
+     */
+    public $CarrierName;
 }
