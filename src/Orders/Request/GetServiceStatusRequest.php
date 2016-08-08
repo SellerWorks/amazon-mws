@@ -7,6 +7,6 @@ use SellerWorks\Amazon\Common\RequestInterface;
 /**
  * Returns the operational status of the Orders API section.
  */
-class GetServiceStatusRequest implements RequestInterface
+final class GetServiceStatusRequest implements RequestInterface
 {
 }

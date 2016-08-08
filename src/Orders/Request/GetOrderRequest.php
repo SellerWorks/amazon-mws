@@ -7,7 +7,7 @@ use SellerWorks\Amazon\Common\RequestInterface;
 /**
  * Returns orders based on the AmazonOrderId values that you specify.
  */
-class GetOrderRequest implements RequestInterface
+final class GetOrderRequest implements RequestInterface
 {
     /**
      * @var string|array

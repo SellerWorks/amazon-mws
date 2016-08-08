@@ -7,7 +7,7 @@ use SellerWorks\Amazon\Common\RequestInterface;
 /**
  * Returns the next page of order items using the NextToken parameter.
  */
-class ListOrderItemsByNextTokenRequest implements RequestInterface
+final class ListOrderItemsByNextTokenRequest implements RequestInterface
 {
     /**
      * @var string

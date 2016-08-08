@@ -7,7 +7,7 @@ use SellerWorks\Amazon\Common\RequestInterface;
 /**
  * Returns orders created or updated during a time frame that you specify.
  */
-class ListOrdersRequest implements RequestInterface
+final class ListOrdersRequest implements RequestInterface
 {
     /**
      * @var DateTimeInterface|string
