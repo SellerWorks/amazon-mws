@@ -1,38 +1,37 @@
 <?php
 
-declare(strict_types=1);
-
-namespace SellerWorks\Amazon\MWS\FulfillmentInbound;
+namespace SellerWorks\Amazon\FulfillmentInbound\Serializer;
 
 use DateTimeInterface;
 use ReflectionClass;
 use ReflectionProperty;
-use SellerWorks\Amazon\MWS\Common\RequestInterface;
-use SellerWorks\Amazon\MWS\Common\Requests\GetServiceStatusRequest;
-use SellerWorks\Amazon\MWS\Common\ResponseInterface;
-use SellerWorks\Amazon\MWS\Common\SerializerInterface;
 use UnexpectedValueException;
 
+use SellerWorks\Amazon\Common\RequestInterface;
+use SellerWorks\Amazon\Common\SerializerInterface;
+use SellerWorks\Amazon\FulfillmentInbound\Request;
+
 /**
- * FulfillmentInboundShipment serializer.
- *
- * Premature optimization? I think not!
+ * Request Serializer / Response Deserializer.
  */
 class Serializer implements SerializerInterface
 {
     /**
-     * @var  Sabre\Xml\Service
+     * @var Sabre\Xml\Service
      */
-    protected $xmlService;
+    private $xmlDeserializer;
+
+    /**
+     * @var array
+     */
+    private $validChoices = [];
 
     /**
      * Constructor.
-     *
-     * @return void
      */
     public function __construct()
     {
-        $this->xmlService = new XmlService;
+        $this->xmlDeserializer = new XmlDeserializer;
     }
 
     /**
@@ -42,48 +41,160 @@ class Serializer implements SerializerInterface
     {
         // Validate request is valid type and set action.
         switch (true) {
-            case $request instanceof Requests\CreateInboundShipmentPlanRequest;
-                return $this->serializeCreateInboundShipmentPlan($request);
+            case $request instanceof Request\CreateInboundShipmentPlanRequest;
+                $action = 'CreateInboundShipmentPlan';
+                break;
 
-            case $request instanceof Requests\CreateInboundShipmentRequest;
-                return $this->serializeCreateInboundShipment($request);
+            case $request instanceof Request\CreateInboundShipmentRequest;
+                $action = 'CreateInboundShipment';
+                break;
 
-            case $request instanceof Requests\UpdateInboundShipmentRequest:
-                return $this->serializeUpdateInboundShipment($request);
+            case $request instanceof Request\UpdateInboundShipmentRequest:
+                $action = 'UpdateInboundShipment';
+                break;
 
-            case $request instanceof Requests\GetPrepInstructionsForSKURequest:
-                return $this->serializeGetPrepInstructionsForSKU($request);
+            case $request instanceof Request\GetPrepInstructionsForSKURequest:
+                $action = 'GetPrepInstructionsForSKU';
+                break;
 
-            case $request instanceof Requests\GetPrepInstructionsForASINRequest:
-                return $this->serializeGetPrepInstructionsForASIN($request);
+            case $request instanceof Request\GetPrepInstructionsForASINRequest:
+                $action = 'GetPrepInstructionsForASIN';
+                break;
 
-            case $request instanceof Requests\ListInboundShipmentsRequest:
-                return $this->serializeListInboundShipments($request);
+            case $request instanceof Request\ListInboundShipmentsRequest:
+                $action = 'ListInboundShipments';
+                break;
 
-            case $request instanceof Requests\ListInboundShipmentsByNextTokenRequest:
-                return $this->serializeListInboundShipmentsByNextToken($request);
+            case $request instanceof Request\ListInboundShipmentsByNextTokenRequest:
+                $action = 'ListInboundShipmentsByNextToken';
+                break;
 
-            case $request instanceof Requests\ListInboundShipmentItemsRequest:
-                return $this->serializeListInboundShipmentItems($request);
+            case $request instanceof Request\ListInboundShipmentItemsRequest:
+                $action = 'ListInboundShipmentItems';
+                break;
 
-            case $request instanceof Requests\ListInboundShipmentItemsByNextTokenRequest:
-                return $this->serializeListInboundShipmentItemsByNextToken($request);
+            case $request instanceof Request\ListInboundShipmentItemsByNextTokenRequest:
+                $action = 'ListInboundShipmentItemsByNextToken';
+                break;
 
-            case $request instanceof GetServiceStatusRequest:
-                return $this->serializeGetServiceStatus($request);
+            case $request instanceof Request\GetServiceStatusRequest:
+                $action = 'GetServiceStatus';
+                break;
 
             default:
-                throw new UnexpectedValueException(getType($request) . ' is not supported.');
+                throw new UnexpectedValueException(getclass($request) . ' is not supported.');
         }
+
+        return $this->serializeProperties($action, $request);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function unserialize(string $response): ResponseInterface
+    public function unserialize($response)
     {
-        return $this->xmlService->parse($response);
+        return $this->xmlDeserializer->parse($response);
     }
+
+    /**
+     * @param  string  $action
+     * @param  RequestInterface  $request
+     * @return array
+     */
+    protected function serializeProperties($action, RequestInterface $request)
+    {
+        $parameters = ['Action' => $action];
+        $reflection = new ReflectionClass(get_class($request));
+        $properties = $reflection->getProperties();
+
+        foreach ($properties as $p) {
+            $propName  = $p->getName();
+            $propValue = $p->getValue($request);
+
+//             printf("Checking %s = %s\n", $propName, implode(',', (array) $propValue));
+
+            if (empty($propValue)) {
+                continue;
+            }
+
+            switch ($propName) {
+                // DateTime properties.
+                case '':
+                    if ($propValue instanceof DateTimeInterface) {
+                        $parameters[$propName] = $propValue->format(static::DATE_FORMAT);
+                    }
+                    elseif (is_string($propValue) && false !== ($time = strtotime($propValue))) {
+                        $parameters[$propName] = gmdate(static::DATE_FORMAT, $time);
+                    }
+                    break;
+
+
+                // Range properties.
+                case '':
+                    if (is_numeric($propValue) && $propValue >= 1 && $propValue <= 100) {
+                        $parameters[$propName] = (int) $propValue;
+                    }
+                    break;
+
+
+                // String properties.
+                case '' && $action == 'ListOrderItems' || $action == 'ListOrderItemsByNextToken':
+                    $parameters[$propName] = $propValue;
+                    break;
+
+
+                // Choice properties.
+                case 'AmazonOrderId' && $action == 'GetOrder':
+                    $parameters = array_merge(
+                        $parameters,
+                        $this->buildChoiceList('AmazonOrderId', 'Id', $propValue, false));
+                    break;
+
+
+                default: break;
+            }
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Build choice parameters.
+     *
+     * @param  string  $propName
+     * @param  string  $listName
+     * @param  array|string  $list
+     * @param  bool  $validate
+     * @return array
+     */
+    protected function buildChoiceList($propName, $listName, $list, $validate = true)
+    {
+        $choice = [];
+        $list   = array_unique((array) $list);
+        $i      = 0;
+
+        foreach ($list as $value) {
+            if ($validate && !in_array($value, $this->validChoices[$propName])) {
+                continue;
+            }
+
+            $choice[sprintf('%s.%s.%s', $propName, $listName, ++$i)] = $value;
+        }
+
+        return $choice;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Serialize CreateInboundShipmentPlan

@@ -14,19 +14,19 @@ use SellerWorks\Amazon\Orders\Request;
 /**
  * Request Serializer / Response Deserializer.
  */
-class Serializer implements SerializerInterface
+final class Serializer implements SerializerInterface
 {
     /**
      * @var Sabre\Xml\Service
      */
-    protected $xmlDeserializer;
+    private $xmlDeserializer;
 
     /**
      * Valid choice values.
      *
      * @var array
      */
-    protected $validChoices = [
+    private $validChoices = [
         'FulfillmentChannel' => ['AFN', 'MFN'],
         'OrderStatus' => [
             'PendingAvailability',

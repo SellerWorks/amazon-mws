@@ -1,15 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace SellerWorks\Amazon\FulfillmentInbound;
-
-use SellerWorks\Amazon\Common\XmlService as BaseXmlService;
+namespace SellerWorks\Amazon\FulfillmentInbound\Serializer;
 
 /**
  * Defines how to deserialize xml using Sabre\Xml
  */
-class XmlService extends BaseXmlService
+class XmlDeserializer extends BaseXmlService
 {
     /**
      * @const string
