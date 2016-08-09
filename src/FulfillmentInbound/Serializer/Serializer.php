@@ -143,7 +143,6 @@ class Serializer implements SerializerInterface
             $propValue = $p->getValue($object);
 
         }
-    }
 
 
 
