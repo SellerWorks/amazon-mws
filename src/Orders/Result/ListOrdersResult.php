@@ -12,6 +12,11 @@ use SellerWorks\Amazon\Orders\Request\ListOrdersByNextTokenRequest;
  */
 final class ListOrdersResult implements IterableResultInterface
 {
+    /**
+     * @property  $client
+     * @method  setClient
+     * @method  getIterator
+     */
     use IterableResultTrait;
 
     /**
@@ -30,7 +35,7 @@ final class ListOrdersResult implements IterableResultInterface
     public $CreatedBefore;
 
     /**
-     * @var Collection<Order>
+     * @var Array<Order>
      */
     public $Orders;
 

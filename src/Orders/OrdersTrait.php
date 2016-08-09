@@ -5,7 +5,7 @@ namespace SellerWorks\Amazon\Orders;
 use SellerWorks\Amazon\Common\RecordIterator;
 
 /**
- * Implements the methods of OrdersInterface.
+ * Implements the plumbing methods of OrdersInterface.
  */
 trait OrdersTrait
 {

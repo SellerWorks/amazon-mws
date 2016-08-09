@@ -24,7 +24,20 @@ class Serializer implements SerializerInterface
     /**
      * @var array
      */
-    private $validChoices = [];
+    private $validChoices = [
+        'ShipmentStatusList' => [
+            'WORKING',
+            'SHIPPED',
+            'IN_TRANSIT',
+            'DELIVERED',
+            'CHECKED_IN',
+            'RECEIVING',
+            'CLOSED',
+            'CANCELLED',
+            'DELETED',
+            'ERROR',
+        ],
+    ];
 
     /**
      * Constructor.
@@ -37,7 +50,7 @@ class Serializer implements SerializerInterface
     /**
      * {@inheritDoc}
      */
-    public function serialize(RequestInterface $request): array
+    public function serialize(RequestInterface $request)
     {
         // Validate request is valid type and set action.
         switch (true) {
@@ -111,15 +124,14 @@ class Serializer implements SerializerInterface
             $propName  = $p->getName();
             $propValue = $p->getValue($request);
 
-//             printf("Checking %s = %s\n", $propName, implode(',', (array) $propValue));
-
             if (empty($propValue)) {
                 continue;
             }
 
             switch ($propName) {
                 // DateTime properties.
-                case '':
+                case 'LastUpdatedAfter':
+                case 'LastUpdatedBefore':
                     if ($propValue instanceof DateTimeInterface) {
                         $parameters[$propName] = $propValue->format(static::DATE_FORMAT);
                     }
@@ -138,16 +150,23 @@ class Serializer implements SerializerInterface
 
 
                 // String properties.
-                case '' && $action == 'ListOrderItems' || $action == 'ListOrderItemsByNextToken':
+                case 'NextToken':
+                case 'ShipmentId':
                     $parameters[$propName] = $propValue;
                     break;
 
 
                 // Choice properties.
-                case 'AmazonOrderId' && $action == 'GetOrder':
+                case 'ShipmentIdList':
                     $parameters = array_merge(
                         $parameters,
-                        $this->buildChoiceList('AmazonOrderId', 'Id', $propValue, false));
+                        $this->buildChoiceList('ShipmentIdList', 'member', $propValue, false));
+                    break;
+
+                case 'ShipmentStatusList':
+                    $parameters = array_merge(
+                        $parameters,
+                        $this->buildChoiceList('ShipmentStatusList', 'member', $propValue));
                     break;
 
 
@@ -202,7 +221,7 @@ class Serializer implements SerializerInterface
      * @param  CreateInboundShipmentPlanRequest  $request
      * @return array
      */
-    protected function serializeCreateInboundShipmentPlan(Requests\CreateInboundShipmentPlanRequest $request): array
+    protected function serializeCreateInboundShipmentPlan(Requests\CreateInboundShipmentPlanRequest $request)
     {
         $array  = ['Action' => 'CreateInboundShipmentPlan'];
         $array += $this->parseAddress($request->ShipFromAddress, 'ShipFromAddress.');
@@ -264,7 +283,7 @@ class Serializer implements SerializerInterface
      * @param  CreateInboundShipmentRequest  $request
      * @return array
      */
-    protected function serializeCreateInboundShipment(Requests\CreateInboundShipmentRequest $request): array
+    protected function serializeCreateInboundShipment(Requests\CreateInboundShipmentRequest $request)
     {
         $header = $request->InboundShipmentHeader;
         $array  = [
@@ -340,7 +359,7 @@ class Serializer implements SerializerInterface
      * @param  UpdateInboundShipmentRequest  $request
      * @return array
      */
-    protected function serializeUpdateInboundShipment(Requests\UpdateInboundShipmentRequest $request): array
+    protected function serializeUpdateInboundShipment(Requests\UpdateInboundShipmentRequest $request)
     {
         $fakeRequest = new Requests\CreateInboundShipmentRequest;
         $fakeRequest->ShipmentId = $request->ShipmentId;
@@ -359,7 +378,7 @@ class Serializer implements SerializerInterface
      * @param  GetPrepInstructionsForSKURequest  $request
      * @return array
      */
-    protected function serializeGetPrepInstructionsForSKU(Requests\GetPrepInstructionsForSKURequest $request): array
+    protected function serializeGetPrepInstructionsForSKU(Requests\GetPrepInstructionsForSKURequest $request)
     {
         $array = [
             'Action'            => 'GetPrepInstructionsForSKU',
@@ -386,7 +405,7 @@ class Serializer implements SerializerInterface
      * @param  GetPrepInstructionsForASINRequest  $request
      * @return array
      */
-    protected function serializeGetPrepInstructionsForASIN(Requests\GetPrepInstructionsForASINRequest $request): array
+    protected function serializeGetPrepInstructionsForASIN(Requests\GetPrepInstructionsForASINRequest $request)
     {
         $array = [
             'Action'            => 'GetPrepInstructionsForASIN',
@@ -413,7 +432,7 @@ class Serializer implements SerializerInterface
      * @param  ListInboundShipmentsRequest  $request
      * @return array
      */
-    protected function serializeListInboundShipments(Requests\ListInboundShipmentsRequest $request): array
+    protected function serializeListInboundShipments(Requests\ListInboundShipmentsRequest $request)
     {
         $array = [
             'Action' => 'ListInboundShipments',
@@ -468,7 +487,7 @@ class Serializer implements SerializerInterface
      * @param  ListInboundShipmentsByNextTokenRequest  $request
      * @return array
      */
-    protected function serializeListInboundShipmentsByNextToken(Requests\ListInboundShipmentsByNextTokenRequest $request): array
+    protected function serializeListInboundShipmentsByNextToken(Requests\ListInboundShipmentsByNextTokenRequest $request)
     {
         $array = [
             'Action'    => 'ListInboundShipmentsByNextToken',
@@ -484,7 +503,7 @@ class Serializer implements SerializerInterface
      * @param  ListInboundShipmentItemsRequest  $request
      * @return array
      */
-    protected function serializeListInboundShipmentItems(Requests\ListInboundShipmentItemsRequest $request): array
+    protected function serializeListInboundShipmentItems(Requests\ListInboundShipmentItemsRequest $request)
     {
         $array = [
             'Action'     => 'ListInboundShipmentItems',
@@ -518,7 +537,7 @@ class Serializer implements SerializerInterface
      * @param  ListInboundShipmentItemsByNextTokenRequest  $request
      * @return array
      */
-    protected function serializeListInboundShipmentItemsByNextToken(Requests\ListInboundShipmentItemsByNextTokenRequest $request): array
+    protected function serializeListInboundShipmentItemsByNextToken(Requests\ListInboundShipmentItemsByNextTokenRequest $request)
     {
         $array = [
             'Action'    => 'ListInboundShipmentItemsByNextToken',
@@ -534,7 +553,7 @@ class Serializer implements SerializerInterface
      * @param  GetServiceStatusRequest  $request
      * @return array
      */
-    protected function serializeGetServiceStatus(GetServiceStatusRequest $request): array
+    protected function serializeGetServiceStatus(GetServiceStatusRequest $request)
     {
         $array = ['Action' => 'GetServiceStatus'];
 
@@ -548,7 +567,7 @@ class Serializer implements SerializerInterface
      * @param  string  $prefix
      * @return array
      */
-    protected function parseAddress(Entities\Address $address, string $prefix = ''): array
+    protected function parseAddress(Entities\Address $address, $prefix = '')
     {
         $results = [
             $prefix.'Name'          => $address->Name,

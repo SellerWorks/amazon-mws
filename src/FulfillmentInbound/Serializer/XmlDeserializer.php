@@ -2,10 +2,15 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Serializer;
 
+use SellerWorks\Amazon\Common\Serializer\XmlDeserializer as BaseXmlDeserializer;
+use SellerWorks\Amazon\FulfillmentInbound\Entity;
+use SellerWorks\Amazon\FulfillmentInbound\Response;
+use SellerWorks\Amazon\FulfillmentInbound\Result;
+
 /**
- * Defines how to deserialize xml using Sabre\Xml
+ * Sabre\Xml\Service element map.
  */
-class XmlDeserializer extends BaseXmlService
+final class XmlDeserializer extends BaseXmlDeserializer
 {
     /**
      * @const string
@@ -13,63 +18,48 @@ class XmlDeserializer extends BaseXmlService
     const NS = 'http://mws.amazonaws.com/FulfillmentInboundShipment/2010-10-01/';
 
     /**
-     * Add all objects to the service.
+     * Local element map.
+     *
+     * @return array
      */
-    public function __construct()
+    public function getElementMap()
     {
-        $namespace = sprintf('{%s}', static::NS);
-        parent::__construct($namespace);
+        $ns = sprintf('{%s}', static::NS);
 
-        $this->elementMap = array_merge($this->elementMap, [
+        return [
             // Response objects.
-            "{$namespace}CreateInboundShipmentPlanResponse" => $this->mapObject(Responses\CreateInboundShipmentPlanResponse::class),
-            "{$namespace}CreateInboundShipmentResponse" => $this->mapObject(Responses\CreateInboundShipmentResponse::class),
-            "{$namespace}GetPrepInstructionsForASINResponse" => $this->mapObject(Responses\GetPrepInstructionsForASINResponse::class),
-            "{$namespace}GetPrepInstructionsForSKUResponse" => $this->mapObject(Responses\GetPrepInstructionsForSKUResponse::class),
-            "{$namespace}ListInboundShipmentItemsResponse" => $this->mapObject(Responses\ListInboundShipmentItemsResponse::class),
-            "{$namespace}ListInboundShipmentItemsByNextTokenResponse" => $this->mapObject(Responses\ListInboundShipmentItemsByNextTokenResponse::class),
-            "{$namespace}ListInboundShipmentsResponse" => $this->mapObject(Responses\ListInboundShipmentsResponse::class),
-            "{$namespace}ListInboundShipmentsByNextTokenResponse" => $this->mapObject(Responses\ListInboundShipmentsByNextTokenResponse::class),
-            "{$namespace}UpdateInboundShipmentResponse" => $this->mapObject(Responses\UpdateInboundShipmentResponse::class),
+            "{$ns}ErrorResponse"                     => $this->mapObject(Response\ErrorResponse::class),
+            "{$ns}GetServiceStatusResponse"          => $this->mapObject(Response\GetServiceStatusResponse::class),
+            "{$ns}ListInboundShipmentItemsResponse"             => $this->mapObject(Response\ListInboundShipmentItemsResponse::class),
+            "{$ns}ListInboundShipmentItemsByNextTokenResponse"  => $this->mapObject(Response\ListInboundShipmentItemsByNextTokenResponse::class),
+            "{$ns}ListInboundShipmentsResponse"      => $this->mapObject(Response\ListInboundShipmentsResponse::class),
+            "{$ns}ListInboundShipmentsByNextTokenResponse"  => $this->mapObject(Response\ListInboundShipmentsByNextTokenResponse::class),
+
 
 
             // Result objects.
-            "{$namespace}CreateInboundShipmentPlanResult" => $this->mapObject(Results\CreateInboundShipmentPlanResult::class),
-            "{$namespace}CreateInboundShipmentResult" => $this->mapObject(Results\CreateInboundShipmentResult::class),
-
-            "{$namespace}GetPrepInstructionsForASINResult" => $this->mapObject(Results\GetPrepInstructionsForASINResult::class),
-            "{$namespace}GetPrepInstructionsForSKUResult" => $this->mapObject(Results\GetPrepInstructionsForSKUResult::class),
-            "{$namespace}ListInboundShipmentItemsResult" => $this->mapObject(Results\ListInboundShipmentItemsResult::class),
-            "{$namespace}ListInboundShipmentItemsByNextTokenResult" => $this->mapObject(Results\ListInboundShipmentItemsByNextTokenResult::class),
-            "{$namespace}ListInboundShipmentsResult" => $this->mapObject(Results\ListInboundShipmentsResult::class),
-            "{$namespace}ListInboundShipmentsByNextTokenResult" => $this->mapObject(Results\ListInboundShipmentsByNextTokenResult::class),
-            "{$namespace}UpdateInboundShipmentResult" => $this->mapObject(Results\UpdateInboundShipmentResult::class),
-
+            "{$ns}Error"                             => $this->mapObject(Result\Error::class),
+            "{$ns}GetServiceStatusResult"            => $this->mapObject(Result\GetServiceStatusResult::class),
+            "{$ns}ListInboundShipmentItemsResult"           => $this->mapObject(Result\ListInboundShipmentItemsResult::class),
+            "{$ns}ListInboundShipmentItemsByNextTokenResult"=> $this->mapObject(Result\ListInboundShipmentItemsResult::class),
+            "{$ns}ListInboundShipmentsResult"               => $this->mapObject(Result\ListInboundShipmentsResult::class),
+            "{$ns}ListInboundShipmentsByNextTokenResult"    => $this->mapObject(Result\ListInboundShipmentsResult::class),
 
             // Collection objects.
-            "{$namespace}ASINPrepInstructionsList" => $this->mapCollectionObject("{$namespace}ASINPrepInstructions", Entities\ASINPrepInstructions::class),
-//            "{$namespace}AmazonPrepFeesDetailsList" => $this->mapCollectionObject("{$namespace}AmazonPrepFeesDetails", Entities\AmazonPrepFeesDetails::class),
-            "{$namespace}ItemData" => $this->mapCollectionObject("{$namespace}member", Entities\InboundShipmentItem::class),
-            "{$namespace}InboundShipmentPlans" => $this->mapCollectionObject("{$namespace}member", Entities\InboundShipmentPlan::class),
-            "{$namespace}InvalidASINList" => $this->mapCollectionObject("{$namespace}InvalidASIN", Entities\InvalidASIN::class),
-            "{$namespace}InvalidSKUList" => $this->mapCollectionObject("{$namespace}InvalidSKU", Entities\InvalidSKU::class),
-            "{$namespace}Items" => $this->mapCollectionObject("{$namespace}member", Entities\InboundShipmentPlanItem::class),
-            "{$namespace}PrepDetailsList" => $this->mapCollectionObject("{$namespace}PrepDetails", Entities\PrepDetails::class),
-            "{$namespace}ShipmentData" => $this->mapCollectionObject("{$namespace}member", Entities\InboundShipmentInfo::class),
-            "{$namespace}SKUPrepInstructionsList" => $this->mapCollectionObject("{$namespace}SKUPrepInstructions", Entities\SKUPrepInstructions::class),
+            "{$ns}ItemData"                 => $this->mapCollection("{$ns}member", Entity\InboundShipmentItem::class),
+            "{$ns}ShipmentData"             => $this->mapCollection("{$ns}member", Entity\InboundShipmentInfo::class),
 
+            "{$ns}PrepDetailsList" => $this->mapList("{$ns}PrepDetails"),
 
-            // Type objects.
-            "{$namespace}Amount" => $this->mapObject(Entities\Amount::class),
-            
-            "{$namespace}ShipFromAddress" => $this->mapObject(Entities\Address::class),
-            "{$namespace}ShipToAddress" => $this->mapObject(Entities\Address::class),
+            // Entity objects.
+            "{$ns}BoxContentsSource"        => $this->mapObject(Entity\BoxContentsSource::class),
+            "{$ns}EstimatedBoxContentsFee"  => $this->mapObject(Entity\BoxContentsFeeDetails::class),
+            "{$ns}PrepDetails"              => $this->mapObject(Entity\PrepDetails::class),
+            "{$ns}ResponseMetadata"         => $this->mapObject(Entity\ResponseMetadata::class),
+            "{$ns}ShipFromAddress"          => $this->mapObject(Entity\Address::class),
 
-
-            // Lists.
-            "{$namespace}PrepInstructionList" => function(Reader $reader) use ($namespace) {
-                return \Sabre\Xml\Deserializer\repeatingElements($reader, "{$namespace}PrepInstruction");
-            },
-        ]);
+            "{$ns}FeePerUnit"               => $this->mapObject(Entity\Amount::class),
+            "{$ns}TotalFee"                 => $this->mapObject(Entity\Amount::class),
+        ];
     }
 }

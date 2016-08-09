@@ -15,12 +15,12 @@ final class Address
     /**
      * @var string
      */
-    public $Address1;
+    public $AddressLine1;
 
     /**
      * @var string
      */
-    public $Address2;
+    public $AddressLine2;
 
     /**
      * @var string

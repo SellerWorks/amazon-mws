@@ -1,6 +1,6 @@
 <?php
 
-namespace SellerWorks\Amazon\FulfillmentInbound\Requests;
+namespace SellerWorks\Amazon\FulfillmentInbound\Request;
 
 use SellerWorks\Amazon\Common\RequestInterface;
 

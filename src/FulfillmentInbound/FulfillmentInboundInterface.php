@@ -28,13 +28,13 @@ interface FulfillmentInboundInterface
      * @param  CreateInboundShipmentPlanRequest $request
      * @return CreateInboundShipmentPlanResponse
      */
-//     function CreateInboundShipmentPlan(Requests\CreateInboundShipmentPlanRequest $request);
+//     function CreateInboundShipmentPlan(Request\CreateInboundShipmentPlanRequest $request);
 
     /**
      * @param  CreateInboundShipmentPlanRequest $request
      * @return PromiseInterface
      */
-//     function CreateInboundShipmentPlanAsync(Requests\CreateInboundShipmentPlanRequest $request);
+//     function CreateInboundShipmentPlanAsync(Request\CreateInboundShipmentPlanRequest $request);
 
 
     /**
@@ -45,13 +45,13 @@ interface FulfillmentInboundInterface
      * @param  CreateInboundShipmentRequest
      * @return CreateInboundShipmentResult
      */
-//     function CreateInboundShipment(Requests\CreateInboundShipmentRequest $request);
+//     function CreateInboundShipment(Request\CreateInboundShipmentRequest $request);
 
     /**
      * @param  CreateInboundShipmentRequest $request
      * @return PromiseInterface
      */
-//     function CreateInboundShipmentAsync(Requests\CreateInboundShipmentRequest $request);
+//     function CreateInboundShipmentAsync(Request\CreateInboundShipmentRequest $request);
 
 
     /**
@@ -62,7 +62,7 @@ interface FulfillmentInboundInterface
      * @param  UpdateInboundShipmentRequest
      * @return UpdateInboundShipmentResult
      */
-//     public function UpdateInboundShipment(Requests\UpdateInboundShipmentRequest $request);
+//     public function UpdateInboundShipment(Request\UpdateInboundShipmentRequest $request);
 
 
     /**
@@ -73,7 +73,7 @@ interface FulfillmentInboundInterface
      * @param  GetPrepInstructionsForSKURequest
      * @return GetPrepInstructionsForSKUResult
      */
-//     function GetPrepInstructionsForSKU(Requests\GetPrepInstructionsForSKURequest $request);
+//     function GetPrepInstructionsForSKU(Request\GetPrepInstructionsForSKURequest $request);
 
 
     /**
@@ -84,7 +84,7 @@ interface FulfillmentInboundInterface
      * @param  GetPrepInstructionsForASINRequest
      * @return GetPrepInstructionsForASINResult
      */
-//     function GetPrepInstructionsForASIN(Requests\GetPrepInstructionsForASINRequest $request);
+//     function GetPrepInstructionsForASIN(Request\GetPrepInstructionsForASINRequest $request);
 
 
     /**
@@ -93,9 +93,15 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipments.html
      *
      * @param  ListInboundShipmentsRequest $request
-     * @return RecordIterator
+     * @return ListInboundShipmentsResult
      */
-//     function ListInboundShipments(Requests\ListInboundShipmentsRequest $request);
+    function ListInboundShipments(Request\ListInboundShipmentsRequest $request);
+
+    /**
+     * @param  ListInboundShipmentsRequest $request
+     * @return PromiseInterface
+     */
+    function ListInboundShipmentsAsync(Request\ListInboundShipmentsRequest $request);
 
 
     /**
@@ -103,10 +109,16 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentsByNextToken.html
      *
-     * @param  string $token
+     * @param  ListInboundShipmentsByNextTokenRequest $request
      * @return ListInboundShipmentsResult
      */
-//     function ListInboundShipmentsByNextToken(string $token);
+    function ListInboundShipmentsByNextToken(Request\ListInboundShipmentsByNextTokenRequest $request);
+
+    /**
+     * @param  ListInboundShipmentsByNextTokenRequest $request
+     * @return PromiseInterface
+     */
+    function ListInboundShipmentsByNextTokenAsync(Request\ListInboundShipmentsByNextTokenRequest $request);
 
 
     /**
@@ -115,15 +127,15 @@ interface FulfillmentInboundInterface
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItems.html
      *
      * @param  ListInboundShipmentItemsRequest
-     * @return RecordIterator
+     * @return ListInboundShipmentItemsResult
      */
-//     function ListInboundShipmentItems(Requests\ListInboundShipmentItemsRequest $request);
+    function ListInboundShipmentItems(Request\ListInboundShipmentItemsRequest $request);
 
     /**
      * @param  ListInboundShipmentItemsRequest
      * @return PromiseInterface
      */
-//     function ListInboundShipmentItemsAsync(Requests\ListInboundShipmentItemsRequest $request);
+    function ListInboundShipmentItemsAsync(Request\ListInboundShipmentItemsRequest $request);
 
 
     /**
@@ -131,10 +143,16 @@ interface FulfillmentInboundInterface
      *
      * @see http://docs.developer.amazonservices.com/en_US/fba_inbound/FBAInbound_ListInboundShipmentItemsByNextToken.html
      *
-     * @param  string  $token
+     * @param  ListInboundShipmentItemsByNextTokenRequest  $request
      * @return ListInboundShipmentItemsByNextTokenResult
      */
-//     function ListInboundShipmentItemsByNextToken(string $token);
+    function ListInboundShipmentItemsByNextToken(Request\ListInboundShipmentItemsByNextTokenRequest $request);
+
+    /**
+     * @param  ListInboundShipmentItemsByNextTokenRequest  $request
+     * @return PromiseInterface
+     */
+    function ListInboundShipmentItemsByNextTokenAsync(Request\ListInboundShipmentItemsByNextTokenRequest $request);
 
 
     /**
