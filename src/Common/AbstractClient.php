@@ -207,7 +207,7 @@ class AbstractClient implements ClientInterface, CredentialsAwareInterface
         }
 
         $parameters = $this->serializer->serialize($request);
-
+print_r($parameters); die;
         // Credentials.
         $parameters['SellerId']       = $credentials->getSellerId();
         $parameters['AWSAccessKeyId'] = $credentials->getAccessKey();

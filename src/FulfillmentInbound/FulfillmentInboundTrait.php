@@ -8,6 +8,24 @@ namespace SellerWorks\Amazon\FulfillmentInbound;
 trait FulfillmentInboundTrait
 {
     /**
+     * @param  CreateInboundShipmentPlanRequest $request
+     * @return CreateInboundShipmentPlanResponse
+     */
+    function CreateInboundShipmentPlan(Request\CreateInboundShipmentPlanRequest $request)
+    {
+        return $this->CreateInboundShipmentPlanAsync($request)->wait();
+    }
+
+    /**
+     * @param  CreateInboundShipmentPlanRequest $request
+     * @return PromiseInterface
+     */
+    function CreateInboundShipmentPlanAsync(Request\CreateInboundShipmentPlanRequest $request)
+    {
+        return $this->send($request, 2);
+    }
+
+    /**
      * @param  ListInboundShipmentsRequest $request
      * @return ListInboundShipmentsResult
      */

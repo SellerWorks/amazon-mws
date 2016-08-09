@@ -116,13 +116,44 @@ class Serializer implements SerializerInterface
      */
     protected function serializeProperties($action, RequestInterface $request)
     {
-        $parameters = ['Action' => $action];
-        $reflection = new ReflectionClass(get_class($request));
+        $parameters = array_merge(['Action' => $action], $this->flatten($request));
+
+        return $parameters;
+    }
+
+    /**
+     * Flatten objects into dot-notation arrays.
+     *
+     * @param  mixed  $object
+     * @param  string  $prefix
+     * @return array
+     */
+    protected function flatten($object, $prefix = null, $separator = '.')
+    {
+        if (!is_object($object)) {
+            return $object;
+        }
+
+        $flattened = [];
+        $reflection = new ReflectionClass(get_class($object));
         $properties = $reflection->getProperties();
 
         foreach ($properties as $p) {
             $propName  = $p->getName();
-            $propValue = $p->getValue($request);
+            $propValue = $p->getValue($object);
+
+        }
+    }
+
+
+
+        $parameters = [];
+
+
+
+        foreach ($properties as $p) {
+            $propName  = $p->getName();
+            $propValue = $p->getValue($object);
 
             if (empty($propValue)) {
                 continue;
@@ -168,6 +199,11 @@ class Serializer implements SerializerInterface
                         $parameters,
                         $this->buildChoiceList('ShipmentStatusList', 'member', $propValue));
                     break;
+
+
+                // Object properties.
+                case 'ShipFromAddress':
+                    $parameters = array_merge($properties, $this->flatten($propValue, 'ShipFromAddress.'));
 
 
                 default: break;

@@ -28,13 +28,13 @@ interface FulfillmentInboundInterface
      * @param  CreateInboundShipmentPlanRequest $request
      * @return CreateInboundShipmentPlanResponse
      */
-//     function CreateInboundShipmentPlan(Request\CreateInboundShipmentPlanRequest $request);
+    function CreateInboundShipmentPlan(Request\CreateInboundShipmentPlanRequest $request);
 
     /**
      * @param  CreateInboundShipmentPlanRequest $request
      * @return PromiseInterface
      */
-//     function CreateInboundShipmentPlanAsync(Request\CreateInboundShipmentPlanRequest $request);
+    function CreateInboundShipmentPlanAsync(Request\CreateInboundShipmentPlanRequest $request);
 
 
     /**

@@ -28,28 +28,31 @@ final class XmlDeserializer extends BaseXmlDeserializer
 
         return [
             // Response objects.
-            "{$ns}ErrorResponse"                     => $this->mapObject(Response\ErrorResponse::class),
-            "{$ns}GetServiceStatusResponse"          => $this->mapObject(Response\GetServiceStatusResponse::class),
-            "{$ns}ListInboundShipmentItemsResponse"             => $this->mapObject(Response\ListInboundShipmentItemsResponse::class),
-            "{$ns}ListInboundShipmentItemsByNextTokenResponse"  => $this->mapObject(Response\ListInboundShipmentItemsByNextTokenResponse::class),
-            "{$ns}ListInboundShipmentsResponse"      => $this->mapObject(Response\ListInboundShipmentsResponse::class),
+            "{$ns}CreateInboundShipmentPlanResponse"        => $this->mapObject(Response\CreateInboundShipmentPlanResponse::class),
+            "{$ns}ErrorResponse"                            => $this->mapObject(Response\ErrorResponse::class),
+            "{$ns}GetServiceStatusResponse"                 => $this->mapObject(Response\GetServiceStatusResponse::class),
+            "{$ns}ListInboundShipmentItemsResponse"         => $this->mapObject(Response\ListInboundShipmentItemsResponse::class),
+            "{$ns}ListInboundShipmentItemsByNextTokenResponse" => $this->mapObject(Response\ListInboundShipmentItemsByNextTokenResponse::class),
+            "{$ns}ListInboundShipmentsResponse"             => $this->mapObject(Response\ListInboundShipmentsResponse::class),
             "{$ns}ListInboundShipmentsByNextTokenResponse"  => $this->mapObject(Response\ListInboundShipmentsByNextTokenResponse::class),
 
 
-
             // Result objects.
-            "{$ns}Error"                             => $this->mapObject(Result\Error::class),
-            "{$ns}GetServiceStatusResult"            => $this->mapObject(Result\GetServiceStatusResult::class),
+            "{$ns}CreateInboundShipmentPlanResult"          => $this->mapObject(Result\CreateInboundShipmentPlanResult::class),
+            "{$ns}Error"                                    => $this->mapObject(Result\Error::class),
+            "{$ns}GetServiceStatusResult"                   => $this->mapObject(Result\GetServiceStatusResult::class),
             "{$ns}ListInboundShipmentItemsResult"           => $this->mapObject(Result\ListInboundShipmentItemsResult::class),
             "{$ns}ListInboundShipmentItemsByNextTokenResult"=> $this->mapObject(Result\ListInboundShipmentItemsResult::class),
             "{$ns}ListInboundShipmentsResult"               => $this->mapObject(Result\ListInboundShipmentsResult::class),
             "{$ns}ListInboundShipmentsByNextTokenResult"    => $this->mapObject(Result\ListInboundShipmentsResult::class),
 
+
             // Collection objects.
             "{$ns}ItemData"                 => $this->mapCollection("{$ns}member", Entity\InboundShipmentItem::class),
             "{$ns}ShipmentData"             => $this->mapCollection("{$ns}member", Entity\InboundShipmentInfo::class),
 
-            "{$ns}PrepDetailsList" => $this->mapList("{$ns}PrepDetails"),
+            "{$ns}PrepDetailsList"          => $this->mapList("{$ns}PrepDetails"),
+
 
             // Entity objects.
             "{$ns}BoxContentsSource"        => $this->mapObject(Entity\BoxContentsSource::class),
