@@ -24,12 +24,7 @@ trait OrdersTrait
      */
     public function ListOrdersAsync(Request\ListOrdersRequest $request)
     {
-        return $this->send($request, 10)->then(
-            // onFulfilled
-            function ($result) {
-                return new RecordIterator($this, $result);
-            }
-        );
+        return $this->send($request, 10);
     }
 
     /**

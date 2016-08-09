@@ -132,18 +132,25 @@ class AbstractClient implements ClientInterface, CredentialsAwareInterface
         $requestEvent = new RequestEvent($request);
         $this->dispatch(Events::REQUEST, $requestEvent);
 
+        $client  = $this;
         $headers = ['Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8', 'Expect' => ''];
         $query   = $this->buildQuery($request);
 
         $gzRequest = new GuzzleRequest('POST', $this->uri, $headers, $query);
         $promise   = $this->guzzle->sendAsync($gzRequest)->then(
             // onFulfilled
-            function (PsrResponseInterface $response) {
+            function (PsrResponseInterface $response) use ($client) {
                 $contents = $response->getBody()->getContents();
                 $contents = $this->serializer->unserialize($contents);
 
                 if ($contents instanceof ResponseInterface) {
-                    return $contents->getResult();
+                    $result = $contents->getResult();
+
+                    if ($result instanceof IterableResultInterface) {
+                        $result->setClient($this);
+                    }
+
+                    return $result;
                 }
                 else {
                     return $contents;

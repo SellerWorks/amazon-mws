@@ -3,6 +3,8 @@
 namespace SellerWorks\Amazon\Orders\Result;
 
 use SellerWorks\Amazon\Common\IterableResultInterface;
+use SellerWorks\Amazon\Common\IterableResultTrait;
+use SellerWorks\Amazon\Common\RecordIterator;
 use SellerWorks\Amazon\Orders\Request\ListOrdersByNextTokenRequest;
 
 /**
@@ -10,6 +12,8 @@ use SellerWorks\Amazon\Orders\Request\ListOrdersByNextTokenRequest;
  */
 final class ListOrdersResult implements IterableResultInterface
 {
+    use IterableResultTrait;
+
     /**
      * @var string
      */
@@ -31,29 +35,33 @@ final class ListOrdersResult implements IterableResultInterface
     public $Orders;
 
     /**
-     * {@inheritDoc)
+     * IterableResultInterface::getNextMethod
      */
-    public function getRecords()
-    {
-        return $this->Orders;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getRequestMethod()
+    public function getNextMethod()
     {
         return 'ListOrdersByNextToken';
     }
 
     /**
-     * {@inheritDoc}
+     * IterableResultInterface::getNextRequest
      */
-    public function getNextTokenRequest($token)
+    public function getNextRequest()
     {
+        if (empty($this->NextToken)) {
+            return null;
+        }
+
         $request = new ListOrdersByNextTokenRequest;
-        $request->NextToken = $token;
+        $request->NextToken = $this->NextToken;
 
         return $request;
+    }
+
+    /**
+     * IterableResultInterface::getRecords
+     */
+    public function getRecords()
+    {
+        return $this->Orders?: [];
     }
 }

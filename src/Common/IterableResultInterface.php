@@ -2,28 +2,25 @@
 
 namespace SellerWorks\Amazon\Common;
 
+use IteratorAggregate;
+
 /**
  * Interface for all Iterable objects.
  */
-interface IterableResultInterface extends ResultInterface
+interface IterableResultInterface extends ResultInterface, IteratorAggregate
 {
     /**
-     * Return array of result objects.
+     * Store a reference to the client within the Result.
+     *
+     * @param  ClientInterface  $client
+     * @return self
+     */
+    function setClient(ClientInterface $client);
+
+    /**
+     * Get array of records.
      *
      * @return array
      */
     function getRecords();
-
-    /**
-     * Get method name of *ByNextToken method.
-     */
-    function getRequestMethod();
-
-    /**
-     * Get Request object for NextToken request.
-     *
-     * @param  string
-     * @return RequestInterface
-     */
-    function getNextTokenRequest($token);
 }

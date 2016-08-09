@@ -26,30 +26,37 @@ class RecordIterator implements ResultInterface, Countable, Iterator
     protected $client;
 
     /**
-     * @var ResultInterface
+     * @var string
      */
-    protected $result;
+    protected $nextMethod;
+
+    /**
+     * @var RequestInterface
+     */
+    protected $nextRequest;
 
     /**
      * Constructor.
      *
      * @param  ClientInterface  $client
      * @param  IterableResultInterface  $result
+     * @param  string  $nextTokenMethod
      */
     public function __construct(
         ClientInterface $client,
         IterableResultInterface $result
     )
     {
-        $this->client  = $client;
-        $this->result  = $result;
-        $this->records = $result->getRecords();
+        $this->client      = $client;
+        $this->nextMethod  = $result->getNextMethod();
+        $this->nextRequest = $result->getNextRequest();
+        $this->records     = $result->getRecords();
     }
 
     /**
      * Countable::count
      *
-     * {@inheritDoc}
+     * @return int
      */
     public function count()
     {
@@ -108,15 +115,14 @@ class RecordIterator implements ResultInterface, Countable, Iterator
      */
     protected function loadNextToken()
     {
-        if (empty($this->result->NextToken)) {
-            return false;
+        if (empty($this->nextRequest)) {
+            return;
         }
 
-        $method        = $this->result->getRequestMethod();
-        $request       = $this->result->getNextTokenRequest($this->result->NextToken);
-        $this->result  = $this->client->$method($request);
-        $this->records = array_merge($this->records, $this->result->getRecords());
+        $method = $this->nextMethod;
+        $result = $this->client->$method($this->nextRequest);
 
-        return true;
+        $this->nextRequest = $result->getNextRequest();
+        $this->records     = array_merge($this->records, $result->getRecords());
     }
 }
