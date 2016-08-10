@@ -7,4 +7,7 @@ namespace SellerWorks\Amazon\Common;
  */
 interface RequestInterface
 {
+    /**
+     */
+//     function flatten($prefix = null);
 }

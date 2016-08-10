@@ -25,6 +25,31 @@ class Serializer implements SerializerInterface
      * @var array
      */
     private $validChoices = [
+        'Condition' => [
+            'NewItem',
+            'NewWithWarranty',
+            'NewOEM',
+            'NewOpenBox',
+            'UsedLikeNew',
+            'UsedVeryGood',
+            'UsedGood',
+            'UsedAcceptable',
+            'UsedPoor',
+            'UsedRefurbished',
+            'CollectibleLikeNew',
+            'CollectibleVeryGood',
+            'CollectibleGood',
+            'CollectibleAcceptable',
+            'CollectiblePoor',
+            'RefurbishedWithWarranty',
+            'Refurbished',
+            'Club',
+        ],
+        'LabelPrepPreference' => [
+            'SELLER_LABEL',
+            'AMAZON_LABEL_ONLY',
+            'AMAZON_LABEL_PREFERRED',
+        ],
         'ShipmentStatusList' => [
             'WORKING',
             'SHIPPED',
@@ -128,45 +153,60 @@ class Serializer implements SerializerInterface
      * @param  string  $prefix
      * @return array
      */
-    protected function flatten($object, $prefix = null, $separator = '.')
+    protected function flatten($object, $prefix = null)
     {
-        if (!is_object($object)) {
-            return $object;
-        }
-
-        $flattened = [];
+        $flattened  = [];
         $reflection = new ReflectionClass(get_class($object));
         $properties = $reflection->getProperties();
 
         foreach ($properties as $p) {
             $propName  = $p->getName();
             $propValue = $p->getValue($object);
-
-        }
-
-
-
-        $parameters = [];
-
-
-
-        foreach ($properties as $p) {
-            $propName  = $p->getName();
-            $propValue = $p->getValue($object);
+            $key       = $prefix.$propName;
 
             if (empty($propValue)) {
                 continue;
             }
 
+            if (is_array())
+
+
+
+
+
+
+
             switch ($propName) {
+                // Scalar properties.
+                case 'ASIN':
+                case 'FulfillmentNetworkSKU':
+                case 'NextToken':
+                case 'SellerSKU':
+                case 'Quantity':
+                case 'ShipmentId':
+                case 'ShipToCountryCode':
+                case 'ShipToCountrySubdivisionCode':
+                // Entity\Address
+                case 'Name':
+                case 'AddressLine1':
+                case 'AddressLine2':
+                case 'City':
+                case 'DistrictOrCounty':
+                case 'StateOrProvinceCode':
+                case 'CountryCode':
+                case 'PostalCode':
+                    $flattened[$key] = $propValue;
+                    break;
+
+
                 // DateTime properties.
                 case 'LastUpdatedAfter':
                 case 'LastUpdatedBefore':
                     if ($propValue instanceof DateTimeInterface) {
-                        $parameters[$propName] = $propValue->format(static::DATE_FORMAT);
+                        $flattened[$key] = $propValue->format(static::DATE_FORMAT);
                     }
                     elseif (is_string($propValue) && false !== ($time = strtotime($propValue))) {
-                        $parameters[$propName] = gmdate(static::DATE_FORMAT, $time);
+                        $flattened[$key] = gmdate(static::DATE_FORMAT, $time);
                     }
                     break;
 
@@ -174,68 +214,79 @@ class Serializer implements SerializerInterface
                 // Range properties.
                 case '':
                     if (is_numeric($propValue) && $propValue >= 1 && $propValue <= 100) {
-                        $parameters[$propName] = (int) $propValue;
+                        $flattened[$key] = (int) $propValue;
                     }
                     break;
 
 
-                // String properties.
-                case 'NextToken':
-                case 'ShipmentId':
-                    $parameters[$propName] = $propValue;
+                // Choice properties.
+                case 'Condition':
+                case 'LabelPrepPreference':
+                    if (in_array($propValue, $this->validChoices[$propName])) {
+                        $flattened[$key] = $propValue;
+                    }
                     break;
 
 
-                // Choice properties.
+                // Array/List properties.
+                case 'InboundShipmentPlanRequestItems':
+                    $flattened = array_merge($flattened, $this->flattenArray($key, 'member.', $propValue, false));
+                    break;
+
                 case 'ShipmentIdList':
-                    $parameters = array_merge(
-                        $parameters,
-                        $this->buildChoiceList('ShipmentIdList', 'member', $propValue, false));
+                    $flattened = array_merge($flattened, $this->flattenArray($key, 'member.', $propValue, false));
                     break;
 
                 case 'ShipmentStatusList':
-                    $parameters = array_merge(
-                        $parameters,
-                        $this->buildChoiceList('ShipmentStatusList', 'member', $propValue));
+                    $flattened = array_merge($flattened, $this->flattenArray($key, 'member.', $propValue));
                     break;
 
 
                 // Object properties.
                 case 'ShipFromAddress':
-                    $parameters = array_merge($properties, $this->flatten($propValue, 'ShipFromAddress.'));
+                    $flattened = array_merge($flattened, $this->flatten($propValue, $key.'.'));
+                    break;
 
 
                 default: break;
             }
         }
 
-        return $parameters;
+        return $flattened;
     }
 
     /**
      * Build choice parameters.
      *
-     * @param  string  $propName
-     * @param  string  $listName
+     * @param  string  $prefix
+     * @param  string  $separator
      * @param  array|string  $list
      * @param  bool  $validate
      * @return array
      */
-    protected function buildChoiceList($propName, $listName, $list, $validate = true)
+    protected function flattenArray($prefix, $separator, $list, $validate = true)
     {
-        $choice = [];
+        $name   = explode('.', $prefix);
+        $name   = array_pop($name);
+        $result = [];
         $list   = array_unique((array) $list);
         $i      = 0;
 
         foreach ($list as $value) {
-            if ($validate && !in_array($value, $this->validChoices[$propName])) {
+            if ($validate && is_array($this->validChoices[$name]) && !in_array($value, $this->validChoices[$name])) {
                 continue;
             }
 
-            $choice[sprintf('%s.%s.%s', $propName, $listName, ++$i)] = $value;
+            $key = sprintf('%s%s%s', $prefix, $separator, ++$i);
+
+            if (is_object($value)) {
+                $result = array_merge($result, $this->flatten($value, $key.'.'));
+            } else {
+                $result[$key] = $value;
+            }
         }
 
-        return $choice;
+        return $result;
     }
 
 
