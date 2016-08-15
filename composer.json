@@ -31,7 +31,8 @@
     },
     "autoload": {
         "psr-4": {
-            "SellerWorks\\Amazon\\": "src/"
+            "SellerWorks\\Amazon\\": "src/",
+            "SellerWorks\\Amazon\\Tests\\": "tests/"
         }
     }
 }
