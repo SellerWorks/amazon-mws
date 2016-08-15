@@ -62,7 +62,9 @@ class Serializer implements SerializerInterface
 
             switch ($meta['type']) {
                 case 'array':
-                    $value = array_values((array) $value);
+                    if (!is_array($value)) {
+                        $value = [$value];
+                    }
 
                     $defaults = ['namespace' => 'member', 'subtype' => ''];
                     $meta = array_merge($defaults, $meta);
@@ -114,7 +116,7 @@ class Serializer implements SerializerInterface
                     break;
 
                 case 'object':
-                    if (class_exists($meta['type'])) {
+                    if (class_exists($meta['subtype']) && is_a($value, $meta['subtype'])) {
                         $flattened = array_merge($flattened, $this->flatten($value, $key));
                     }
                     break;

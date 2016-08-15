@@ -45,9 +45,31 @@ final class InboundShipmentPlanRequestItem
         return [
             'SellerSKU'         => ['type' => 'scalar'],
             'ASIN'              => ['type' => 'scalar'],
-            'Condition'         => ['type' => 'scalar'],
+            'Condition'         => ['type' => 'choice', 'choices' => [
+                'NewItem',
+                'NewWithWarranty',
+                'NewOEM',
+                'NewOpenBox',
+                'UsedLikeNew',
+                'UsedVeryGood',
+                'UsedGood',
+                'UsedAcceptable',
+                'UsedPoor',
+                'UsedRefurbished',
+                'CollectibleLikeNew',
+                'CollectibleVeryGood',
+                'CollectibleGood',
+                'CollectibleAcceptable',
+                'CollectiblePoor',
+                'RefurbishedWithWarranty',
+                'Refurbished',
+                'Club',
+            ]],
             'Quantity'          => ['type' => 'scalar'],
             'QuantityInCase'    => ['type' => 'scalar'],
+
+            // Undocumented.
+//             'PrepDetailsList'   => ['type' => 'array', 'subtype' => PrepDetails::class, 'namespace' => 'member'],
         ];
     }
 }
