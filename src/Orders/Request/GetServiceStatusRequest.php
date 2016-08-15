@@ -9,4 +9,11 @@ use SellerWorks\Amazon\Common\RequestInterface;
  */
 final class GetServiceStatusRequest implements RequestInterface
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [];
+    }
 }

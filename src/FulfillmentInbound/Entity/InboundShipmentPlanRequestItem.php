@@ -36,4 +36,18 @@ final class InboundShipmentPlanRequestItem
      * @var PrepDetailsList
      */
     public $PrepDetailsList;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'SellerSKU'         => ['type' => 'scalar'],
+            'ASIN'              => ['type' => 'scalar'],
+            'Condition'         => ['type' => 'scalar'],
+            'Quantity'          => ['type' => 'scalar'],
+            'QuantityInCase'    => ['type' => 'scalar'],
+        ];
+    }
 }

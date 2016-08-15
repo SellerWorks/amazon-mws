@@ -5,7 +5,7 @@ namespace SellerWorks\Amazon\Common;
 /**
  * Interface for all Request objects.
  */
-interface RequestInterface
+interface EntityInterface
 {
     /**
      * Return metadata about this object.

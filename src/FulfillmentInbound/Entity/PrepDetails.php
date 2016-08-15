@@ -16,4 +16,22 @@ final class PrepDetails
      * @var string
      */
     public $PrepOwner;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'PrepInstruction'   => ['type' => 'choice', 'choices' => [
+                'Polybagging',
+                'BubbleWrapping',
+                'Taping',
+                'BlackShrinkWrapping',
+                'Labeling',
+                'HangGarment',
+            ]],
+            'PrepOwner'         => ['type' => 'choice', 'choices' => ['AMAZON', 'SELLER']],
+        ];
+    }
 }

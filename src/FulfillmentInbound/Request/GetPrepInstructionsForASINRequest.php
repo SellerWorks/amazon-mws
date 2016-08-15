@@ -20,4 +20,15 @@ final class GetPrepInstructionsForASINRequest implements RequestInterface
 	 * @var string
 	 */
 	public $ShipToCountryCode;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'ASINList'          => ['type' => 'array'],
+            'ShipToCountryCode' => ['type' => 'scalar'],
+        ];
+    }
 }

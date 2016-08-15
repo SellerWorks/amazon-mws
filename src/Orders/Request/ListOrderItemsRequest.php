@@ -13,4 +13,14 @@ final class ListOrderItemsRequest implements RequestInterface
      * @var string
      */
     public $AmazonOrderId;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'AmazonOrderId' => ['type' => 'scalar'],
+        ];
+    }
 }

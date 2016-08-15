@@ -13,4 +13,14 @@ final class GetOrderRequest implements RequestInterface
      * @var string|array
      */
     public $AmazonOrderId;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'AmazonOrderId' => ['type' => 'choice', 'multiple' => true, 'namespace' => 'Id'],
+        ];
+    }
 }

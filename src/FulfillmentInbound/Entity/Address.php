@@ -46,4 +46,21 @@ final class Address
      * @var string
      */
     public $PostalCode;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'Name'                  => ['type' => 'scalar'],
+            'AddressLine1'          => ['type' => 'scalar'],
+            'AddressLine2'          => ['type' => 'scalar'],
+            'City'                  => ['type' => 'scalar'],
+            'DistrictOrCounty'      => ['type' => 'scalar'],
+            'StateOrProvinceCode'   => ['type' => 'scalar'],
+            'CountryCode'           => ['type' => 'scalar'],
+            'PostalCode'            => ['type' => 'scalar'],
+        ];
+    }
 }

@@ -47,4 +47,21 @@ final class InboundShipmentItem
      * @var string
      */
     public $ReleaseDate;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'ShipmentId'            => ['type' => 'scalar'],
+            'SellerSKU'             => ['type' => 'scalar'],
+            'FulfillmentNetworkSKU' => ['type' => 'scalar'],
+            'QuantityShipped'       => ['type' => 'scalar'],
+            'QuantityReceived'      => ['type' => 'scalar'],
+            'QuantityInCase'        => ['type' => 'scalar'],
+            'PrepDetailsList'       => ['type' => 'array', 'subtype' => PrepDetails::class],
+            'ReleaseDate'           => ['type' => 'datetime'],
+        ];
+    }
 }
