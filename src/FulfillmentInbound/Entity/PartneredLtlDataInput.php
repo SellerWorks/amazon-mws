@@ -24,7 +24,7 @@ final class PartneredLtlDataInput
     public $SellerFreightClass;
 
     /**
-     * @var string
+     * @var date
      */
     public $FreightReadyDate;
 
@@ -42,4 +42,20 @@ final class PartneredLtlDataInput
      * @var Amount
      */
     public $SellerDeclaredValue;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'Contact'             => ['type' => 'contact', 'subtype' => Contact::class],
+            'BoxCount'            => ['type' => 'scalar'],
+            'SellerFreightClass'  => ['type' => 'scalar'],
+            'FreightReadyDate'    => ['type' => 'date'],
+            'PalletList'          => ['type' => 'array', 'subtype' => Pallet::class, 'namespace' => 'member'],
+            'TotalWeight'         => ['type' => 'contact', 'subtype' => Weight::class],
+            'SellerDeclaredValue' => ['type' => 'contact', 'subtype' => Amount::class],
+        ];
+    }
 }

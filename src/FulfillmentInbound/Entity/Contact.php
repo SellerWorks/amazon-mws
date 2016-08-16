@@ -27,4 +27,17 @@ final class Contact
      * @var string
      */
     public $Fax;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'Name'  => ['type' => 'scalar'],
+            'Phone' => ['type' => 'scalar'],
+            'Email' => ['type' => 'scalar'],
+            'Fax'   => ['type' => 'scalar'],
+        ];
+    }
 }

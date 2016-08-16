@@ -21,4 +21,16 @@ final class Pallet
      * @var bool
      */
     public $IsStacked;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'Dimensions' => ['type' => 'object', 'subtype' => Dimensions::class],
+            'Weight'     => ['type' => 'object', 'subtype' => Weight::class],
+            'IsStacked'  => ['type' => 'boolean'],
+        ];
+    }
 }

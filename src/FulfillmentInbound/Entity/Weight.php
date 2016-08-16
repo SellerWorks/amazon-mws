@@ -16,4 +16,15 @@ final class Weight
      * @var int
      */
     public $Value;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'Unit'  => ['type' => 'choice', 'choices' => ['pounds', 'kilograms']],
+            'Value' => ['type' => 'scalar'],
+        ];
+    }
 }

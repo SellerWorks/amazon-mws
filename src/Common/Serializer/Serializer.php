@@ -118,12 +118,20 @@ class Serializer implements SerializerInterface
                     }
                     break;
 
+                case 'date':
                 case 'datetime':
+                    if ('datetime' == $meta['type']) {
+                        $format = static::DATE_FORMAT;
+                    }
+                    else {
+                        $format = 'Y-m-d';
+                    }
+
                     if ($value instanceof DateTimeInterface) {
-                        $flattened[$key] = $value->format(static::DATE_FORMAT);
+                        $flattened[$key] = $value->format($format);
                     }
                     elseif (is_scalar($value) && false !== ($ts = strtotime($value))) {
-                        $flattened[$key] = gmdate(static::DATE_FORMAT, $ts);
+                        $flattened[$key] = gmdate($format, $ts);
                     }
                     break;
 

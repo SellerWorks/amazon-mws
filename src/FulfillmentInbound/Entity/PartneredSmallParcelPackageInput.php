@@ -23,8 +23,8 @@ final class PartneredSmallParcelPackageInput
     public function getMetadata()
     {
         return [
-            'CarrierName' => ['type' => 'object', 'subtype' => Dimensions::class],
-            'PackageList' => ['type' => 'object', 'subtype' => Weight::class],
+            'Dimensions' => ['type' => 'object', 'subtype' => Dimensions::class],
+            'Weight'     => ['type' => 'object', 'subtype' => Weight::class],
         ];
     }
 }

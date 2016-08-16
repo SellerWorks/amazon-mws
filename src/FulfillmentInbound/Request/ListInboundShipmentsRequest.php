@@ -30,4 +30,28 @@ final class ListInboundShipmentsRequest implements RequestInterface
      * @var DateTimeInterface
      */
     public $LastUpdatedBefore;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'ShipmentStatusList' => ['type' => 'choice', 'multiple' => true, 'namespace' => 'Status', 'choices' => [
+                'WORKING',
+                'SHIPPED',
+                'IN_TRANSIT',
+                'DELIVERED',
+                'CHECKED_IN',
+                'RECEIVING',
+                'CLOSED',
+                'CANCELLED',
+                'DELETED',
+                'ERROR',
+            ]],
+            'ShipmentIdList'     => ['type' => 'choice', 'multiple' => true, 'namespace' => 'Id'],
+            'LastUpdatedAfter'   => ['type' => 'datetime'],
+            'LastUpdatedBefore'  => ['type' => 'datetime'],
+        ];
+    }
 }

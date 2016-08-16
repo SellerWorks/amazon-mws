@@ -66,6 +66,10 @@ class Serializer extends BaseSerializer implements SerializerInterface
                 $action = 'GetPrepInstructionsForASIN';
                 break;
 
+            case $request instanceof Request\PutTransportContentRequest;
+                $action = 'PutTransportContent';
+                break;
+
             case $request instanceof Request\ListInboundShipmentsRequest:
                 $action = 'ListInboundShipments';
                 break;

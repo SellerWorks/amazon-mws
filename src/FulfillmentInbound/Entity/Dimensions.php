@@ -26,4 +26,17 @@ final class Dimensions
      * @var int
      */
     public $Height;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'Unit'   => ['type' => 'choice', 'choices' => ['inches', 'centimeters']],
+            'Length' => ['type' => 'scalar'],
+            'Width'  => ['type' => 'scalar'],
+            'Height' => ['type' => 'scalar'],
+        ];
+    }
 }

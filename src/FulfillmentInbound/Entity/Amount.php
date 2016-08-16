@@ -16,4 +16,15 @@ final class Amount
      * @var string
      */
     public $Value;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'CurrencyCode' => ['type' => 'scalar'],
+            'Value'        => ['type' => 'scalar'],
+        ];
+    }
 }

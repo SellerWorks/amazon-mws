@@ -15,4 +15,14 @@ final class ListInboundShipmentsByNextTokenRequest implements RequestInterface
      * @var string
      */
     public $NextToken;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'NextToken' => ['type' => 'scalar'],
+        ];
+    }
 }

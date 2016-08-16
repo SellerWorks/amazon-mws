@@ -26,4 +26,16 @@ final class ListInboundShipmentItemsRequest implements RequestInterface
      * @var DateTimeInterface
      */
     public $LastUpdatedBefore;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'ShipmentId'        => ['type' => 'scalar'],
+            'LastUpdatedAfter'  => ['type' => 'datetime'],
+            'LastUpdatedBefore' => ['type' => 'datetime'],
+        ];
+    }
 }

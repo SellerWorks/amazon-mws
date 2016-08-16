@@ -23,7 +23,7 @@ final class PartneredSmallParcelDataInput
     public function getMetadata()
     {
         return [
-            'CarrierName' => ['type' => 'scalar'],
+            'CarrierName' => ['type' => 'choice', 'choices' => ['UNITED_PARCEL_SERVICE_INC', 'DHL_STANDARD']],
             'PackageList' => ['type' => 'array', 'subtype' => PartneredSmallParcelPackageInput::class, 'namespace' => 'member'],
         ];
     }

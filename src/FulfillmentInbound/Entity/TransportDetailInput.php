@@ -34,10 +34,10 @@ final class TransportDetailInput
     public function getMetadata()
     {
         return [
-            'PartneredSmallParcelDataInput' => ['type' => 'object', 'subtype' => PartneredSmallParcelDataInput::class],
-            'NonPartneredSmallParcelData'   => ['type' => 'object', 'subtype' => NonPartneredSmallParcelData::class],
-            'PartneredLtlData'              => ['type' => 'object', 'subtype' => PartneredLtlData::class],
-            'NonPartneredLtlData'           => ['type' => 'object', 'subtype' => NonPartneredLtlData::class],
+            'PartneredSmallParcelData'    => ['type' => 'object', 'subtype' => PartneredSmallParcelDataInput::class],
+            'NonPartneredSmallParcelData' => ['type' => 'object', 'subtype' => NonPartneredSmallParcelDataInput::class],
+            'PartneredLtlData'            => ['type' => 'object', 'subtype' => PartneredLtlDataInput::class],
+            'NonPartneredLtlData'         => ['type' => 'object', 'subtype' => NonPartneredLtlDataInput::class],
         ];
     }
 }

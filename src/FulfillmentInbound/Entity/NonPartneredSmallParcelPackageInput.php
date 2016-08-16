@@ -11,4 +11,14 @@ final class NonPartneredSmallParcelPackageInput
      * @var string
      */
     public $TrackingId;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'TrackingId' => ['type' => 'scalar'],
+        ];
+    }
 }
