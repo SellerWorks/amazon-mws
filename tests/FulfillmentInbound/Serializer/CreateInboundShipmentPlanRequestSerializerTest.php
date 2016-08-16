@@ -630,26 +630,24 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test CreateInboundShipment.InboundShipmentHeader.PrepDetailsList (empty)
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItem.PrepDetailsList (empty)
      */
-    public function test_CreateInboundShipment_InboundShipmentHeader_PrepDetailsList_empty()
+    public function test_reateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_PrepDetailsList_empty()
     {
-/*
         $serializer = new Serializer;
 
-        $request = new Request\CreateInboundShipmentRequest;
-        $request->InboundShipmentItems = new Entity\InboundShipmentItem;
-        $request->InboundShipmentItems->PrepDetailsList = null;
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
+        $request->InboundShipmentPlanRequestItems->PrepDetailsList = null;
 
         $serialized = $serializer->serialize($request);
         $expected = [
-            'Action' => 'CreateInboundShipment',
+            'Action' => 'CreateInboundShipmentPlan',
         ];
 
         ksort($serialized);
         ksort($expected);
         $this->assertSame($serialized, $expected);
-*/
     }
 
     /**

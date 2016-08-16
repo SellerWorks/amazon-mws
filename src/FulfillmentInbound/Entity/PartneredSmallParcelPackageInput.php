@@ -16,4 +16,15 @@ final class PartneredSmallParcelPackageInput
      * @var Weight
      */
     public $Weight;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'CarrierName' => ['type' => 'object', 'subtype' => Dimensions::class],
+            'PackageList' => ['type' => 'object', 'subtype' => Weight::class],
+        ];
+    }
 }

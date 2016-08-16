@@ -27,7 +27,7 @@ final class GetPrepInstructionsForASINRequest implements RequestInterface
     public function getMetadata()
     {
         return [
-            'ASINList'          => ['type' => 'array'],
+            'ASINList'          => ['type' => 'choice', 'multiple' => true, 'namespace' => 'Id'],
             'ShipToCountryCode' => ['type' => 'scalar'],
         ];
     }

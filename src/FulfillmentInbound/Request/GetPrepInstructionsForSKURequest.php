@@ -20,4 +20,15 @@ final class GetPrepInstructionsForSKURequest implements RequestInterface
 	 * @var string
 	 */
 	public $ShipToCountryCode;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'SellerSKUList'     => ['type' => 'choice', 'multiple' => true, 'namespace' => 'Id'],
+            'ShipToCountryCode' => ['type' => 'scalar'],
+        ];
+    }
 }

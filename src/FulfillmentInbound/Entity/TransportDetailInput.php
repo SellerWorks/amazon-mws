@@ -27,4 +27,17 @@ final class TransportDetailInput
      * @var NonPartneredLtlDataInput
      */
     public $NonPartneredLtlData;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'PartneredSmallParcelDataInput' => ['type' => 'object', 'subtype' => PartneredSmallParcelDataInput::class],
+            'NonPartneredSmallParcelData'   => ['type' => 'object', 'subtype' => NonPartneredSmallParcelData::class],
+            'PartneredLtlData'              => ['type' => 'object', 'subtype' => PartneredLtlData::class],
+            'NonPartneredLtlData'           => ['type' => 'object', 'subtype' => NonPartneredLtlData::class],
+        ];
+    }
 }

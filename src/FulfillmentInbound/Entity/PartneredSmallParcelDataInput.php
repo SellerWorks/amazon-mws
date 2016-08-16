@@ -16,4 +16,15 @@ final class PartneredSmallParcelDataInput
      * @var Array<PartneredSmallParcelPackageInput>
      */
     public $PackageList;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return [
+            'CarrierName' => ['type' => 'scalar'],
+            'PackageList' => ['type' => 'array', 'subtype' => PartneredSmallParcelPackageInput::class, 'namespace' => 'member'],
+        ];
+    }
 }
