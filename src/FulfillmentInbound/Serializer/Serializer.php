@@ -50,6 +50,14 @@ class Serializer extends BaseSerializer implements SerializerInterface
                 $action = 'UpdateInboundShipment';
                 break;
 
+            case $request instanceof Request\GetPreorderInfoRequest:
+                $action = 'GetPreorderInfo';
+                break;
+
+            case $request instanceof Request\ConfirmPreorderRequest:
+                $action = 'ConfirmPreorder';
+                break;
+
             case $request instanceof Request\GetPrepInstructionsForSKURequest:
                 $action = 'GetPrepInstructionsForSKU';
                 break;
@@ -79,7 +87,7 @@ class Serializer extends BaseSerializer implements SerializerInterface
                 break;
 
             default:
-                throw new UnexpectedValueException(getclass($request) . ' is not supported.');
+                throw new UnexpectedValueException(get_class($request) . ' is not supported.');
         }
 
         return $this->serializeProperties($action, $request);

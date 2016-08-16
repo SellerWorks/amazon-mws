@@ -54,9 +54,9 @@ class Serializer implements SerializerInterface
 
         foreach ($metadata as $prop => $meta) {
             $key   = ltrim($path.'.'.$prop, '.');
-            $value = $object->{$prop}?: null;
+            $value = $object->{$prop};
 
-            if (empty($value)) {
+            if (empty($value) && !is_bool($value)) {
                 continue;
             }
 
@@ -76,6 +76,18 @@ class Serializer implements SerializerInterface
                             $flattened = array_merge($flattened, $this->flatten($i, $idxPath));
                             ++$idx;
                         }
+                    }
+                    break;
+
+                case 'boolean':
+                    if (is_bool($value)) {
+                        $flattened[$key] = $value? 'true' : 'false';
+                    }
+                    elseif ('true' == strtolower($value)) {
+                        $flattened[$key] = 'true';
+                    }
+                    elseif ('false' == strtolower($value)) {
+                        $flattened[$key] = 'false';
                     }
                     break;
 
@@ -135,10 +147,6 @@ class Serializer implements SerializerInterface
 
                 case 'scalar':
                     if (is_scalar($value)) {
-                        if (is_bool($value)) {
-                            $value = $value? 'true' : 'false';
-                        }
-
                         $flattened[$key] = $value;
                     }
                     break;

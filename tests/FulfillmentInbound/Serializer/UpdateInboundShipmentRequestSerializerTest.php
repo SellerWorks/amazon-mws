@@ -12,7 +12,7 @@ use SellerWorks\Amazon\FulfillmentInbound\Serializer\Serializer;
 /**
  * Serializer tests
  */
-class CreateInboundShipmentRequestSerializerTest extends TestCase
+class UpdateInboundShipmentRequestSerializerTest extends TestCase
 {
     private $faker;
 
@@ -22,18 +22,18 @@ class CreateInboundShipmentRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test CreateInboundShipment.ShipmentId
+     * Test UpdateInboundShipment.ShipmentId
      */
-    public function test_CreateInboundShipment_ShipmentId()
+    public function test_UpdateInboundShipment_ShipmentId()
     {
         $serializer = new Serializer;
 
-        $request = new Request\CreateInboundShipmentRequest;
+        $request = new Request\UpdateInboundShipmentRequest;
         $request->ShipmentId = $this->faker->uuid;
 
         $serialized = $serializer->serialize($request);
         $expected = [
-            'Action' => 'CreateInboundShipment',
+            'Action' => 'UpdateInboundShipment',
             'ShipmentId' => $request->ShipmentId,
         ];
 
@@ -43,9 +43,9 @@ class CreateInboundShipmentRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test CreateInboundShipment.InboundShipmentHeader
+     * Test UpdateInboundShipment.InboundShipmentHeader
      */
-    public function test_CreateInboundShipment_InboundShipmentHeader()
+    public function test_UpdateInboundShipment_InboundShipmentHeader()
     {
         $serializer = new Serializer;
 
@@ -68,12 +68,12 @@ class CreateInboundShipmentRequestSerializerTest extends TestCase
         $header->ShipmentStatus                 = 'WORKING';
         $header->IntendedBoxContentsSource      = 'NONE';
 
-        $request = new Request\CreateInboundShipmentRequest;
+        $request = new Request\UpdateInboundShipmentRequest;
         $request->InboundShipmentHeader = $header;
 
         $serialized = $serializer->serialize($request);
         $expected = [
-            'Action' => 'CreateInboundShipment',
+            'Action' => 'UpdateInboundShipment',
             'InboundShipmentHeader.ShipmentName' => $header->ShipmentName,
             'InboundShipmentHeader.ShipFromAddress.Name' => $address->Name,
             'InboundShipmentHeader.ShipFromAddress.AddressLine1' => $address->AddressLine1,
@@ -96,18 +96,18 @@ class CreateInboundShipmentRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test CreateInboundShipment.InboundShipmentItems (empty)
+     * Test UpdateInboundShipment.InboundShipmentItems (empty)
      */
-    public function test_CreateInboundShipment_InboundShipmentItems_empty()
+    public function test_UpdateInboundShipment_InboundShipmentItems_empty()
     {
         $serializer = new Serializer;
 
-        $request = new Request\CreateInboundShipmentRequest;
+        $request = new Request\UpdateInboundShipmentRequest;
         $request->InboundShipmentItems = null;
 
         $serialized = $serializer->serialize($request);
         $expected = [
-            'Action' => 'CreateInboundShipment',
+            'Action' => 'UpdateInboundShipment',
         ];
 
         ksort($serialized);
@@ -116,9 +116,9 @@ class CreateInboundShipmentRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test CreateInboundShipment.InboundShipmentItems (one)
+     * Test UpdateInboundShipment.InboundShipmentItems (one)
      */
-    public function test_CreateInboundShipment_InboundShipmentItems_one()
+    public function test_UpdateInboundShipment_InboundShipmentItems_one()
     {
         $serializer = new Serializer;
 
@@ -136,11 +136,11 @@ class CreateInboundShipmentRequestSerializerTest extends TestCase
         $item->ReleaseDate           = $this->faker->dateTimeThisCentury();
         $expected[$path.'ReleaseDate'] = $item->ReleaseDate->format(Serializer::DATE_FORMAT);
 
-        $request = new Request\CreateInboundShipmentRequest;
+        $request = new Request\UpdateInboundShipmentRequest;
         $request->InboundShipmentItems = $item;
 
         $serialized = $serializer->serialize($request);
-        $expected['Action'] = 'CreateInboundShipment';
+        $expected['Action'] = 'UpdateInboundShipment';
 
         ksort($serialized);
         ksort($expected);
@@ -148,9 +148,9 @@ class CreateInboundShipmentRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test CreateInboundShipment.InboundShipmentItems (multi)
+     * Test UpdateInboundShipment.InboundShipmentItems (multi)
      */
-    public function test_CreateInboundShipment_InboundShipmentItems_multi()
+    public function test_UpdateInboundShipment_InboundShipmentItems_multi()
     {
         $serializer = new Serializer;
 
@@ -172,11 +172,11 @@ class CreateInboundShipmentRequestSerializerTest extends TestCase
             $items[] = $item;
         }
 
-        $request = new Request\CreateInboundShipmentRequest;
+        $request = new Request\UpdateInboundShipmentRequest;
         $request->InboundShipmentItems = $items;
 
         $serialized = $serializer->serialize($request);
-        $expected['Action'] = 'CreateInboundShipment';
+        $expected['Action'] = 'UpdateInboundShipment';
 
         ksort($serialized);
         ksort($expected);

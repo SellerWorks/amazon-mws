@@ -35,7 +35,11 @@ final class CreateInboundShipmentRequest implements RequestInterface
         return [
             'ShipmentId'            => ['type' => 'scalar'],
             'InboundShipmentHeader' => ['type' => 'object', 'subtype' => Entity\InboundShipmentHeader::class],
-            'InboundShipmentItems'  => ['type' => 'array',  'subtype' => Entity\InboundShipmentItem::class],
+            'InboundShipmentItems'  => [
+                'type'      => 'array',
+                'subtype'   => Entity\InboundShipmentItem::class,
+                'namespace' => 'member',
+            ],
         ];
     }
 }

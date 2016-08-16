@@ -56,7 +56,7 @@ final class InboundShipmentHeader
                 'AMAZON_LABEL_ONLY',
                 'AMAZON_LABEL_PREFERRED',
             ]],
-            'AreCasesRequired'                  => ['type' => 'scalar'],
+            'AreCasesRequired'                  => ['type' => 'boolean'],
             'ShipmentStatus'                    => ['type' => 'choice', 'choices' => [
                 'WORKING',
                 'SHIPPED',

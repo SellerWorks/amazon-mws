@@ -22,40 +22,250 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test CreateInboundShipmentPlanRequest.ShipFromAddress
+     * Test CreateInboundShipmentPlanRequest.ShipFromAddress.Name
      */
-    public function test_CreateInboundShipmentPlanRequest_ShipFromAddress()
+    public function test_CreateInboundShipmentPlanRequest_ShipFromAddress_Name()
     {
         $serializer = new Serializer;
 
-        $address = new Entity\Address;
-        $address->Name                  = $this->faker->name;
-        $address->AddressLine1          = $this->faker->streetAddress;
-        $address->AddressLine2          = $this->faker->secondaryAddress;
-        $address->City                  = $this->faker->city;
-        $address->DistrictOrCounty      = $this->faker->citySuffix;
-        $address->StateOrProvinceCode   = $this->faker->stateAbbr;
-        $address->CountryCode           = $this->faker->countryCode;
-        $address->PostalCode            = $this->faker->postcode;
-
+        // Check for value.
         $request = new Request\CreateInboundShipmentPlanRequest;
-        $request->ShipFromAddress = $address;
+        $request->ShipFromAddress = new Entity\Address;
+        $request->ShipFromAddress->Name = $this->faker->name;
 
         $serialized = $serializer->serialize($request);
         $expected = [
             'Action' => 'CreateInboundShipmentPlan',
-            'ShipFromAddress.Name' => $address->Name,
-            'ShipFromAddress.AddressLine1' => $address->AddressLine1,
-            'ShipFromAddress.AddressLine2' => $address->AddressLine2,
-            'ShipFromAddress.City' => $address->City,
-            'ShipFromAddress.DistrictOrCounty' => $address->DistrictOrCounty,
-            'ShipFromAddress.StateOrProvinceCode' => $address->StateOrProvinceCode,
-            'ShipFromAddress.CountryCode' => $address->CountryCode,
-            'ShipFromAddress.PostalCode' => $address->PostalCode,
+            'ShipFromAddress.Name' => $request->ShipFromAddress->Name,
         ];
 
         ksort($serialized);
         ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+
+        // Check for null.
+        $request->ShipFromAddress->Name = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['ShipFromAddress.Name']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.ShipFromAddress.AddressLine1
+     */
+    public function test_CreateInboundShipmentPlanRequest_ShipFromAddress_AddressLine1()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->ShipFromAddress = new Entity\Address;
+        $request->ShipFromAddress->AddressLine1 = $this->faker->streetAddress;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+            'ShipFromAddress.AddressLine1' => $request->ShipFromAddress->AddressLine1,
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+
+        // Check for null.
+        $request->ShipFromAddress->AddressLine1 = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['ShipFromAddress.AddressLine1']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.ShipFromAddress.AddressLine2
+     */
+    public function test_CreateInboundShipmentPlanRequest_ShipFromAddress_AddressLine2()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->ShipFromAddress = new Entity\Address;
+        $request->ShipFromAddress->AddressLine2 = $this->faker->secondaryAddress;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+            'ShipFromAddress.AddressLine2' => $request->ShipFromAddress->AddressLine2,
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+
+        // Check for null.
+        $request->ShipFromAddress->AddressLine2 = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['ShipFromAddress.AddressLine2']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.ShipFromAddress.City
+     */
+    public function test_CreateInboundShipmentPlanRequest_ShipFromAddress_City()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->ShipFromAddress = new Entity\Address;
+        $request->ShipFromAddress->City = $this->faker->city;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+            'ShipFromAddress.City' => $request->ShipFromAddress->City,
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+
+        // Check for null.
+        $request->ShipFromAddress->City = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['ShipFromAddress.City']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.ShipFromAddress.DistrictOrCounty
+     */
+    public function test_CreateInboundShipmentPlanRequest_ShipFromAddress_DistrictOrCounty()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->ShipFromAddress = new Entity\Address;
+        $request->ShipFromAddress->DistrictOrCounty = $this->faker->citySuffix;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+            'ShipFromAddress.DistrictOrCounty' => $request->ShipFromAddress->DistrictOrCounty,
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+
+        // Check for null.
+        $request->ShipFromAddress->DistrictOrCounty = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['ShipFromAddress.DistrictOrCounty']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.ShipFromAddress.StateOrProvinceCode
+     */
+    public function test_CreateInboundShipmentPlanRequest_ShipFromAddress_StateOrProvinceCode()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->ShipFromAddress = new Entity\Address;
+        $request->ShipFromAddress->StateOrProvinceCode = $this->faker->stateAbbr;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+            'ShipFromAddress.StateOrProvinceCode' => $request->ShipFromAddress->StateOrProvinceCode,
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+
+        // Check for null.
+        $request->ShipFromAddress->StateOrProvinceCode = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['ShipFromAddress.StateOrProvinceCode']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.ShipFromAddress.CountryCode
+     */
+    public function test_CreateInboundShipmentPlanRequest_ShipFromAddress_CountryCode()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->ShipFromAddress = new Entity\Address;
+        $request->ShipFromAddress->CountryCode = $this->faker->countryCode;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+            'ShipFromAddress.CountryCode' => $request->ShipFromAddress->CountryCode,
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+
+        // Check for null.
+        $request->ShipFromAddress->CountryCode = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['ShipFromAddress.CountryCode']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.ShipFromAddress.PostalCode
+     */
+    public function test_CreateInboundShipmentPlanRequest_ShipFromAddress_PostalCode()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->ShipFromAddress = new Entity\Address;
+        $request->ShipFromAddress->PostalCode = $this->faker->postcode;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+            'ShipFromAddress.PostalCode' => $request->ShipFromAddress->PostalCode,
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+
+        // Check for null.
+        $request->ShipFromAddress->PostalCode = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['ShipFromAddress.PostalCode']);
+
         $this->assertSame($serialized, $expected);
     }
 
@@ -143,54 +353,155 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItems (empty)
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItem.SellerSKU
      */
-    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItems_empty()
+    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_SellerSKU()
     {
         $serializer = new Serializer;
 
+        // Check for value.
         $request = new Request\CreateInboundShipmentPlanRequest;
-        $request->InboundShipmentPlanRequestItems = null;
+        $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
+        $request->InboundShipmentPlanRequestItems->SellerSKU = $this->faker->uuid;
 
         $serialized = $serializer->serialize($request);
         $expected = [
             'Action' => 'CreateInboundShipmentPlan',
+            'InboundShipmentPlanRequestItems.member.1.SellerSKU' => $request->InboundShipmentPlanRequestItems->SellerSKU,
         ];
 
         ksort($serialized);
         ksort($expected);
         $this->assertSame($serialized, $expected);
+
+        // Check for null.
+        $request->InboundShipmentPlanRequestItems->SellerSKU = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['InboundShipmentPlanRequestItems.member.1.SellerSKU']);
+
+        $this->assertSame($serialized, $expected);
     }
 
     /**
-     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItems (one)
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItem.ASIN
      */
-    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItems_one()
+    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_ASIN()
     {
         $serializer = new Serializer;
 
-        $item = new Entity\InboundShipmentPlanRequestItem;
-        $item->SellerSKU = $this->faker->uuid;
-        $item->ASIN = $this->faker->uuid;
-        $item->Condition = 'NewItem';
-        $item->Quantity = $this->faker->randomDigitNotNull;
-        $item->QuantityInCase = $this->faker->randomDigitNotNull;
-
+        // Check for value.
         $request = new Request\CreateInboundShipmentPlanRequest;
-        $request->InboundShipmentPlanRequestItems = $item;
+        $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
+        $request->InboundShipmentPlanRequestItems->ASIN = $this->faker->uuid;
 
         $serialized = $serializer->serialize($request);
         $expected = [
             'Action' => 'CreateInboundShipmentPlan',
-            'InboundShipmentPlanRequestItems.member.1.SellerSKU'      => $item->SellerSKU,
-            'InboundShipmentPlanRequestItems.member.1.ASIN'           => $item->ASIN,
-            'InboundShipmentPlanRequestItems.member.1.Condition'      => $item->Condition,
-            'InboundShipmentPlanRequestItems.member.1.Quantity'       => $item->Quantity,
-            'InboundShipmentPlanRequestItems.member.1.QuantityInCase' => $item->QuantityInCase,
+            'InboundShipmentPlanRequestItems.member.1.ASIN' => $request->InboundShipmentPlanRequestItems->ASIN,
         ];
 
         ksort($serialized);
         ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+        // Check for null.
+        $request->InboundShipmentPlanRequestItems->ASIN = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['InboundShipmentPlanRequestItems.member.1.ASIN']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItem.Condition
+     */
+    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_Condition()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
+        $expected = ['Action' => 'CreateInboundShipmentPlan'];
+
+        $choices = $request->InboundShipmentPlanRequestItems->getMetadata()['Condition']['choices'];
+
+        foreach ($choices as $choice) {
+            $request->InboundShipmentPlanRequestItems->Condition = $choice;
+
+            $serialized = $serializer->serialize($request);
+            $expected['InboundShipmentPlanRequestItems.member.1.Condition'] = $choice;
+
+            ksort($serialized);
+            ksort($expected);
+            $this->assertSame($serialized, $expected);
+        }
+
+        // Check for null.
+        $request->InboundShipmentPlanRequestItems->Condition = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['InboundShipmentPlanRequestItems.member.1.Condition']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItem.Quantity
+     */
+    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_Quantity()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
+        $request->InboundShipmentPlanRequestItems->Quantity = $this->faker->randomDigitNotNull;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+            'InboundShipmentPlanRequestItems.member.1.Quantity' => $request->InboundShipmentPlanRequestItems->Quantity,
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+        // Check for null.
+        $request->InboundShipmentPlanRequestItems->Quantity = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['InboundShipmentPlanRequestItems.member.1.Quantity']);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItem.QuantityInCase
+     */
+    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_QuantityInCase()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
+        $request->InboundShipmentPlanRequestItems->QuantityInCase = $this->faker->randomDigitNotNull;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+            'InboundShipmentPlanRequestItems.member.1.QuantityInCase' => $request->InboundShipmentPlanRequestItems->QuantityInCase,
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+
+        // Check for null.
+        $request->InboundShipmentPlanRequestItems->QuantityInCase = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['InboundShipmentPlanRequestItems.member.1.QuantityInCase']);
+
         $this->assertSame($serialized, $expected);
     }
 
@@ -222,6 +533,26 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
 
         $serialized = $serializer->serialize($request);
         $expected['Action'] = 'CreateInboundShipmentPlan';
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItems (empty)
+     */
+    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItems_empty()
+    {
+        $serializer = new Serializer;
+
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->InboundShipmentPlanRequestItems = null;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipmentPlan',
+        ];
 
         ksort($serialized);
         ksort($expected);
