@@ -43,6 +43,61 @@ class ClientPlumbingTest extends TestCase
     }
 
     /**
+     * Test CreateInboundShipmentPlan
+     */
+    public function test_CreateInboundShipmentPlanRequest()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentPlanResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $result = $this->client->CreateInboundShipmentPlan(new Request\CreateInboundShipmentPlanRequest);
+        $this->assertTrue($result instanceof Result\CreateInboundShipmentPlanResult);
+
+        $expected = new Result\CreateInboundShipmentPlanResult;
+        $expected->InboundShipmentPlans = [];
+
+        $plan = new Entity\InboundShipmentPlan;
+        $plan->ShipmentId = 'String';
+        $plan->DestinationFulfillmentCenterId = 'String';
+        $plan->ShipToAddress = new Entity\Address;
+        $plan->ShipToAddress->Name = 'String';
+        $plan->ShipToAddress->AddressLine1 = 'String';
+        $plan->ShipToAddress->AddressLine2 = 'String';
+        $plan->ShipToAddress->DistrictOrCounty = 'String';
+        $plan->ShipToAddress->City = 'String';
+        $plan->ShipToAddress->StateOrProvinceCode = 'String';
+        $plan->ShipToAddress->CountryCode = 'String';
+        $plan->ShipToAddress->PostalCode = 'String';
+        $plan->LabelPrepType = 'String';
+        $plan->Items = [];
+//         $plan->EstimatedBoxContentsFee = new Entity\EstimatedBoxContentsFee;
+
+        $item = new Entity\InboundShipmentPlanItem;
+        $item->SellerSKU = 'String';
+        $item->FulfillmentNetworkSKU = 'String';
+        $item->Quantity = '1';
+        $item->PrepDetailsList = [];
+        
+        $prep = new Entity\PrepDetails;
+        $prep->PrepInstruction = 'String';
+        $prep->PrepOwner = 'String';
+
+        $item->PrepDetailsList[] = $prep;
+        $plan->Items[] = $item;
+        $expected->InboundShipmentPlans[] = $plan;
+
+        $this->assertEquals($result, $expected);
+    }
+
+    /**
+     * Test GetServiceStatusAsync
+     */
+    public function test_CreateInboundShipmentPlanRequestAsync()
+    {
+
+    }
+
+    /**
      * Test GetServiceStatus
      */
     public function test_GetServiceStatus()
