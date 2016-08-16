@@ -67,9 +67,7 @@ final class InboundShipmentPlanRequestItem
             ]],
             'Quantity'          => ['type' => 'scalar'],
             'QuantityInCase'    => ['type' => 'scalar'],
-
-            // Undocumented.
-//             'PrepDetailsList'   => ['type' => 'array', 'subtype' => PrepDetails::class, 'namespace' => 'member'],
+            'PrepDetailsList'   => ['type' => 'array', 'subtype' => PrepDetails::class, 'namespace' => 'member'],
         ];
     }
 }

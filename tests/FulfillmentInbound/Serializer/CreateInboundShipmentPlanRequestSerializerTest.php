@@ -358,16 +358,17 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
     public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_SellerSKU()
     {
         $serializer = new Serializer;
+        $value = $this->faker->uuid;
 
         // Check for value.
         $request = new Request\CreateInboundShipmentPlanRequest;
         $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
-        $request->InboundShipmentPlanRequestItems->SellerSKU = $this->faker->uuid;
+        $request->InboundShipmentPlanRequestItems->SellerSKU = $value;
 
         $serialized = $serializer->serialize($request);
         $expected = [
             'Action' => 'CreateInboundShipmentPlan',
-            'InboundShipmentPlanRequestItems.member.1.SellerSKU' => $request->InboundShipmentPlanRequestItems->SellerSKU,
+            'InboundShipmentPlanRequestItems.member.1.SellerSKU' => $value,
         ];
 
         ksort($serialized);
@@ -388,16 +389,17 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
     public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_ASIN()
     {
         $serializer = new Serializer;
+        $value = $this->faker->uuid;
 
         // Check for value.
         $request = new Request\CreateInboundShipmentPlanRequest;
         $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
-        $request->InboundShipmentPlanRequestItems->ASIN = $this->faker->uuid;
+        $request->InboundShipmentPlanRequestItems->ASIN = $value;
 
         $serialized = $serializer->serialize($request);
         $expected = [
             'Action' => 'CreateInboundShipmentPlan',
-            'InboundShipmentPlanRequestItems.member.1.ASIN' => $request->InboundShipmentPlanRequestItems->ASIN,
+            'InboundShipmentPlanRequestItems.member.1.ASIN' => $value,
         ];
 
         ksort($serialized);
@@ -443,6 +445,12 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
         unset($expected['InboundShipmentPlanRequestItems.member.1.Condition']);
 
         $this->assertSame($serialized, $expected);
+
+        // Check for invalid.
+        $request->InboundShipmentPlanRequestItems->Condition = 'NOT_A_VALUE';
+        $serialized = $serializer->serialize($request);
+
+        $this->assertSame($serialized, $expected);
     }
 
     /**
@@ -451,16 +459,17 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
     public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_Quantity()
     {
         $serializer = new Serializer;
+        $value = $this->faker->randomDigitNotNull;
 
         // Check for value.
         $request = new Request\CreateInboundShipmentPlanRequest;
         $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
-        $request->InboundShipmentPlanRequestItems->Quantity = $this->faker->randomDigitNotNull;
+        $request->InboundShipmentPlanRequestItems->Quantity = $value;
 
         $serialized = $serializer->serialize($request);
         $expected = [
             'Action' => 'CreateInboundShipmentPlan',
-            'InboundShipmentPlanRequestItems.member.1.Quantity' => $request->InboundShipmentPlanRequestItems->Quantity,
+            'InboundShipmentPlanRequestItems.member.1.Quantity' => $value,
         ];
 
         ksort($serialized);
@@ -481,16 +490,17 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
     public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_QuantityInCase()
     {
         $serializer = new Serializer;
+        $value = $this->faker->randomDigitNotNull;
 
         // Check for value.
         $request = new Request\CreateInboundShipmentPlanRequest;
         $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
-        $request->InboundShipmentPlanRequestItems->QuantityInCase = $this->faker->randomDigitNotNull;
+        $request->InboundShipmentPlanRequestItems->QuantityInCase = $value;
 
         $serialized = $serializer->serialize($request);
         $expected = [
             'Action' => 'CreateInboundShipmentPlan',
-            'InboundShipmentPlanRequestItems.member.1.QuantityInCase' => $request->InboundShipmentPlanRequestItems->QuantityInCase,
+            'InboundShipmentPlanRequestItems.member.1.QuantityInCase' => $value,
         ];
 
         ksort($serialized);
@@ -503,6 +513,143 @@ class CreateInboundShipmentPlanRequestSerializerTest extends TestCase
         unset($expected['InboundShipmentPlanRequestItems.member.1.QuantityInCase']);
 
         $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItem.PrepDetailsList.PrepInstruction
+     */
+    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_PrepDetailsList_PrepInstruction()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
+        $request->InboundShipmentPlanRequestItems->PrepDetailsList = new Entity\PrepDetails;
+        $expected = ['Action' => 'CreateInboundShipmentPlan'];
+
+        $choices = $request->InboundShipmentPlanRequestItems->PrepDetailsList->getMetadata()['PrepInstruction']['choices'];
+
+        foreach ($choices as $choice) {
+            $request->InboundShipmentPlanRequestItems->PrepDetailsList->PrepInstruction = $choice;
+
+            $serialized = $serializer->serialize($request);
+            $expected['InboundShipmentPlanRequestItems.member.1.PrepDetailsList.member.1.PrepInstruction'] = $choice;
+
+            ksort($serialized);
+            ksort($expected);
+            $this->assertSame($serialized, $expected);
+        }
+
+        // Check for null.
+        $request->InboundShipmentPlanRequestItems->PrepDetailsList->PrepInstruction = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['InboundShipmentPlanRequestItems.member.1.PrepDetailsList.member.1.PrepInstruction']);
+
+        $this->assertSame($serialized, $expected);
+
+        // Check for invalid.
+        $request->InboundShipmentPlanRequestItems->PrepDetailsList->PrepInstruction = 'NOT_A_VALUE';
+        $serialized = $serializer->serialize($request);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItem.PrepDetailsList.PrepOwner
+     */
+    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_PrepDetailsList_PrepOwner()
+    {
+        $serializer = new Serializer;
+
+        // Check for value.
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
+        $request->InboundShipmentPlanRequestItems->PrepDetailsList = new Entity\PrepDetails;
+        $expected = ['Action' => 'CreateInboundShipmentPlan'];
+
+        $choices = $request->InboundShipmentPlanRequestItems->PrepDetailsList->getMetadata()['PrepOwner']['choices'];
+
+        foreach ($choices as $choice) {
+            $request->InboundShipmentPlanRequestItems->PrepDetailsList->PrepOwner = $choice;
+
+            $serialized = $serializer->serialize($request);
+            $expected['InboundShipmentPlanRequestItems.member.1.PrepDetailsList.member.1.PrepOwner'] = $choice;
+
+            ksort($serialized);
+            ksort($expected);
+            $this->assertSame($serialized, $expected);
+        }
+
+        // Check for null.
+        $request->InboundShipmentPlanRequestItems->PrepDetailsList->PrepOwner = '';
+        $serialized = $serializer->serialize($request);
+        unset($expected['InboundShipmentPlanRequestItems.member.1.PrepDetailsList.member.1.PrepOwner']);
+
+        $this->assertSame($serialized, $expected);
+
+        // Check for invalid.
+        $request->InboundShipmentPlanRequestItems->PrepDetailsList->PrepOwner = 'NOT_A_VALUE';
+        $serialized = $serializer->serialize($request);
+
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipmentPlanRequest.InboundShipmentPlanRequestItem.PrepDetailsList (multi)
+     */
+    public function test_CreateInboundShipmentPlanRequest_InboundShipmentPlanRequestItem_PrepDetailsList_multi()
+    {
+        $serializer = new Serializer;
+        $meta = (new Entity\PrepDetails)->getMetadata();
+
+        $request = new Request\CreateInboundShipmentPlanRequest;
+        $request->InboundShipmentPlanRequestItems = new Entity\InboundShipmentPlanRequestItem;
+        $request->InboundShipmentPlanRequestItems->PrepDetailsList = [];
+
+        $expected = [];
+
+        for ($i = 1; $i <= 10; ++$i) {
+            $path = sprintf('InboundShipmentPlanRequestItems.member.1.PrepDetailsList.member.%s.', $i);
+            $v1 = $this->faker->randomElement($meta['PrepInstruction']['choices']);
+            $v2 = $this->faker->randomElement($meta['PrepOwner']['choices']);
+
+            $prep = new Entity\PrepDetails;
+            $prep->PrepInstruction = $expected[$path.'PrepInstruction'] = $v1;
+            $prep->PrepOwner       = $expected[$path.'PrepOwner']       = $v2;
+
+            $request->InboundShipmentPlanRequestItems->PrepDetailsList[] = $prep;
+        }
+
+        $serialized = $serializer->serialize($request);
+        $expected['Action'] = 'CreateInboundShipmentPlan';
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+    }
+
+    /**
+     * Test CreateInboundShipment.InboundShipmentHeader.PrepDetailsList (empty)
+     */
+    public function test_CreateInboundShipment_InboundShipmentHeader_PrepDetailsList_empty()
+    {
+/*
+        $serializer = new Serializer;
+
+        $request = new Request\CreateInboundShipmentRequest;
+        $request->InboundShipmentItems = new Entity\InboundShipmentItem;
+        $request->InboundShipmentItems->PrepDetailsList = null;
+
+        $serialized = $serializer->serialize($request);
+        $expected = [
+            'Action' => 'CreateInboundShipment',
+        ];
+
+        ksort($serialized);
+        ksort($expected);
+        $this->assertSame($serialized, $expected);
+*/
     }
 
     /**

@@ -60,7 +60,7 @@ final class InboundShipmentItem
             'QuantityShipped'       => ['type' => 'scalar'],
             'QuantityReceived'      => ['type' => 'scalar'],
             'QuantityInCase'        => ['type' => 'scalar'],
-            'PrepDetailsList'       => ['type' => 'array', 'subtype' => PrepDetails::class],
+            'PrepDetailsList'       => ['type' => 'array', 'subtype' => PrepDetails::class, 'namespace' => 'member'],
             'ReleaseDate'           => ['type' => 'datetime'],
         ];
     }
