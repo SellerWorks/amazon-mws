@@ -48,7 +48,9 @@ final class XmlDeserializer extends BaseXmlDeserializer
 
 
             // Collection objects.
+            "{$ns}InboundShipmentPlans"     => $this->mapCollection("{$ns}member", Entity\InboundShipmentPlan::class),
             "{$ns}ItemData"                 => $this->mapCollection("{$ns}member", Entity\InboundShipmentItem::class),
+            "{$ns}Items"                    => $this->mapCollection("{$ns}member", Entity\InboundShipmentPlanItem::class),
             "{$ns}ShipmentData"             => $this->mapCollection("{$ns}member", Entity\InboundShipmentInfo::class),
 
             "{$ns}PrepDetailsList"          => $this->mapList("{$ns}PrepDetails"),
@@ -60,6 +62,7 @@ final class XmlDeserializer extends BaseXmlDeserializer
             "{$ns}PrepDetails"              => $this->mapObject(Entity\PrepDetails::class),
             "{$ns}ResponseMetadata"         => $this->mapObject(Entity\ResponseMetadata::class),
             "{$ns}ShipFromAddress"          => $this->mapObject(Entity\Address::class),
+            "{$ns}ShipToAddress"            => $this->mapObject(Entity\Address::class),
 
             "{$ns}FeePerUnit"               => $this->mapObject(Entity\Amount::class),
             "{$ns}TotalFee"                 => $this->mapObject(Entity\Amount::class),

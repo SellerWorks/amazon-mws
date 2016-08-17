@@ -70,7 +70,14 @@ class ClientPlumbingTest extends TestCase
         $plan->ShipToAddress->PostalCode = 'String';
         $plan->LabelPrepType = 'String';
         $plan->Items = [];
-//         $plan->EstimatedBoxContentsFee = new Entity\EstimatedBoxContentsFee;
+        $plan->EstimatedBoxContentsFee = new Entity\BoxContentsFeeDetails;
+        $plan->EstimatedBoxContentsFee->TotalUnits = '1';
+        $plan->EstimatedBoxContentsFee->FeePerUnit = new Entity\Amount;
+        $plan->EstimatedBoxContentsFee->FeePerUnit->CurrencyCode = 'String';
+        $plan->EstimatedBoxContentsFee->FeePerUnit->Value = '100';
+        $plan->EstimatedBoxContentsFee->TotalFee = new Entity\Amount;
+        $plan->EstimatedBoxContentsFee->TotalFee->CurrencyCode = 'String';
+        $plan->EstimatedBoxContentsFee->TotalFee->Value = '100';
 
         $item = new Entity\InboundShipmentPlanItem;
         $item->SellerSKU = 'String';
@@ -86,7 +93,7 @@ class ClientPlumbingTest extends TestCase
         $plan->Items[] = $item;
         $expected->InboundShipmentPlans[] = $plan;
 
-        $this->assertEquals($result, $expected);
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -94,7 +101,14 @@ class ClientPlumbingTest extends TestCase
      */
     public function test_CreateInboundShipmentPlanRequestAsync()
     {
+        $responseXml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentPlanResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
 
+        $promise = $this->client->CreateInboundShipmentPlanAsync(new Request\CreateInboundShipmentPlanRequest);
+        $this->assertTrue($promise instanceof PromiseInterface);
+        
+        $result = $promise->wait();
+        $this->assertTrue($result instanceof Result\CreateInboundShipmentPlanResult);
     }
 
     /**
