@@ -45,7 +45,7 @@ class ClientPlumbingTest extends TestCase
     /**
      * Test CreateInboundShipmentPlan
      */
-    public function test_CreateInboundShipmentPlanRequest()
+    public function test_CreateInboundShipmentPlan()
     {
         $responseXml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentPlanResponse.xml');
         $this->stack->append(new Response(200, [], $responseXml));
@@ -97,9 +97,9 @@ class ClientPlumbingTest extends TestCase
     }
 
     /**
-     * Test GetServiceStatusAsync
+     * Test CreateInboundShipmentPlanAsync
      */
-    public function test_CreateInboundShipmentPlanRequestAsync()
+    public function test_CreateInboundShipmentPlanAsync()
     {
         $responseXml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentPlanResponse.xml');
         $this->stack->append(new Response(200, [], $responseXml));
@@ -110,6 +110,89 @@ class ClientPlumbingTest extends TestCase
         $result = $promise->wait();
         $this->assertTrue($result instanceof Result\CreateInboundShipmentPlanResult);
     }
+
+    /**
+     * Test CreateInboundShipment
+     */
+    public function test_CreateInboundShipment()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $result = $this->client->CreateInboundShipment(new Request\CreateInboundShipmentRequest);
+        $this->assertTrue($result instanceof Result\CreateInboundShipmentResult);
+
+        $expected = new Result\CreateInboundShipmentResult;
+        $expected->ShipmentId = 'String';
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test CreateInboundShipmentAsync
+     */
+    public function test_CreateInboundShipmentAsync()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/CreateInboundShipmentResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $promise = $this->client->CreateInboundShipmentAsync(new Request\CreateInboundShipmentRequest);
+        $this->assertTrue($promise instanceof PromiseInterface);
+        
+        $result = $promise->wait();
+        $this->assertTrue($result instanceof Result\CreateInboundShipmentResult);
+    }
+
+    /**
+     * Test GetPrepInstructionsForSKU
+     */
+    public function test_GetPrepInstructionsForSKU()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/GetPrepInstructionsForSKUResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $result = $this->client->GetPrepInstructionsForSKU(new Request\GetPrepInstructionsForSKURequest);
+//         $this->assertTrue($result instanceof Result\GetPrepInstructionsForSKUResult);
+print_r($result); die;
+/*
+        $expected = new Result\GetPrepInstructionsForSKUResult;
+        $expected->ShipmentId = 'String';
+
+        $this->assertEquals($expected, $result);
+*/
+    }
+
+    /**
+     * Test GetPrepInstructionsForASIN
+     */
+    public function test_GetPrepInstructionsForASIN()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/GetPrepInstructionsForASINResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $result = $this->client->GetPrepInstructionsForASIN(new Request\GetPrepInstructionsForASINRequest);
+//         $this->assertTrue($result instanceof Result\GetPrepInstructionsForASINResult);
+print_r($result); die;
+/*
+        $expected = new Result\GetPrepInstructionsForASINResult;
+        $expected->ShipmentId = 'String';
+
+        $this->assertEquals($expected, $result);
+*/
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Test GetServiceStatus

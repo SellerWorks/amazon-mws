@@ -29,7 +29,10 @@ final class XmlDeserializer extends BaseXmlDeserializer
         return [
             // Response objects.
             "{$ns}CreateInboundShipmentPlanResponse"        => $this->mapObject(Response\CreateInboundShipmentPlanResponse::class),
+            "{$ns}CreateInboundShipmentResponse"            => $this->mapObject(Response\CreateInboundShipmentResponse::class),
             "{$ns}ErrorResponse"                            => $this->mapObject(Response\ErrorResponse::class),
+            "{$ns}GetPrepInstructionsForASINResponse"       => $this->mapObject(Response\GetPrepInstructionsForASINResponse::class),
+            "{$ns}GetPrepInstructionsForSKUResponse"        => $this->mapObject(Response\GetPrepInstructionsForSKUResponse::class),
             "{$ns}GetServiceStatusResponse"                 => $this->mapObject(Response\GetServiceStatusResponse::class),
             "{$ns}ListInboundShipmentItemsResponse"         => $this->mapObject(Response\ListInboundShipmentItemsResponse::class),
             "{$ns}ListInboundShipmentItemsByNextTokenResponse" => $this->mapObject(Response\ListInboundShipmentItemsByNextTokenResponse::class),
@@ -39,7 +42,10 @@ final class XmlDeserializer extends BaseXmlDeserializer
 
             // Result objects.
             "{$ns}CreateInboundShipmentPlanResult"          => $this->mapObject(Result\CreateInboundShipmentPlanResult::class),
+            "{$ns}CreateInboundShipmentResult"              => $this->mapObject(Result\CreateInboundShipmentResult::class),
             "{$ns}Error"                                    => $this->mapObject(Result\Error::class),
+            "{$ns}GetPrepInstructionsForASINResult"         => $this->mapObject(Result\GetPrepInstructionsForASINResult::class),
+            "{$ns}GetPrepInstructionsForSKUResult"          => $this->mapObject(Result\GetPrepInstructionsForSKUResult::class),
             "{$ns}GetServiceStatusResult"                   => $this->mapObject(Result\GetServiceStatusResult::class),
             "{$ns}ListInboundShipmentItemsResult"           => $this->mapObject(Result\ListInboundShipmentItemsResult::class),
             "{$ns}ListInboundShipmentItemsByNextTokenResult"=> $this->mapObject(Result\ListInboundShipmentItemsResult::class),

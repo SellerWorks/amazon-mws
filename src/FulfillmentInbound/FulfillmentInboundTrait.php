@@ -25,6 +25,64 @@ trait FulfillmentInboundTrait
         return $this->send($request, 2);
     }
 
+
+    /**
+     * @param  CreateInboundShipmentRequest $request
+     * @return CreateInboundShipmentResponse
+     */
+    function CreateInboundShipment(Request\CreateInboundShipmentRequest $request)
+    {
+        return $this->CreateInboundShipmentAsync($request)->wait();
+    }
+
+    /**
+     * @param  CreateInboundShipmentRequest $request
+     * @return PromiseInterface
+     */
+    function CreateInboundShipmentAsync(Request\CreateInboundShipmentRequest $request)
+    {
+        return $this->send($request, 2);
+    }
+
+
+    /**
+     * @param  GetPrepInstructionsForSKURequest $request
+     * @return GetPrepInstructionsForSKUResponse
+     */
+    function GetPrepInstructionsForSKU(Request\GetPrepInstructionsForSKURequest $request)
+    {
+        return $this->GetPrepInstructionsForSKUAsync($request)->wait();
+    }
+
+    /**
+     * @param  GetPrepInstructionsForSKURequest $request
+     * @return PromiseInterface
+     */
+    function GetPrepInstructionsForSKUAsync(Request\GetPrepInstructionsForSKURequest $request)
+    {
+        return $this->send($request, 2);
+    }
+
+
+    /**
+     * @param  GetPrepInstructionsForASINRequest $request
+     * @return GetPrepInstructionsForASINResponse
+     */
+    function GetPrepInstructionsForASIN(Request\GetPrepInstructionsForASINRequest $request)
+    {
+        return $this->GetPrepInstructionsForASINAsync($request)->wait();
+    }
+
+    /**
+     * @param  GetPrepInstructionsForASINRequest $request
+     * @return PromiseInterface
+     */
+    function GetPrepInstructionsForASINAsync(Request\GetPrepInstructionsForASINRequest $request)
+    {
+        return $this->send($request, 2);
+    }
+
+
     /**
      * @param  ListInboundShipmentsRequest $request
      * @return ListInboundShipmentsResult
