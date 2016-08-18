@@ -1,30 +1,70 @@
-## Amazon MWS Toolkit
-An object oriented approach to using Amazon's [Marketplace Webservices](http://mws.amazon.com).  Currently an ALPHA release and not recommended for production use.
+# Amazon MWS Toolkit
 
-### Usage
+The **Amazon MWS Toolkit** makes it easy for developers to access Amazon's [Marketplace Webservices](https://developer.amazonservices.com/index.html) in their PHP code, and build robust applications using services like *Orders*, *Fulfillment Inbound Shipment* and *Reports*. You can get started in minutes by installing the toolkit through Composer or by downloading the latest release.
 
-The following example shows how to instantiate the client and call the FulfillmentInboundShipment service.
+Currently this project is in BETA and not recommended for production use, but you can try it anyway. (I know you will!)
 
-```php
-require 'vendor/autoload.php'
+## Resources
 
-use SellerWorks\Amazon\MWS\Common\Passport;
-use SellerWorks\Amazon\MWS\FulfillmentInbound\Client;
-use SellerWorks\Amazon\MWS\FulfillmentInbound\Requests;
-use SellerWorks\Amazon\MWS\FulfillmentInbound\Types;
+* Toolkit Docs - For details about using this toolkit
+* [API Docs](https://developer.amazonservices.com/index.html) - For details about operations, parameters, and responses
 
-$passport  = new Passport(AMAZON_SELLER_ID, MWS_ACCESS_KEY, MWS_SECRET_KEY, OPTIONAL_MWS_AUTH_TOKEN);
-$mwsClient = new Client($passport);
+## Installation
 
-// Check service status
-$response = $mwsClient->GetServiceStatus();
+Through Composer, obviously:
 
-// Check for open shipments
-$request = new Requests\ListInboundShipmentsRequest;
-$request->ShipmentStatusList = [
-    Types\ShipmentStatus::SHIPPED,
-];
-
-$response = $mwsClient->ListInboundShipments($request);
 ```
-The XML returned by the webservice is marshalled into PHP objects specific to the API.
+composer require sellerworks/amazon-mws
+```
+
+You can also use Amazon MWS Toolkit without using Composer by registering an autoloader function:
+
+```
+spl_autoload_register(function($class) {
+    $prefix = 'SellerWorks\\Amazon\\';
+
+    if (!substr($class, 0, 18) === $prefix) {
+        return;
+    }
+
+    $class = substr($class, strlen($prefix));
+    $location = __DIR__ . 'path/to/sellerworks-amazon/src/' . str_replace('\\', '/', $class) . '.php';
+
+    if (is_file($location)) {
+        require_once($location);
+    }
+});
+```
+
+Now you're ready to get started.
+
+## Example
+
+Get the service status.
+
+```
+<?php
+
+require 'vendor/autoload.php';
+
+use SellerWorks\Amazon\Credentials\Credentials;
+use SellerWorks\Amazon\Orders\Client;
+
+// Create the API client.
+$credentials = new Credentials('Seller Id', 'Access Key', 'Secret Key');
+$client = new Client($credentials);
+
+// Send request to the API.
+$status = $client->GetServiceStatus();
+
+// Output service level information.
+printf("The current service level for the Orders Service is: %s\n", $status->Status);
+```
+
+## Project Goals
+
+* Be well maintained.
+* Be well documented.
+* Be well tested.
+
+# Enjoy!
