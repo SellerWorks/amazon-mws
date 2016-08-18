@@ -2,10 +2,12 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * A preparation instruction, and who is reponsible for that preparation.
  */
-final class PrepDetails
+final class PrepDetails implements MetadataInterface
 {
     /**
      * @var PrepInstruction

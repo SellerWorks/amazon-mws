@@ -5,12 +5,6 @@ namespace SellerWorks\Amazon\Common;
 /**
  * Interface for all Request objects.
  */
-interface RequestInterface
+interface RequestInterface extends Serializer\MetadataInterface
 {
-    /**
-     * Return metadata about this object.
-     *
-     * @return array
-     */
-    public function getMetadata();
 }

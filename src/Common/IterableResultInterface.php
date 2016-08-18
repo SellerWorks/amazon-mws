@@ -18,6 +18,20 @@ interface IterableResultInterface extends ResultInterface, IteratorAggregate
     function setClient(ClientInterface $client);
 
     /**
+     * Get name of 'ByNextToken' method.
+     *
+     * @return string
+     */
+    function getNextMethod();
+
+    /**
+     * Get request object for 'ByNextToken' method call.
+     *
+     * @return RequestInterface
+     */
+    function getNextRequest();
+
+    /**
      * Get array of records.
      *
      * @return array

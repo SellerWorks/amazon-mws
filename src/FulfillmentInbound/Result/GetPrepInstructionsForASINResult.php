@@ -10,12 +10,12 @@ use SellerWorks\Amazon\Common\ResultInterface;
 final class GetPrepInstructionsForASINResult implements ResultInterface
 {
     /**
-     * @var ArrayCollection<ASINPrepInstructionsList>
+     * @var Array<ASINPrepInstructions>
      */
     public $ASINPrepInstructionsList;
 
     /**
-     * @var ArrayCollection<InvalidASINList>
+     * @var Array<InvalidASIN>
      */
     public $InvalidASINList;
 }

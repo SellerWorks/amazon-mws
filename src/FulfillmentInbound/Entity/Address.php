@@ -2,10 +2,12 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * Postal address information.
  */
-final class Address
+final class Address implements MetadataInterface
 {
     /**
      * @var string

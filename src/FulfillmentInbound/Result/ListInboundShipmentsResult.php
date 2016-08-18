@@ -4,7 +4,6 @@ namespace SellerWorks\Amazon\FulfillmentInbound\Result;
 
 use SellerWorks\Amazon\Common\IterableResultInterface;
 use SellerWorks\Amazon\Common\IterableResultTrait;
-use SellerWorks\Amazon\Common\RecordIterator;
 use SellerWorks\Amazon\FulfillmentInbound\Request\ListInboundShipmentsByNextTokenRequest;
 
 /**

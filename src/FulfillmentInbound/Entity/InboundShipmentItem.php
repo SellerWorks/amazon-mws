@@ -2,11 +2,13 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * Item information for an inbound shipment. Submitted with a call to the CreateInboundShipment or UpdateInboundShipment
  * operation.
  */
-final class InboundShipmentItem
+final class InboundShipmentItem implements MetadataInterface
 {
     /**
      * @var string

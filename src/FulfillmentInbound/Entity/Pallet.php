@@ -2,10 +2,12 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * Pallet information.
  */
-final class Pallet
+final class Pallet implements MetadataInterface
 {
     /**
      * @var Dimensions

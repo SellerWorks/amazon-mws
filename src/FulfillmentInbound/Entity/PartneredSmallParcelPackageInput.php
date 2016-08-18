@@ -2,10 +2,12 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * Dimension and weight information for the package.
  */
-final class PartneredSmallParcelPackageInput
+final class PartneredSmallParcelPackageInput implements MetadataInterface
 {
     /**
      * @var Dimensions

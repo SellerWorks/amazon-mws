@@ -46,6 +46,25 @@ trait FulfillmentInboundTrait
 
 
     /**
+     * @param  UpdateInboundShipmentRequest $request
+     * @return UpdateInboundShipmentResponse
+     */
+    function UpdateInboundShipment(Request\UpdateInboundShipmentRequest $request)
+    {
+        return $this->UpdateInboundShipmentAsync($request)->wait();
+    }
+
+    /**
+     * @param  UpdateInboundShipmentRequest $request
+     * @return PromiseInterface
+     */
+    function UpdateInboundShipmentAsync(Request\UpdateInboundShipmentRequest $request)
+    {
+        return $this->send($request, 2);
+    }
+
+
+    /**
      * @param  GetPrepInstructionsForSKURequest $request
      * @return GetPrepInstructionsForSKUResponse
      */

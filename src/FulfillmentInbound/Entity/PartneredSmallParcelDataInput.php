@@ -2,10 +2,12 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * Information that is required by an Amazon-partnered carrier to ship a Small Parcel inbound shipment.
  */
-final class PartneredSmallParcelDataInput
+final class PartneredSmallParcelDataInput implements MetadataInterface
 {
     /**
      * @var string

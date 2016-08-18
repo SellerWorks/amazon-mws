@@ -1,36 +1,33 @@
 <?php
 
-namespace SellerWorks\Amazon\Orders\Result;
+namespace SellerWorks\Amazon\Tests\Common;
+
+use SplFixedArray;
 
 use SellerWorks\Amazon\Common\IterableResultInterface;
 use SellerWorks\Amazon\Common\IterableResultTrait;
 
 /**
- * GetOrder result object.
+ * Stub class to test IterableResultTrait
  */
-final class GetOrderResult implements IterableResultInterface
+class IterableResultStub implements IterableResultInterface
 {
-    /**
-     * @property  $client
-     * @method  setClient
-     * @method  getIterator
-     */
     use IterableResultTrait;
 
     /**
-     * @var string
+     * @var array
      */
-    public $LastUpdatedBefore;
+    protected $arr;
 
     /**
-     * @var string
+     * Constructor.
+     *
+     * @param  int  $size
      */
-    public $CreatedBefore;
-
-    /**
-     * @var Collection<Order>
-     */
-    public $Orders;
+    public function __construct($size = 0)
+    {
+        $this->arr = new SplFixedArray($size);
+    }
 
     /**
      * IterableResultInterface::getNextMethod
@@ -53,6 +50,6 @@ final class GetOrderResult implements IterableResultInterface
      */
     public function getRecords()
     {
-        return $this->Orders?: [];
+        return $this->arr->toArray();
     }
 }

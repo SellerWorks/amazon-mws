@@ -36,5 +36,5 @@ final class SKUPrepInstructions
     /**
      * @var Array<AmazonPrepFeesDetails>
      */
-    public $AmazonPrepFeesDetails;
+    public $AmazonPrepFeesDetailsList;
 }

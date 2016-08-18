@@ -2,11 +2,13 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * Information that is required by an Amazon-partnered carrier to ship a Less Than Truckload/Full Truckload (LTL/FTL)
  * inbound shipment.
  */
-final class PartneredLtlDataInput
+final class PartneredLtlDataInput implements MetadataInterface
 {
     /**
      * @var Contact
@@ -49,13 +51,13 @@ final class PartneredLtlDataInput
     public function getMetadata()
     {
         return [
-            'Contact'             => ['type' => 'contact', 'subtype' => Contact::class],
+            'Contact'             => ['type' => 'object', 'subtype' => Contact::class],
             'BoxCount'            => ['type' => 'scalar'],
             'SellerFreightClass'  => ['type' => 'scalar'],
             'FreightReadyDate'    => ['type' => 'date'],
             'PalletList'          => ['type' => 'array', 'subtype' => Pallet::class, 'namespace' => 'member'],
-            'TotalWeight'         => ['type' => 'contact', 'subtype' => Weight::class],
-            'SellerDeclaredValue' => ['type' => 'contact', 'subtype' => Amount::class],
+            'TotalWeight'         => ['type' => 'object', 'subtype' => Weight::class],
+            'SellerDeclaredValue' => ['type' => 'object', 'subtype' => Amount::class],
         ];
     }
 }

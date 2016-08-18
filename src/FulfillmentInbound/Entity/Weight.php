@@ -2,10 +2,12 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * The weight value and unit of measurement.
  */
-final class Weight
+final class Weight implements MetadataInterface
 {
     /**
      * @var string

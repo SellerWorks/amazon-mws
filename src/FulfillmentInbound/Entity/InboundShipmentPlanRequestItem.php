@@ -2,10 +2,12 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * How the seller intends to provide box contents information for a shipment.
  */
-final class InboundShipmentPlanRequestItem
+final class InboundShipmentPlanRequestItem implements MetadataInterface
 {
     /**
      * @var string

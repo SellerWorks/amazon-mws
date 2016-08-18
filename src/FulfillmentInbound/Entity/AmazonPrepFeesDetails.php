@@ -8,7 +8,7 @@ namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 final class AmazonPrepFeesDetails
 {
     /**
-     * @var Array<PrepInstruction>
+     * @var string
      */
     public $PrepInstruction;
 

@@ -14,8 +14,8 @@
                     <AmazonPrepFeesDetails>
                         <PrepInstruction>String</PrepInstruction>
                         <FeePerUnit>
-                        <CurrencyCode>String</CurrencyCode>
-                        <Value>100</Value>
+                            <CurrencyCode>String</CurrencyCode>
+                            <Value>100</Value>
                         </FeePerUnit>
                     </AmazonPrepFeesDetails>
                 </AmazonPrepFeesDetailsList>

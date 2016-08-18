@@ -2,10 +2,12 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * The dimension values and unit of measurement.
  */
-final class InboundShipmentHeader
+final class InboundShipmentHeader implements MetadataInterface
 {
     /**
      * @var string

@@ -48,7 +48,7 @@ final class InboundShipmentInfo
     public $ConfirmedNeedByDate;
 
     /**
-     * @var BoxContentsSource
+     * @var string
      */
     public $BoxContentsSource;
 

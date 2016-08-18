@@ -2,10 +2,12 @@
 
 namespace SellerWorks\Amazon\FulfillmentInbound\Entity;
 
+use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
+
 /**
  * The currency code and value.
  */
-final class Amount
+final class Amount implements MetadataInterface
 {
     /**
      * @var string
