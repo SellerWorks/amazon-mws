@@ -53,6 +53,10 @@ class Serializer implements SerializerInterface
         $metadata  = $object->getMetadata();
 
         foreach ($metadata as $prop => $meta) {
+            if (!property_exists($object, $prop)) {
+                continue;
+            }
+
             $key   = ltrim($path.'.'.$prop, '.');
             $value = $object->{$prop};
 
@@ -101,6 +105,10 @@ class Serializer implements SerializerInterface
                             continue;
                         }
 
+                        if (is_array($value)) {
+                            $value = array_shift($value);
+                        }
+
                         $flattened[$key] = $value;
                     } else {
                         $value = array_values((array) $value);
@@ -120,18 +128,17 @@ class Serializer implements SerializerInterface
 
                 case 'date':
                 case 'datetime':
-                    if ('datetime' == $meta['type']) {
-                        $format = static::DATE_FORMAT;
-                    }
-                    else {
-                        $format = 'Y-m-d';
+                    $defaults = ['format' => static::DATE_FORMAT];
+                    $meta     = array_merge($defaults, $meta);
+                    if ('date' == $meta['type']) {
+                        $meta['format'] = 'Y-m-d';
                     }
 
                     if ($value instanceof DateTimeInterface) {
-                        $flattened[$key] = $value->format($format);
+                        $flattened[$key] = $value->format($meta['format']);
                     }
                     elseif (is_scalar($value) && false !== ($ts = strtotime($value))) {
-                        $flattened[$key] = gmdate($format, $ts);
+                        $flattened[$key] = gmdate($meta['format'], $ts);
                     }
                     break;
 
