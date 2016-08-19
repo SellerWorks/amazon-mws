@@ -1,3 +1,7 @@
+![GitHub release](https://img.shields.io/github/release/SellerWorks/amazon-mws.svg?maxAge=2592000)
+![Travis](https://img.shields.io/travis/SellerWorks/amazon-mws.svg?maxAge=2592000)
+![Packagist](https://img.shields.io/packagist/l/SellerWorks/amazon-mws.svg?maxAge=2592000)
+
 # Amazon MWS Toolkit
 
 The **Amazon MWS Toolkit** makes it easy for developers to access Amazon's [Marketplace Webservices](https://developer.amazonservices.com/index.html) in their PHP code, and build robust applications using services like *Orders*, *Fulfillment Inbound Shipment* and *Reports*. You can get started in minutes by installing the toolkit through Composer or by downloading the latest release.
