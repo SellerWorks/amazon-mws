@@ -21,7 +21,7 @@ class BadRequestSerializerTest extends TestCase
         if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
             $this->expectException(\Exception::class);
         } else {
-            $this->expectException(\PHPUnit_Framework_Error::class);
+            $this->expectException(\UnexpectedValueException::class);
         }
 
         $serializer = new Serializer;
