@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "fzaninotto/faker": "^1.6",
-        "phpunit/phpunit": "^5.4"
+        "phpunit/phpunit": "~5.3"
     },
     "suggest": {
         "monolog/monolog": "For logging transactions"
