@@ -1,13 +1,13 @@
 <?php
 
-namespace SellerWorks\Amazon\Orders\Serializer;
+namespace SellerWorks\Amazon\Reports\Serializer;
 
 use UnexpectedValueException;
 
 use SellerWorks\Amazon\Common\RequestInterface;
 use SellerWorks\Amazon\Common\SerializerInterface;
 use SellerWorks\Amazon\Common\Serializer\Serializer as BaseSerializer;
-use SellerWorks\Amazon\Orders\Request;
+use SellerWorks\Amazon\Reports\Request;
 
 /**
  * Request Serializer / Response Deserializer.
@@ -34,28 +34,8 @@ final class Serializer extends BaseSerializer implements SerializerInterface
     {
         // Validate request is valid type and set action.
         switch (true) {
-            case $request instanceof Request\ListOrdersRequest:
-                $action = 'ListOrders';
-                break;
-
-            case $request instanceof Request\ListOrdersByNextTokenRequest:
-                $action = 'ListOrdersByNextToken';
-                break;
-
-            case $request instanceof Request\GetOrderRequest:
-                $action = 'GetOrder';
-                break;
-
-            case $request instanceof Request\ListOrderItemsRequest:
-                $action = 'ListOrderItems';
-                break;
-
-            case $request instanceof Request\ListOrderItemsByNextTokenRequest:
-                $action = 'ListOrderItemsByNextToken';
-                break;
-
-            case $request instanceof Request\GetServiceStatusRequest:
-                $action = 'GetServiceStatus';
+            case $request instanceof Request\RequestReportRequest:
+                $action = 'RequestReport';
                 break;
 
             default:

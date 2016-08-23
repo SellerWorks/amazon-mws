@@ -1,6 +1,6 @@
 <?php
 
-namespace SellerWorks\Amazon\Orders\Entity;
+namespace SellerWorks\Amazon\Reports\Entity;
 
 /**
  * Meta-data returned with the response object.

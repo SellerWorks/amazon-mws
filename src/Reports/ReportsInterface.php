@@ -5,26 +5,27 @@ namespace SellerWorks\Amazon\Reports;
 /**
  * Amazon MWS Reports
  *
- * With the Orders API section of Amazon Marketplace Web Service (Amazon MWS), you can build simple applications that
- * retrieve only the order information that you need. This enables you to develop fast, flexible, custom applications in
- * areas like order synchronization, order research, and demand-based decision support tools.
+ * The Reports API section of the Amazon Marketplace Web Service (Amazon MWS) API lets you request various reports that
+ * help you manage your Sell on Amazon business. Report types are specified using the ReportTypes enumeration.
  *
- * @url http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/
- * @version 2013-09-01
+ * @url http://docs.developer.amazonservices.com/en_US/reports/
+ * @version 2009-01-01
  */
 interface ReportsInterface
 {
     /**
-     * Returns the operational status of the Orders API section.
+     * Creates a report request and submits the request to Amazon MWS.
      *
-     * @see http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/MWS_GetServiceStatus.html
+     * @see http://docs.developer.amazonservices.com/en_US/reports/Reports_RequestReport.html
      *
-     * @return GetServiceStatusResponse
+     * @param  RequestReportRequest  $request
+     * @return RequestReportResult
      */
-    function GetServiceStatus();
+    function RequestReport(Request\RequestReportRequest $request);
 
     /**
+     * @param  RequestReportRequest  $request
      * @return PromiseInterface
      */
-    function GetServiceStatusAsync();
+    function RequestReportAsync(Request\RequestReportRequest $request);
 }
