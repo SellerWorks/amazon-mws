@@ -2,8 +2,6 @@
 
 namespace SellerWorks\Amazon\Orders;
 
-use SellerWorks\Amazon\Common\Results\GetServiceStatusResult;
-
 /**
  * Amazon MWS Orders
  *
@@ -22,21 +20,33 @@ interface OrdersInterface
      * @see http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/Orders_ListOrders.html
      *
      * @param  ListOrdersRequest $request
-     * @param  Passport $passport
-     * @return RecordIterator
+     * @return ListOrdersResult
      */
-//     function ListOrders(Requests\ListOrdersRequest $request, Passport $passport = null): RecordIterator;
+    function ListOrders(Request\ListOrdersRequest $request);
+
+    /**
+     * @param  ListOrdersRequest $request
+     * @return PromiseInterface
+     */
+    function ListOrdersAsync(Request\ListOrdersRequest $request);
+
 
     /**
      * Returns the next page of orders using the NextToken parameter.
      *
      * @see http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/Orders_ListOrdersByNextToken.html
      *
-     * @param  string  $NextToken
-     * @param  Passport  $passport
+     * @param  ListOrdersByNextTokenRequest  $request
      * @return ListOrdersByNextTokenResult
      */
-//     function ListOrdersByNextToken(string $NextToken, Passport $passport = null): Results\ListOrdersByNextTokenResult;
+    function ListOrdersByNextToken(Request\ListOrdersByNextTokenRequest $request);
+
+    /**
+     * @param  ListOrdersByNextTokenRequest  $request
+     * @return PromiseInterface
+     */
+    function ListOrdersByNextTokenAsync(Request\ListOrdersByNextTokenRequest $request);
+
 
     /**
      * Returns orders based on the AmazonOrderId values that you specify.
@@ -44,10 +54,16 @@ interface OrdersInterface
      * @see http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/Orders_GetOrder.html
      *
      * @param  GetOrderRequest  $request
-     * @param  Passport  $passport
      * @return GetOrderResult
      */
-//     function GetOrder(Requests\GetOrderRequest $request, Passport $passport = null): Results\GetOrderResult;
+    function GetOrder(Request\GetOrderRequest $request);
+
+    /**
+     * @param  GetOrderRequest  $request
+     * @return PromiseInterface
+     */
+    function GetOrderAsync(Request\GetOrderRequest $request);
+
 
     /**
      * Returns order items based on the AmazonOrderId that you specify.
@@ -55,21 +71,33 @@ interface OrdersInterface
      * @see http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/Orders_ListOrderItems.html
      *
      * @param  ListOrderItemsRequest  $request
-     * @param  Passport  $passport
-     * @return RecordIterator
+     * @return ListOrderItemsResult
      */
-//     function ListOrderItems(Requests\ListOrderItemsRequest $request, Passport $passport = null): RecordIterator;
+    function ListOrderItems(Request\ListOrderItemsRequest $request);
+
+    /**
+     * @param  ListOrderItemsRequest  $request
+     * @return PromiseInterface
+     */
+    function ListOrderItemsAsync(Request\ListOrderItemsRequest $request);
+
 
     /**
      * Returns the next page of order items using the NextToken parameter.
      *
      * @see http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/Orders_ListOrderItemsByNextToken.html
      *
-     * @param  string  $NextToken
-     * @param  Passport  $passport
+     * @param  ListOrderItemsByNextTokenRequest  $request
      * @return ListOrderItemsByNextTokenResult
      */
-//     function ListOrderItemsByNextToken(string $NextToken, Passport $passport = null): Results\ListOrderItemsByNextTokenResult;
+    function ListOrderItemsByNextToken(Request\ListOrderItemsByNextTokenRequest $request);
+
+    /**
+     * @param  ListOrderItemsByNextTokenRequest  $request
+     * @return PromiseInterface
+     */
+    function ListOrderItemsByNextTokenAsync(Request\ListOrderItemsByNextTokenRequest $request);
+
 
     /**
      * Returns the operational status of the Orders API section.

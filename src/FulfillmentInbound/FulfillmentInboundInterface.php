@@ -45,13 +45,13 @@ interface FulfillmentInboundInterface
      * @param  CreateInboundShipmentRequest
      * @return CreateInboundShipmentResult
      */
-//     function CreateInboundShipment(Request\CreateInboundShipmentRequest $request);
+    function CreateInboundShipment(Request\CreateInboundShipmentRequest $request);
 
     /**
      * @param  CreateInboundShipmentRequest $request
      * @return PromiseInterface
      */
-//     function CreateInboundShipmentAsync(Request\CreateInboundShipmentRequest $request);
+    function CreateInboundShipmentAsync(Request\CreateInboundShipmentRequest $request);
 
 
     /**
@@ -62,7 +62,13 @@ interface FulfillmentInboundInterface
      * @param  UpdateInboundShipmentRequest
      * @return UpdateInboundShipmentResult
      */
-//     public function UpdateInboundShipment(Request\UpdateInboundShipmentRequest $request);
+    public function UpdateInboundShipment(Request\UpdateInboundShipmentRequest $request);
+
+    /**
+     * @param  UpdateInboundShipmentRequest
+     * @return PromiseInterface
+     */
+    public function UpdateInboundShipmentAsync(Request\UpdateInboundShipmentRequest $request);
 
 
     /**
@@ -73,7 +79,13 @@ interface FulfillmentInboundInterface
      * @param  GetPrepInstructionsForSKURequest
      * @return GetPrepInstructionsForSKUResult
      */
-//     function GetPrepInstructionsForSKU(Request\GetPrepInstructionsForSKURequest $request);
+    function GetPrepInstructionsForSKU(Request\GetPrepInstructionsForSKURequest $request);
+
+    /**
+     * @param  GetPrepInstructionsForSKURequest
+     * @return PromiseInterface
+     */
+    function GetPrepInstructionsForSKUAsync(Request\GetPrepInstructionsForSKURequest $request);
 
 
     /**
@@ -84,7 +96,13 @@ interface FulfillmentInboundInterface
      * @param  GetPrepInstructionsForASINRequest
      * @return GetPrepInstructionsForASINResult
      */
-//     function GetPrepInstructionsForASIN(Request\GetPrepInstructionsForASINRequest $request);
+    function GetPrepInstructionsForASIN(Request\GetPrepInstructionsForASINRequest $request);
+
+    /**
+     * @param  GetPrepInstructionsForASINRequest
+     * @return PromiseInterface
+     */
+    function GetPrepInstructionsForASINAsync(Request\GetPrepInstructionsForASINRequest $request);
 
 
     /**
