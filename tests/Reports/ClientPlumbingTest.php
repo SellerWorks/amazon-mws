@@ -86,6 +86,50 @@ class ClientPlumbingTest extends TestCase
     }
 
     /**
+     * Test GetReportRequestList
+     */
+    public function test_GetReportRequestList()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/GetReportRequestListResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $result = $this->client->GetReportRequestList(new Request\GetReportRequestListRequest);
+        $this->assertTrue($result instanceof Result\GetReportRequestListResult);
+
+        $expected = new Result\GetReportRequestListResult;
+        $expected->NextToken = 'string';
+        $expected->HasNext = 'false';
+        $expected->ReportRequestInfo = new Entity\ReportRequestInfo;
+        $expected->ReportRequestInfo->ReportRequestId = 'string';
+        $expected->ReportRequestInfo->ReportType = 'string';
+        $expected->ReportRequestInfo->StartDate = '2007-10-25T23:36:28';
+        $expected->ReportRequestInfo->EndDate = '2004-02-14T10:44:14';
+        $expected->ReportRequestInfo->Scheduled = 'false';
+        $expected->ReportRequestInfo->SubmittedDate = '2018-10-31T22:36:46-07:00';
+        $expected->ReportRequestInfo->ReportProcessingStatus = 'string';
+        $expected->ReportRequestInfo->GeneratedReportId = 'string';
+        $expected->ReportRequestInfo->StartedProcessingDate = '2008-04-22T10:44:23';
+        $expected->ReportRequestInfo->CompletedDate = '2012-01-12T03:16:16';
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test GetReportRequestListAsync
+     */
+    public function test_GetReportRequestListAsync()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/GetReportRequestListResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $promise = $this->client->GetReportRequestListAsync(new Request\GetReportRequestListRequest);
+        $this->assertTrue($promise instanceof PromiseInterface);
+        
+        $result = $promise->wait();
+        $this->assertTrue($result instanceof Result\GetReportRequestListResult);
+    }
+
+    /**
      * Test ErrorResponse
      */
     public function test_ErrorResponse()

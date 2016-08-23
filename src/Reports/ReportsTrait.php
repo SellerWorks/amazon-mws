@@ -26,4 +26,22 @@ trait ReportsTrait
     {
         return $this->send($request, 10);
     }
+
+    /**
+     * @param  GetReportRequestListRequest  $request
+     * @return GetReportRequestListResult
+     */
+    function GetReportRequestList(Request\GetReportRequestListRequest $request)
+    {
+        return $this->GetReportRequestListAsync($request)->wait();
+    }
+
+    /**
+     * @param  GetReportRequestListRequest  $request
+     * @return PromiseInterface
+     */
+    public function GetReportRequestListAsync(Request\GetReportRequestListRequest $request)
+    {
+        return $this->send($request, 10);
+    }
 }

@@ -38,6 +38,10 @@ final class Serializer extends BaseSerializer implements SerializerInterface
                 $action = 'RequestReport';
                 break;
 
+            case $request instanceof Request\GetReportRequestListRequest:
+                $action = 'GetReportRequestList';
+                break;
+
             default:
                 throw new UnexpectedValueException(get_class($request) . ' is not supported.');
         }

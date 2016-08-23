@@ -3,7 +3,7 @@
 namespace SellerWorks\Amazon\Reports\Request;
 
 use SellerWorks\Amazon\Common\RequestInterface;
-use SellerWorks\Amazon\Orders\Entity\ReportType;
+use SellerWorks\Amazon\Reports\Entity\ReportType;
 
 /**
  * Creates a report request and submits the request to Amazon MWS.
