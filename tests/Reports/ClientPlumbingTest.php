@@ -111,7 +111,9 @@ class ClientPlumbingTest extends TestCase
         $expected->ReportRequestInfo->StartedProcessingDate = '2008-04-22T10:44:23';
         $expected->ReportRequestInfo->CompletedDate = '2012-01-12T03:16:16';
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expected->NextToken, $result->NextToken);
+        $this->assertEquals($expected->HasNext, $result->HasNext);
+        $this->assertEquals($expected->ReportRequestInfo, $result->ReportRequestInfo);
     }
 
     /**
@@ -127,6 +129,84 @@ class ClientPlumbingTest extends TestCase
         
         $result = $promise->wait();
         $this->assertTrue($result instanceof Result\GetReportRequestListResult);
+    }
+
+    /**
+     * Test GetReportRequestListByNextToken
+     */
+    public function test_GetReportRequestListByNextToken()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/GetReportRequestListByNextTokenResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $result = $this->client->GetReportRequestListByNextToken(new Request\GetReportRequestListByNextTokenRequest);
+        $this->assertTrue($result instanceof Result\GetReportRequestListResult);
+
+        $expected = new Result\GetReportRequestListResult;
+        $expected->NextToken = 'string';
+        $expected->HasNext = 'false';
+        $expected->ReportRequestInfo = new Entity\ReportRequestInfo;
+        $expected->ReportRequestInfo->ReportRequestId = 'string';
+        $expected->ReportRequestInfo->ReportType = 'string';
+        $expected->ReportRequestInfo->StartDate = '2007-10-25T23:36:28';
+        $expected->ReportRequestInfo->EndDate = '2004-02-14T10:44:14';
+        $expected->ReportRequestInfo->Scheduled = 'false';
+        $expected->ReportRequestInfo->SubmittedDate = '2018-10-31T22:36:46-07:00';
+        $expected->ReportRequestInfo->ReportProcessingStatus = 'string';
+        $expected->ReportRequestInfo->GeneratedReportId = 'string';
+        $expected->ReportRequestInfo->StartedProcessingDate = '2008-04-22T10:44:23';
+        $expected->ReportRequestInfo->CompletedDate = '2012-01-12T03:16:16';
+
+        $this->assertEquals($expected->NextToken, $result->NextToken);
+        $this->assertEquals($expected->HasNext, $result->HasNext);
+        $this->assertEquals($expected->ReportRequestInfo, $result->ReportRequestInfo);
+    }
+
+    /**
+     * Test GetReportRequestListByNextTokenAsync
+     */
+    public function test_GetReportRequestListByNextTokenAsync()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/GetReportRequestListByNextTokenResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $promise = $this->client->GetReportRequestListByNextTokenAsync(new Request\GetReportRequestListByNextTokenRequest);
+        $this->assertTrue($promise instanceof PromiseInterface);
+
+        $result = $promise->wait();
+        $this->assertTrue($result instanceof Result\GetReportRequestListResult);
+    }
+
+    /**
+     * Test GetReportRequestCount
+     */
+    public function test_GetReportRequestCount()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/GetReportRequestCountResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $result = $this->client->GetReportRequestCount(new Request\GetReportRequestCountRequest);
+        $this->assertTrue($result instanceof Result\GetReportRequestCountResult);
+
+        $expected = new Result\GetReportRequestCountResult;
+        $expected->Count = '100';
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test GetReportRequestCountAsync
+     */
+    public function test_GetReportRequestCountAsync()
+    {
+        $responseXml = file_get_contents(__DIR__.'/Mock/GetReportRequestCountResponse.xml');
+        $this->stack->append(new Response(200, [], $responseXml));
+
+        $promise = $this->client->GetReportRequestCountAsync(new Request\GetReportRequestCountRequest);
+        $this->assertTrue($promise instanceof PromiseInterface);
+
+        $result = $promise->wait();
+        $this->assertTrue($result instanceof Result\GetReportRequestCountResult);
     }
 
     /**

@@ -28,19 +28,29 @@ final class XmlDeserializer extends BaseXmlDeserializer
 
         return [
             // Response objects.
-            "{$ns}GetReportRequestListResponse"     => $this->mapObject(Response\GetReportRequestListResponse::class),
-            "{$ns}RequestReportResponse"            => $this->mapObject(Response\RequestReportResponse::class),
+            "{$ns}CancelReportRequestsResponse"             => $this->mapObject(Response\CancelReportRequestsResponse::class),
+            "{$ns}GetReportListResponse"                    => $this->mapObject(Response\GetReportListResponse::class),
+            "{$ns}GetReportListByNextTokenResponse"         => $this->mapObject(Response\GetReportListByNextTokenResponse::class),
+            "{$ns}GetReportRequestCountResponse"            => $this->mapObject(Response\GetReportRequestCountResponse::class),
+            "{$ns}GetReportRequestListResponse"             => $this->mapObject(Response\GetReportRequestListResponse::class),
+            "{$ns}GetReportRequestListByNextTokenResponse"  => $this->mapObject(Response\GetReportRequestListByNextTokenResponse::class),
+            "{$ns}RequestReportResponse"                    => $this->mapObject(Response\RequestReportResponse::class),
 
-            "{$ns}ErrorResponse"                    => $this->mapObject(Response\ErrorResponse::class),
-            "{$ns}GetServiceStatusResponse"         => $this->mapObject(Response\GetServiceStatusResponse::class),
+            "{$ns}ErrorResponse"                            => $this->mapObject(Response\ErrorResponse::class),
+            "{$ns}GetServiceStatusResponse"                 => $this->mapObject(Response\GetServiceStatusResponse::class),
 
 
             // Result objects.
-            "{$ns}GetReportRequestListResult"       => $this->mapObject(Result\GetReportRequestListResult::class),
-            "{$ns}RequestReportResult"              => $this->mapObject(Result\RequestReportResult::class),
+            "{$ns}CancelReportRequestsResult"               => $this->mapObject(Result\CancelReportRequestsResult::class),
+            "{$ns}GetReportListResult"                      => $this->mapObject(Result\GetReportListResult::class),
+            "{$ns}GetReportListByNextTokenResult"           => $this->mapObject(Result\GetReportListResult::class),
+            "{$ns}GetReportRequestCountResult"              => $this->mapObject(Result\GetReportRequestCountResult::class),
+            "{$ns}GetReportRequestListResult"               => $this->mapObject(Result\GetReportRequestListResult::class),
+            "{$ns}GetReportRequestListByNextTokenResult"    => $this->mapObject(Result\GetReportRequestListResult::class),
+            "{$ns}RequestReportResult"                      => $this->mapObject(Result\RequestReportResult::class),
 
-            "{$ns}Error"                            => $this->mapObject(Result\Error::class),
-            "{$ns}GetServiceStatusResult"           => $this->mapObject(Result\GetServiceStatusResult::class),
+            "{$ns}Error"                                    => $this->mapObject(Result\Error::class),
+            "{$ns}GetServiceStatusResult"                   => $this->mapObject(Result\GetServiceStatusResult::class),
 
 
             // Collection objects.
@@ -50,6 +60,7 @@ final class XmlDeserializer extends BaseXmlDeserializer
 
 
             // Entity objects.
+            "{$ns}ReportInfo"                       => $this->mapObject(Entity\ReportInfo::class),
             "{$ns}ReportRequestInfo"                => $this->mapObject(Entity\ReportRequestInfo::class),
 
             "{$ns}ResponseMetadata"                 => $this->mapObject(Entity\ResponseMetadata::class),

@@ -9,7 +9,7 @@ use SellerWorks\Amazon\Reports\Request\GetReportRequestListByNextTokenRequest;
 /**
  * GetReportRequestList result.
  */
-final class GetReportRequestListResult implements IterableResultInterface
+final class GetReportListResult implements IterableResultInterface
 {
     /**
      * @property  $client
@@ -29,16 +29,16 @@ final class GetReportRequestListResult implements IterableResultInterface
     public $HasNext;
 
     /**
-     * @var ReportRequestInfo
+     * @var Array<ReportInfo>
      */
-    public $ReportRequestInfo;
+    public $ReportInfo;
 
     /**
      * IterableResultInterface::getNextMethod
      */
     public function getNextMethod()
     {
-        return 'GetReportRequestListByNextToken';
+        return 'GetReportListByNextToken';
     }
 
     /**
@@ -50,7 +50,7 @@ final class GetReportRequestListResult implements IterableResultInterface
             return null;
         }
 
-        $request = new GetReportRequestListByNextTokenRequest;
+        $request = new GetReportListByNextTokenRequest;
         $request->NextToken = $this->NextToken;
 
         return $request;
@@ -61,6 +61,6 @@ final class GetReportRequestListResult implements IterableResultInterface
      */
     public function getRecords()
     {
-        return $this->ReportRequestInfo?: [];
+        return $this->ReportInfo?: [];
     }
 }

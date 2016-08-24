@@ -13,7 +13,7 @@ use SellerWorks\Amazon\Reports\Serializer\Serializer;
 /**
  * Serializer tests
  */
-class GetReportRequestListRequestSerializerTest extends TestCase
+class CancelReportRequestsRequestSerializerTest extends TestCase
 {
     private $faker;
 
@@ -23,18 +23,18 @@ class GetReportRequestListRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test GetReportRequestListRequest.ReportRequestIdList
+     * Test CancelReportRequestsRequest.ReportRequestIdList
      */
-    public function test_GetReportRequestListRequest_ReportRequestIdList_as_scalar()
+    public function test_CancelReportRequestsRequest_ReportRequestIdList_as_scalar()
     {
         $serializer = new Serializer;
 
-        $request = new Request\GetReportRequestListRequest;
+        $request = new Request\CancelReportRequestsRequest;
         $request->ReportRequestIdList = $this->faker->uuid;
 
         $serialized = $serializer->serialize($request);
         $expected   = [
-            'Action'                   => 'GetReportRequestList',
+            'Action'                   => 'CancelReportRequests',
             'ReportRequestIdList.Id.1' => $request->ReportRequestIdList,
         ];
 
@@ -44,9 +44,9 @@ class GetReportRequestListRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test GetReportRequestListRequest.ReportRequestIdList
+     * Test CancelReportRequestsRequest.ReportRequestIdList
      */
-    public function test_GetReportRequestListRequest_ReportRequestIdList_as_array()
+    public function test_CancelReportRequestsRequest_ReportRequestIdList_as_array()
     {
         $serializer = new Serializer;
 
@@ -62,11 +62,11 @@ class GetReportRequestListRequestSerializerTest extends TestCase
             'ReportRequestIdList.Id.9' => $this->faker->uuid,
         ];
 
-        $request = new Request\GetReportRequestListRequest;
+        $request = new Request\CancelReportRequestsRequest;
         $request->ReportRequestIdList = array_values($values);
 
         $serialized = $serializer->serialize($request);
-        $expected   = ['Action' => 'GetReportRequestList'] + $values;
+        $expected   = ['Action' => 'CancelReportRequests'] + $values;
 
         ksort($serialized);
         ksort($expected);
@@ -74,18 +74,18 @@ class GetReportRequestListRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test GetReportRequestListRequest.ReportTypeList
+     * Test CancelReportRequestsRequest.ReportTypeList
      */
-    public function test_GetReportRequestListRequest_ReportTypeList_as_scalar()
+    public function test_CancelReportRequestsRequest_ReportTypeList_as_scalar()
     {
         $serializer = new Serializer;
 
-        $request = new Request\GetReportRequestListRequest;
+        $request = new Request\CancelReportRequestsRequest;
         $request->ReportTypeList = Entity\ReportType::getTypes()[0];
 
         $serialized = $serializer->serialize($request);
         $expected   = [
-            'Action'              => 'GetReportRequestList',
+            'Action'              => 'CancelReportRequests',
             'ReportTypeList.Id.1' => $request->ReportTypeList,
         ];
 
@@ -95,9 +95,9 @@ class GetReportRequestListRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test GetReportRequestListRequest.ReportRequestIdList
+     * Test CancelReportRequestsRequest.ReportRequestIdList
      */
-    public function test_GetReportRequestListRequest_ReportTypeList_as_array()
+    public function test_CancelReportRequestsRequest_ReportTypeList_as_array()
     {
         $serializer = new Serializer;
 
@@ -108,11 +108,11 @@ class GetReportRequestListRequestSerializerTest extends TestCase
             $values['ReportTypeList.Id.'.$i] = $array[$i - 1];
         }
 
-        $request = new Request\GetReportRequestListRequest;
+        $request = new Request\CancelReportRequestsRequest;
         $request->ReportTypeList = array_values($values);
 
         $serialized = $serializer->serialize($request);
-        $expected   = ['Action' => 'GetReportRequestList'] + $values;
+        $expected   = ['Action' => 'CancelReportRequests'] + $values;
 
         ksort($serialized);
         ksort($expected);
@@ -120,18 +120,18 @@ class GetReportRequestListRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test GetReportRequestListRequest.ReportProcessingStatusList
+     * Test CancelReportRequestsRequest.ReportProcessingStatusList
      */
-    public function test_GetReportRequestListRequest_ReportProcessingStatusList_as_scalar()
+    public function test_CancelReportRequestsRequest_ReportProcessingStatusList_as_scalar()
     {
         $serializer = new Serializer;
 
-        $request = new Request\GetReportRequestListRequest;
+        $request = new Request\CancelReportRequestsRequest;
         $request->ReportProcessingStatusList = '_SUBMITTED_';
 
         $serialized = $serializer->serialize($request);
         $expected   = [
-            'Action'                          => 'GetReportRequestList',
+            'Action'                          => 'CancelReportRequests',
             'ReportProcessingStatusList.Id.1' => $request->ReportProcessingStatusList,
         ];
 
@@ -141,9 +141,9 @@ class GetReportRequestListRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test GetReportRequestListRequest.ReportProcessingStatusList
+     * Test CancelReportRequestsRequest.ReportProcessingStatusList
      */
-    public function test_GetReportRequestListRequest_ReportProcessingStatusList_as_array()
+    public function test_CancelReportRequestsRequest_ReportProcessingStatusList_as_array()
     {
         $serializer = new Serializer;
 
@@ -155,11 +155,11 @@ class GetReportRequestListRequestSerializerTest extends TestCase
             'ReportProcessingStatusList.Id.5' => '_DONE_NO_DATA_',
         ];
 
-        $request = new Request\GetReportRequestListRequest;
+        $request = new Request\CancelReportRequestsRequest;
         $request->ReportProcessingStatusList = array_values($values);
 
         $serialized = $serializer->serialize($request);
-        $expected   = ['Action' => 'GetReportRequestList'] + $values;
+        $expected   = ['Action' => 'CancelReportRequests'] + $values;
 
         ksort($serialized);
         ksort($expected);
@@ -167,55 +167,19 @@ class GetReportRequestListRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test GetReportRequestListRequest.MaxCount
+     * Test CancelReportRequestsRequest.{RequestedFromDate,RequestedToDate} as DateTime objects.
      */
-    public function test_GetReportRequestListRequest_MaxCount()
+    public function test_CancelReportRequestsRequest_dates_as_objects()
     {
         $serializer = new Serializer;
 
-        // In range.
-        $request = new Request\GetReportRequestListRequest;
-        $request->MaxCount = 10;
-
-        $serialized = $serializer->serialize($request);
-        $expected   = [
-            'Action'   => 'GetReportRequestList',
-            'MaxCount' => $request->MaxCount,
-        ];
-
-        ksort($serialized);
-        ksort($expected);
-        $this->assertSame($serialized, $expected);
-
-        // Out of range.
-        $request = new Request\GetReportRequestListRequest;
-        $request->MaxCount = 110;
-
-        $serialized = $serializer->serialize($request);
-        $expected   = [
-            'Action'   => 'GetReportRequestList',
-        ];
-
-        ksort($serialized);
-        ksort($expected);
-        $this->assertSame($serialized, $expected);
-
-    }
-
-    /**
-     * Test GetReportRequestListRequest.{RequestedFromDate,RequestedToDate} as DateTime objects.
-     */
-    public function test_GetReportRequestListRequest_dates_as_objects()
-    {
-        $serializer = new Serializer;
-
-        $request = new Request\GetReportRequestListRequest;
+        $request = new Request\CancelReportRequestsRequest;
         $request->RequestedFromDate = new DateTime($bttf1955 = '1955-11-12T06:38:00Z');
         $request->RequestedToDate   = new DateTime($bttf1985 = '1985-10-26T09:00:00Z');
 
         $serialized = $serializer->serialize($request);
         $expected   = [
-            'Action'            => 'GetReportRequestList',
+            'Action'            => 'CancelReportRequests',
             'RequestedFromDate' => $bttf1955,
             'RequestedToDate'   => $bttf1985,
         ];
@@ -226,19 +190,19 @@ class GetReportRequestListRequestSerializerTest extends TestCase
     }
 
     /**
-     * Test GetReportRequestListRequest.{RequestedFromDate,RequestedToDate} as strings.
+     * Test CancelReportRequestsRequest.{RequestedFromDate,RequestedToDate} as strings.
      */
-    public function test_GetReportRequestListRequest_dates_as_strings()
+    public function test_CancelReportRequestsRequest_dates_as_strings()
     {
         $serializer = new Serializer;
 
-        $request = new Request\GetReportRequestListRequest;
+        $request = new Request\CancelReportRequestsRequest;
         $request->RequestedFromDate = $bttf1955 = '1955-11-12T06:38:00Z';
         $request->RequestedToDate   = $bttf1985 = '1985-10-26T09:00:00Z';
 
         $serialized = $serializer->serialize($request);
         $expected   = [
-            'Action'            => 'GetReportRequestList',
+            'Action'            => 'CancelReportRequests',
             'RequestedFromDate' => $bttf1955,
             'RequestedToDate'   => $bttf1985,
         ];

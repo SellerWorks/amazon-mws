@@ -3,7 +3,7 @@
 namespace SellerWorks\Amazon\Reports\Entity;
 
 /**
- * Meta-data returned with the response object.
+ * Detailed information about a report request.
  */
 final class ReportRequestInfo
 {
