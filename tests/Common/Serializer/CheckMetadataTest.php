@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
 use SellerWorks\Amazon\Tests\FulfillmentInbound;
 use SellerWorks\Amazon\Tests\Orders;
+use SellerWorks\Amazon\Tests\Reports;
 
 /**
  * Serializer metadata tests
@@ -20,7 +21,8 @@ class CheckMetadataTest extends TestCase
     {
         $check = array_merge(
             FulfillmentInbound\Serializer\CheckMetadata::getMetadataClasses(),
-            Orders\Serializer\CheckMetadata::getMetadataClasses()
+            Orders\Serializer\CheckMetadata::getMetadataClasses(),
+            Reports\Serializer\CheckMetadata::getMetadataClasses()
         );
 
         foreach ($check as $i) {

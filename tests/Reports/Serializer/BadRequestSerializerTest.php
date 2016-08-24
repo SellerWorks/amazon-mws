@@ -1,9 +1,9 @@
 <?php
 
-namespace SellerWorks\Amazon\Tests\FulfillmentInbound\Serializer;
+namespace SellerWorks\Amazon\Tests\Reports\Serializer;
 
 use PHPUnit\Framework\TestCase;
-use SellerWorks\Amazon\FulfillmentInbound\Serializer\Serializer;
+use SellerWorks\Amazon\Reports\Serializer\Serializer;
 
 /**
  * Serializer tests

@@ -2,7 +2,6 @@
 
 namespace SellerWorks\Amazon\Tests\Orders\Serializer;
 
-use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
 use SellerWorks\Amazon\Orders\Entity;
 use SellerWorks\Amazon\Orders\Request;
 

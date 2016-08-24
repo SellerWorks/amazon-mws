@@ -2,7 +2,6 @@
 
 namespace SellerWorks\Amazon\Tests\FulfillmentInbound\Serializer;
 
-use SellerWorks\Amazon\Common\Serializer\MetadataInterface;
 use SellerWorks\Amazon\FulfillmentInbound\Entity;
 use SellerWorks\Amazon\FulfillmentInbound\Request;
 

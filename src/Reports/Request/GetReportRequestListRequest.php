@@ -13,7 +13,7 @@ final class GetReportRequestListRequest implements RequestInterface
     /**
      * @var Array<string>
      */
-    public $ReportRequestIdListd;
+    public $ReportRequestIdList;
 
     /**
      * @var Array<string>
