@@ -134,4 +134,40 @@ trait ReportsTrait
     {
         return $this->send($request, 60);
     }
+
+    /**
+     * @param  GetReportCountRequest  $request
+     * @return GetReportCountResult
+     */
+    function GetReportCount(Request\GetReportCountRequest $request)
+    {
+        return $this->GetReportCountAsync($request)->wait();
+    }
+
+    /**
+     * @param  GetReportCountRequest  $request
+     * @return PromiseInterface
+     */
+    function GetReportCountAsync(Request\GetReportCountRequest $request)
+    {
+        return $this->send($request, 60);
+    }
+
+    /**
+     * @param  GetReportRequest  $request
+     * @return GetReportResult
+     */
+    function GetReport(Request\GetReportRequest $request)
+    {
+        return $this->GetReportAsync($request)->wait();
+    }
+
+    /**
+     * @param  GetReportRequest  $request
+     * @return PromiseInterface
+     */
+    function GetReportAsync(Request\GetReportRequest $request)
+    {
+        return $this->send($request, 60);
+    }
 }

@@ -133,4 +133,39 @@ interface ReportsInterface
      * @return PromiseInterface
      */
     public function GetReportListByNextTokenAsync(Request\GetReportListByNextTokenRequest $request);
+
+
+    /**
+     * Returns a count of the reports, created in the previous 90 days, with a status of _DONE_ and that are available
+     * for download.
+     *
+     * @see http://docs.developer.amazonservices.com/en_US/reports/Reports_GetReportCount.html
+     *
+     * @param  GetReportCountRequest  $request
+     * @return GetReportCountResult
+     */
+    function GetReportCount(Request\GetReportCountRequest $request);
+
+    /**
+     * @param  GetReportCountRequest  $request
+     * @return PromiseInterface
+     */
+    function GetReportCountAsync(Request\GetReportCountRequest $request);
+
+
+    /**
+     * Returns the contents of a report and the Content-MD5 header for the returned report body.
+     *
+     * @see http://docs.developer.amazonservices.com/en_US/reports/Reports_GetReport.html
+     *
+     * @param  GetReportRequest  $request
+     * @return GetReportResult
+     */
+    function GetReport(Request\GetReportRequest $request);
+
+    /**
+     * @param  GetReportRequest  $request
+     * @return PromiseInterface
+     */
+    function GetReportAsync(Request\GetReportRequest $request);
 }

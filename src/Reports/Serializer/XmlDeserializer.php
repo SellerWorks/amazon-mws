@@ -29,11 +29,13 @@ final class XmlDeserializer extends BaseXmlDeserializer
         return [
             // Response objects.
             "{$ns}CancelReportRequestsResponse"             => $this->mapObject(Response\CancelReportRequestsResponse::class),
+            "{$ns}GetReportCountResponse"                   => $this->mapObject(Response\GetReportCountResponse::class),
             "{$ns}GetReportListResponse"                    => $this->mapObject(Response\GetReportListResponse::class),
             "{$ns}GetReportListByNextTokenResponse"         => $this->mapObject(Response\GetReportListByNextTokenResponse::class),
             "{$ns}GetReportRequestCountResponse"            => $this->mapObject(Response\GetReportRequestCountResponse::class),
             "{$ns}GetReportRequestListResponse"             => $this->mapObject(Response\GetReportRequestListResponse::class),
             "{$ns}GetReportRequestListByNextTokenResponse"  => $this->mapObject(Response\GetReportRequestListByNextTokenResponse::class),
+            "{$ns}GetReportResponse"                        => $this->mapObject(Response\GetReportResponse::class),
             "{$ns}RequestReportResponse"                    => $this->mapObject(Response\RequestReportResponse::class),
 
             "{$ns}ErrorResponse"                            => $this->mapObject(Response\ErrorResponse::class),
@@ -42,11 +44,13 @@ final class XmlDeserializer extends BaseXmlDeserializer
 
             // Result objects.
             "{$ns}CancelReportRequestsResult"               => $this->mapObject(Result\CancelReportRequestsResult::class),
+            "{$ns}GetReportCountResult"                     => $this->mapObject(Result\GetReportCountResult::class),
             "{$ns}GetReportListResult"                      => $this->mapObject(Result\GetReportListResult::class),
             "{$ns}GetReportListByNextTokenResult"           => $this->mapObject(Result\GetReportListResult::class),
             "{$ns}GetReportRequestCountResult"              => $this->mapObject(Result\GetReportRequestCountResult::class),
             "{$ns}GetReportRequestListResult"               => $this->mapObject(Result\GetReportRequestListResult::class),
             "{$ns}GetReportRequestListByNextTokenResult"    => $this->mapObject(Result\GetReportRequestListResult::class),
+            "{$ns}GetReportResult"                          => $this->mapObject(Result\GetReportResult::class),
             "{$ns}RequestReportResult"                      => $this->mapObject(Result\RequestReportResult::class),
 
             "{$ns}Error"                                    => $this->mapObject(Result\Error::class),

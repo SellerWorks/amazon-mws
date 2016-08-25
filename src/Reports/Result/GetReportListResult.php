@@ -4,7 +4,7 @@ namespace SellerWorks\Amazon\Reports\Result;
 
 use SellerWorks\Amazon\Common\IterableResultInterface;
 use SellerWorks\Amazon\Common\IterableResultTrait;
-use SellerWorks\Amazon\Reports\Request\GetReportRequestListByNextTokenRequest;
+use SellerWorks\Amazon\Reports\Request\GetReportListByNextTokenRequest;
 
 /**
  * GetReportRequestList result.
