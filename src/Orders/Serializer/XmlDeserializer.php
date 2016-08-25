@@ -24,61 +24,61 @@ final class XmlDeserializer extends BaseXmlDeserializer
      */
     public function getElementMap()
     {
-        $namespace = sprintf('{%s}', static::NS);
+        $ns = sprintf('{%s}', static::NS);
 
         return [
             // Response objects.
-            "{$namespace}ListOrdersResponse"                => $this->mapObject(Response\ListOrdersResponse::class),
-            "{$namespace}ListOrdersByNextTokenResponse"     => $this->mapObject(Response\ListOrdersByNextTokenResponse::class),
-            "{$namespace}GetOrderResponse"                  => $this->mapObject(Response\GetOrderResponse::class),
-            "{$namespace}ListOrderItemsResponse"            => $this->mapObject(Response\ListOrderItemsResponse::class),
-            "{$namespace}ListOrderItemsByNextTokenResponse" => $this->mapObject(Response\ListOrderItemsByNextTokenResponse::class),
+            "{$ns}ListOrdersResponse"                => $this->mapObject(Response\ListOrdersResponse::class),
+            "{$ns}ListOrdersByNextTokenResponse"     => $this->mapObject(Response\ListOrdersByNextTokenResponse::class),
+            "{$ns}GetOrderResponse"                  => $this->mapObject(Response\GetOrderResponse::class),
+            "{$ns}ListOrderItemsResponse"            => $this->mapObject(Response\ListOrderItemsResponse::class),
+            "{$ns}ListOrderItemsByNextTokenResponse" => $this->mapObject(Response\ListOrderItemsByNextTokenResponse::class),
 
-            "{$namespace}ErrorResponse"                     => $this->mapObject(Response\ErrorResponse::class),
-            "{$namespace}GetServiceStatusResponse"          => $this->mapObject(Response\GetServiceStatusResponse::class),
+            "{$ns}ErrorResponse"                     => $this->mapObject(Response\ErrorResponse::class),
+            "{$ns}GetServiceStatusResponse"          => $this->mapObject(Response\GetServiceStatusResponse::class),
 
 
             // Result objects.
-            "{$namespace}ListOrdersResult"                  => $this->mapObject(Result\ListOrdersResult::class),
-            "{$namespace}ListOrdersByNextTokenResult"       => $this->mapObject(Result\ListOrdersResult::class),
-            "{$namespace}GetOrderResult"                    => $this->mapObject(Result\GetOrderResult::class),
-            "{$namespace}ListOrderItemsResult"              => $this->mapObject(Result\ListOrderItemsResult::class),
-            "{$namespace}ListOrderItemsByNextTokenResult"   => $this->mapObject(Result\ListOrderItemsResult::class),
+            "{$ns}ListOrdersResult"                  => $this->mapObject(Result\ListOrdersResult::class),
+            "{$ns}ListOrdersByNextTokenResult"       => $this->mapObject(Result\ListOrdersResult::class),
+            "{$ns}GetOrderResult"                    => $this->mapObject(Result\GetOrderResult::class),
+            "{$ns}ListOrderItemsResult"              => $this->mapObject(Result\ListOrderItemsResult::class),
+            "{$ns}ListOrderItemsByNextTokenResult"   => $this->mapObject(Result\ListOrderItemsResult::class),
 
-            "{$namespace}Error"                             => $this->mapObject(Result\Error::class),
-            "{$namespace}GetServiceStatusResult"            => $this->mapObject(Result\GetServiceStatusResult::class),
+            "{$ns}Error"                             => $this->mapObject(Result\Error::class),
+            "{$ns}GetServiceStatusResult"            => $this->mapObject(Result\GetServiceStatusResult::class),
 
 
             // Collection objects.
-            "{$namespace}Orders"                            => $this->mapCollection("{$namespace}Order", Entity\Order::class),
-            "{$namespace}OrderItems"                        => $this->mapCollection("{$namespace}OrderItem", Entity\OrderItem::class),
-            "{$namespace}PaymentExecutionDetail"            => $this->mapList("{$namespace}PaymentExecutionDetailItem"),
-            "{$namespace}PromotionIds"                      => $this->mapList("{$namespace}PromotionId"),
+            "{$ns}Orders"                            => $this->mapCollection("{$ns}Order", Entity\Order::class),
+            "{$ns}OrderItems"                        => $this->mapCollection("{$ns}OrderItem", Entity\OrderItem::class),
+            "{$ns}PaymentExecutionDetail"            => $this->mapList("{$ns}PaymentExecutionDetailItem"),
+            "{$ns}PromotionIds"                      => $this->mapList("{$ns}PromotionId"),
 
 
             // Entity objects.
-            "{$namespace}BuyerCustomizedInfo"               => $this->mapObject(Entity\BuyerCustomizedInfo::class),
-            "{$namespace}InvoiceData"                       => $this->mapObject(Entity\InvoiceData::class),
-            "{$namespace}Order"                             => $this->mapObject(Entity\Order::class),
-            "{$namespace}OrderItem"                         => $this->mapObject(Entity\OrderItem::class),
-            "{$namespace}PaymentExecutionDetailItem"        => $this->mapObject(Entity\PaymentExecutionDetailItem::class),
-            "{$namespace}PointsGranted"                     => $this->mapObject(Entity\PointsGranted::class),
-            "{$namespace}ResponseMetadata"                  => $this->mapObject(Entity\ResponseMetadata::class),
-            "{$namespace}ShippingAddress"                   => $this->mapObject(Entity\Address::class),
+            "{$ns}BuyerCustomizedInfo"               => $this->mapObject(Entity\BuyerCustomizedInfo::class),
+            "{$ns}InvoiceData"                       => $this->mapObject(Entity\InvoiceData::class),
+            "{$ns}Order"                             => $this->mapObject(Entity\Order::class),
+            "{$ns}OrderItem"                         => $this->mapObject(Entity\OrderItem::class),
+            "{$ns}PaymentExecutionDetailItem"        => $this->mapObject(Entity\PaymentExecutionDetailItem::class),
+            "{$ns}PointsGranted"                     => $this->mapObject(Entity\PointsGranted::class),
+            "{$ns}ResponseMetadata"                  => $this->mapObject(Entity\ResponseMetadata::class),
+            "{$ns}ShippingAddress"                   => $this->mapObject(Entity\Address::class),
 
-            "{$namespace}CODFee"                            => $this->mapObject(Entity\Money::class),
-            "{$namespace}CODFeeDiscount"                    => $this->mapObject(Entity\Money::class),
-            "{$namespace}GiftWrapPrice"                     => $this->mapObject(Entity\Money::class),
-            "{$namespace}GiftWrapTax"                       => $this->mapObject(Entity\Money::class),
-            "{$namespace}ItemPrice"                         => $this->mapObject(Entity\Money::class),
-            "{$namespace}ItemTax"                           => $this->mapObject(Entity\Money::class),
-            "{$namespace}OrderTotal"                        => $this->mapObject(Entity\Money::class),
-            "{$namespace}Payment"                           => $this->mapObject(Entity\Money::class),
-            "{$namespace}PointsMonetaryValue"               => $this->mapObject(Entity\Money::class),
-            "{$namespace}PromotionDiscount"                 => $this->mapObject(Entity\Money::class),
-            "{$namespace}ShippingDiscount"                  => $this->mapObject(Entity\Money::class),
-            "{$namespace}ShippingPrice"                     => $this->mapObject(Entity\Money::class),
-            "{$namespace}ShippingTax"                       => $this->mapObject(Entity\Money::class),
+            "{$ns}CODFee"                            => $this->mapObject(Entity\Money::class),
+            "{$ns}CODFeeDiscount"                    => $this->mapObject(Entity\Money::class),
+            "{$ns}GiftWrapPrice"                     => $this->mapObject(Entity\Money::class),
+            "{$ns}GiftWrapTax"                       => $this->mapObject(Entity\Money::class),
+            "{$ns}ItemPrice"                         => $this->mapObject(Entity\Money::class),
+            "{$ns}ItemTax"                           => $this->mapObject(Entity\Money::class),
+            "{$ns}OrderTotal"                        => $this->mapObject(Entity\Money::class),
+            "{$ns}Payment"                           => $this->mapObject(Entity\Money::class),
+            "{$ns}PointsMonetaryValue"               => $this->mapObject(Entity\Money::class),
+            "{$ns}PromotionDiscount"                 => $this->mapObject(Entity\Money::class),
+            "{$ns}ShippingDiscount"                  => $this->mapObject(Entity\Money::class),
+            "{$ns}ShippingPrice"                     => $this->mapObject(Entity\Money::class),
+            "{$ns}ShippingTax"                       => $this->mapObject(Entity\Money::class),
         ];
     }
 }

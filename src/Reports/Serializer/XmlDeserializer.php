@@ -61,6 +61,7 @@ final class XmlDeserializer extends BaseXmlDeserializer
 
 
             // List objects.
+            "{$ns}ReportInfo"                       => $this->mapList("{$ns}ReportInfo"),
 
 
             // Entity objects.
