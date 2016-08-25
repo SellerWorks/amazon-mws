@@ -9,41 +9,41 @@ use SellerWorks\Amazon\Reports\Request;
 use SellerWorks\Amazon\Reports\Result;
 
 /**
- * GetReportRequestListResult tests
+ * GetReportListResult tests
  */
-class GetReportRequestListResultTest extends TestCase
+class GetReportListResultTest extends TestCase
 {
     /**
      * Test getNextMethod
      */
-    public function test_GetReportRequestListResult_getNextMethod()
+    public function test_GetReportListResult_getNextMethod()
     {
-        $obj = new Result\GetReportRequestListResult;
+        $obj = new Result\GetReportListResult;
         $this->assertTrue($obj instanceof IterableResultInterface);
         $this->assertTrue(method_exists($obj, 'getNextMethod'));
-        $this->assertTrue($obj->getNextMethod() == 'GetReportRequestListByNextToken');
+        $this->assertTrue($obj->getNextMethod() == 'GetReportListByNextToken');
     }
 
     /**
      * Test getNextRequest
      */
-    public function test_GetReportRequestListResult_getNextRequest()
+    public function test_GetReportListResult_getNextRequest()
     {
-        $obj = new Result\GetReportRequestListResult;
+        $obj = new Result\GetReportListResult;
         $this->assertTrue(method_exists($obj, 'getNextRequest'));
         $this->assertTrue(is_null($obj->getNextRequest()));
 
         $obj->NextToken = uniqid();
-        $this->assertTrue($obj->getNextRequest() instanceof Request\GetReportRequestListByNextTokenRequest);
+        $this->assertTrue($obj->getNextRequest() instanceof Request\GetReportListByNextTokenRequest);
         $this->assertEquals($obj->getNextRequest()->NextToken, $obj->NextToken);
     }
 
     /**
      * Test getRecords
      */
-    public function test_GetReportRequestListResult_getRecords()
+    public function test_GetReportListResult_getRecords()
     {
-        $obj = new Result\GetReportRequestListResult;
+        $obj = new Result\GetReportListResult;
         $this->assertTrue(method_exists($obj, 'getRecords'));
         $this->assertEquals($obj->getRecords(), []);
     }
