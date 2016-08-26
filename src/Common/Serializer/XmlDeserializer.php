@@ -35,6 +35,48 @@ abstract class XmlDeserializer extends Service
         return [];
     }
 
+    protected function keyValue(Reader $reader, $namespace = null)
+    {
+        // If there's no children, we don't do anything.
+        if ($reader->isEmptyElement) {
+            $reader->next();
+            return [];
+        }
+
+        $values = [];
+        $reader->read();
+
+        do {
+            if ($reader->nodeType === Reader::ELEMENT) {
+                if ($namespace !== null && $reader->namespaceURI === $namespace) {
+                    $key   = $reader->localName;
+                    $value = $reader->parseCurrentElement()['value'];
+                } else {
+                    $key   = $reader->getClark();
+                    $value = $reader->parseCurrentElement()['value'];
+                }
+
+                if (!isset($values[$key])) {
+                    $values[$key] = $value;
+                }
+                else {
+                    if (!is_array($values[$key])) {
+                        $tmp = $values[$key];
+                        $values[$key] = [$tmp];
+                    }
+
+                    $values[$key][] = $value;
+                }
+            } else {
+                $reader->read();
+            }
+        } while ($reader->nodeType !== Reader::END_ELEMENT);
+
+        $reader->read();
+
+        return $values;
+    }
+
     /**
      * Return new object by closure.
      *
@@ -47,7 +89,7 @@ abstract class XmlDeserializer extends Service
 
         return function(Reader $reader) use ($namespace, $className) {
             $object = new $className;
-            $values = Deserializer\keyValue($reader, $namespace);
+            $values = $this->keyValue($reader, $namespace);
 
             foreach ($values as $property => $value) {
                 if (property_exists($object, $property)) {

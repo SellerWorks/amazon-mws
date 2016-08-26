@@ -61,14 +61,13 @@ final class XmlDeserializer extends BaseXmlDeserializer
 
 
             // List objects.
-            "{$ns}ReportInfo"                       => $this->mapList("{$ns}ReportInfo"),
 
 
             // Entity objects.
-            "{$ns}ReportInfo"                       => $this->mapObject(Entity\ReportInfo::class),
-            "{$ns}ReportRequestInfo"                => $this->mapObject(Entity\ReportRequestInfo::class),
+            "{$ns}ReportInfo"                               => $this->mapObject(Entity\ReportInfo::class),
+            "{$ns}ReportRequestInfo"                        => $this->mapObject(Entity\ReportRequestInfo::class),
 
-            "{$ns}ResponseMetadata"                 => $this->mapObject(Entity\ResponseMetadata::class),
+            "{$ns}ResponseMetadata"                         => $this->mapObject(Entity\ResponseMetadata::class),
         ];
     }
 }
