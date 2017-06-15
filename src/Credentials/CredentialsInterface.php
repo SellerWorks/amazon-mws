@@ -3,7 +3,7 @@
 namespace SellerWorks\Amazon\Credentials;
 
 /**
- * Credentials interface.
+ * Amazon MWS Credentials interface.
  */
 interface CredentialsInterface
 {
@@ -12,26 +12,26 @@ interface CredentialsInterface
      *
      * @return string
      */
-    function getSellerId();
+    public function getSellerId(): string;
 
     /**
      * Get Access Key.
      *
      * @return string
      */
-    function getAccessKey();
+    public function getAccessKey(): string;
 
     /**
      * Get Secret Access Key.
      *
      * @return string
      */
-    function getSecretKey();
+    public function getSecretKey(): string;
 
     /**
      * Get MWS Auth Token.
      *
      * @return string
      */
-    function getMwsAuthToken();
+    public function getMwsAuthToken(): string;
 }

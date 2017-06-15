@@ -10,10 +10,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 interface ClientInterface
 {
     /**
-     * Set event dispatcher.
+     * Get the endpoint path.
      *
-     * @param  EventDispatcherInterface  $eventDispatcher
-     * @return self
+     * @return string
      */
-    function setEventDispatcher(EventDispatcherInterface $eventDispatcher);
+    public function getPath(): string;
+
+    /**
+     * Get the endpoint version.
+     *
+     * @return string
+     */
+    public function getVersion(): string;
 }

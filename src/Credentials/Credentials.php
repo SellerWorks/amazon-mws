@@ -2,74 +2,102 @@
 
 namespace SellerWorks\Amazon\Credentials;
 
+use Serializable;
+
 /**
- * Credentials for all requests.
+ * Amazon MWS Credentials value object.
  */
-final class Credentials implements CredentialsInterface
+final class Credentials implements CredentialsInterface, Serializable
 {
     /**
      * @var string
      */
-    protected $SellerId;
+    private $sellerId;
 
     /**
      * @var string
      */
-    protected $AccessKey;
+    private $accessKey;
 
     /**
      * @var string
      */
-    protected $SecretKey;
+    private $secretKey;
 
     /**
      * @var string
      */
-    protected $MwsAuthToken;
+    private $mwsAuthToken;
 
     /**
-     * @param  string  $SellerId
-     * @param  string  $AccessKey
-     * @param  string  $SecretKey
-     * @param  string  $MwsAuthToken
+     * @param  string  $sellerId
+     * @param  string  $accessKey
+     * @param  string  $secretKey
+     * @param  string  $mwsAuthToken
      */
-    public function __construct($SellerId, $AccessKey, $SecretKey, $MwsAuthToken = '')
+    public function __construct(string $sellerId, string $accessKey, string $secretKey, string $mwsAuthToken = '')
     {
-        $this->SellerId     = trim($SellerId);
-        $this->AccessKey    = trim($AccessKey);
-        $this->SecretKey    = trim($SecretKey);
-        $this->MwsAuthToken = trim($MwsAuthToken);
+        $this->sellerId     = trim($sellerId);
+        $this->accessKey    = trim($accessKey);
+        $this->secretKey    = trim($secretKey);
+        $this->mwsAuthToken = trim($mwsAuthToken);
     }
 
     /**
      * @return string
      */
-    public function getSellerId()
+    public function getSellerId(): string
     {
-        return $this->SellerId;
+        return $this->sellerId;
     }
 
     /**
      * @return string
      */
-    public function getAccessKey()
+    public function getAccessKey(): string
     {
-        return $this->AccessKey;
+        return $this->accessKey;
     }
 
     /**
      * @return string
      */
-    public function getSecretKey()
+    public function getSecretKey(): string
     {
-        return $this->SecretKey;
+        return $this->secretKey;
     }
 
     /**
      * @return string
      */
-    public function getMwsAuthToken()
+    public function getMwsAuthToken(): string
     {
-        return $this->MwsAuthToken;
+        return $this->mwsAuthToken;
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return serialize([
+            $this->sellerId,
+            $this->accessKey,
+            $this->secretKey,
+            $this->mwsAuthToken,
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->sellerId,
+            $this->accessKey,
+            $this->secretKey,
+            $this->mwsAuthToken
+        ) = unserialize($serialized);
     }
 }

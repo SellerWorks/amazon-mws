@@ -22,7 +22,7 @@ use SellerWorks\Amazon\Credentials\CredentialsInterface;
  * @url http://docs.developer.amazonservices.com/en_US/orders-2013-09-01/Orders_Overview.html
  * @version 2013-09-01
  */
-class Client extends AbstractClient implements OrdersInterface
+class Client extends AbstractClient // implements OrdersInterface
 {
     /**
      * Import the Orders API plumbing methods.
@@ -44,18 +44,22 @@ class Client extends AbstractClient implements OrdersInterface
     use OrdersTrait;
 
     /**
-     * MWS Service definitions.
+     * Get the endpoint path.
+     *
+     * @return string
      */
-    const MWS_PATH    = '/Orders/2013-09-01/';
-    const MWS_VERSION = '2013-09-01';
+    public function getPath(): string
+    {
+        return '/Orders/2013-09-01/';
+    }
 
     /**
-     * {@inheritDoc}
+     * Get the endpoint version.
+     *
+     * @return string
      */
-    public function __construct(CredentialsInterface $credentials)
+    public function getVersion(): string
     {
-        parent::__construct($credentials);
-
-        $this->serializer = new Serializer\Serializer;
+        return '2013-09-01';
     }
 }
