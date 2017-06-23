@@ -7,7 +7,6 @@ use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Uri;
-use GuzzleHttp\Psr7\UriInterface;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -23,9 +22,6 @@ abstract class AbstractClient implements ClientInterface
     /** @var CredentialsInterface */
     protected $credentials;
 
-    /** @var string */
-    protected $country;
-
     /** @var GuzzleHttp\Client */
     protected $guzzle;
 
@@ -33,7 +29,7 @@ abstract class AbstractClient implements ClientInterface
     protected $uri;
 
     /** @var string */
-    protected $defaultMarketplaceId;
+    protected $marketplace;
 
     /**
      * Configure the client defaults.
@@ -41,12 +37,11 @@ abstract class AbstractClient implements ClientInterface
      * @param  CredentialsInterface $credentials
      * @param  string               $country
      */
-    public function __construct(CredentialsInterface $credentials = null, string $country = Country::US)
+    public function __construct(CredentialsInterface $credentials = null)
     {
         $this->guzzle = new GuzzleClient;
 
         $this->setCredentials($credentials);
-        $this->setCountry($country);
     }
 
     /**
@@ -56,20 +51,6 @@ abstract class AbstractClient implements ClientInterface
     public function setCredentials(?CredentialsInterface $credentials): self
     {
         $this->credentials = $credentials;
-
-        return $this;
-    }
-
-    /**
-     * @param  string $country
-     * @return self
-     */
-    public function setCountry(?string $country): self
-    {
-        $country = strtolower($country);
-        Country::assertExists($country);
-
-        $this->defaultMarketplaceId = Country::getMarketplaceId($country);
 
         return $this;
     }

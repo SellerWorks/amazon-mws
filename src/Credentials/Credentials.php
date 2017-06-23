@@ -9,34 +9,31 @@ use Serializable;
  */
 final class Credentials implements CredentialsInterface, Serializable
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $sellerId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $accessKey;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $secretKey;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $mwsAuthToken;
 
     /**
-     * @param  string  $sellerId
-     * @param  string  $accessKey
-     * @param  string  $secretKey
-     * @param  string  $mwsAuthToken
+     * @param  string $sellerId
+     * @param  string $accessKey
+     * @param  string $secretKey
+     * @param  string $mwsAuthToken
      */
-    public function __construct(string $sellerId, string $accessKey, string $secretKey, string $mwsAuthToken = '')
-    {
+    public function __construct(
+        string $sellerId,
+        string $accessKey,
+        string $secretKey,
+        string $mwsAuthToken = '',
+        string $country = 'us'
+    ) {
         $this->sellerId     = trim($sellerId);
         $this->accessKey    = trim($accessKey);
         $this->secretKey    = trim($secretKey);
