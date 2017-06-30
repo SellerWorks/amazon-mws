@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace SellerWorks\Amazon\Orders\Serializer;
 
@@ -12,9 +12,7 @@ use SellerWorks\Amazon\Orders\Result;
  */
 final class XmlDeserializer extends BaseXmlDeserializer
 {
-    /**
-     * @const string
-     */
+    /** @const string */
     const NS = 'https://mws.amazonservices.com/Orders/2013-09-01';
 
     /**

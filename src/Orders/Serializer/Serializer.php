@@ -2,21 +2,17 @@
 
 namespace SellerWorks\Amazon\Orders\Serializer;
 
-use UnexpectedValueException;
-
 use SellerWorks\Amazon\Common\RequestInterface;
-use SellerWorks\Amazon\Common\SerializerInterface;
 use SellerWorks\Amazon\Common\Serializer\Serializer as BaseSerializer;
 use SellerWorks\Amazon\Orders\Request;
+use UnexpectedValueException;
 
 /**
- * Request Serializer / Response Deserializer.
+ * Order Serializer.
  */
-final class Serializer extends BaseSerializer implements SerializerInterface
+final class Serializer extends BaseSerializer
 {
-    /**
-     * @var Sabre\Xml\Service
-     */
+    /** @var Sabre\Xml\Service */
     private $xmlDeserializer;
 
     /**
@@ -24,7 +20,7 @@ final class Serializer extends BaseSerializer implements SerializerInterface
      */
     public function __construct()
     {
-        $this->xmlDeserializer = new XmlDeserializer;
+        $this->xmlDeserializer = new XmlDeserializer();
     }
 
     /**

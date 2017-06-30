@@ -12,9 +12,7 @@ use Sabre\Xml\Service;
  */
 abstract class XmlDeserializer extends Service
 {
-    /**
-     * @const string Namespace
-     */
+    /** @const string */
     const NS = '';
 
     /**
@@ -30,7 +28,7 @@ abstract class XmlDeserializer extends Service
      *
      * @return array
      */
-    public function getElementMap()
+    public function getElementMap(): array
     {
         return [];
     }

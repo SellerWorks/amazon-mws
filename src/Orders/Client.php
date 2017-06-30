@@ -3,6 +3,7 @@
 namespace SellerWorks\Amazon\Orders;
 
 use SellerWorks\Amazon\Common\AbstractClient;
+use SellerWorks\Amazon\Common\SerializerInterface;
 use SellerWorks\Amazon\Credentials\CredentialsInterface;
 
 /**
@@ -61,5 +62,21 @@ class Client extends AbstractClient // implements OrdersInterface
     public function getVersion(): string
     {
         return '2013-09-01';
+    }
+
+    /**
+     * Get the serializer.
+     *
+     * @return SerializerInterface
+     */
+    protected function getSerializer(): SerializerInterface
+    {
+        static $serializer;
+
+        if (null === $serializer) {
+            $serializer = new Serializer\Serializer();
+        }
+
+        return $serializer;
     }
 }
