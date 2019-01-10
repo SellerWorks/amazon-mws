@@ -13,7 +13,38 @@ declare(strict_types=1);
 
 namespace SellerWorks\Amazon;
 
+use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\HandlerStack;
+
 class MwsClient
 {
+    /** @var HttpClient */
+    private $httpClient;
 
+    /**
+     * Default values.
+     *
+     * @param HttpClient|null $httpClient
+     */
+    public function __construct(HttpClient $httpClient = null)
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    /**
+     * @return HttpClient
+     */
+    private function getHttpClient(): HttpClient
+    {
+        if (null === $this->httpClient) {
+            $stack = HandlerStack::create();
+
+            $this->httpClient = new HttpClient([
+                'http_errors' => true,
+                'stack'       => $stack,
+            ]);
+        }
+
+        return $this->httpClient;
+    }
 }
