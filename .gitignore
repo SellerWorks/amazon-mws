@@ -1,5 +1,4 @@
 composer.lock
 build/
 vendor/
-test.php
 .DS_Store
