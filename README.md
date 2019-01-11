@@ -1,7 +1,9 @@
 ![](https://img.shields.io/github/tag/SellerWorks/amazon-mws.svg)
+![](https://img.shields.io/github/license/SellerWorks/amazon-mws.svg)
 ![](https://img.shields.io/travis/php-v/SellerWorks/amazon-mws.svg)
 ![](https://img.shields.io/travis/SellerWorks/amazon-mws.svg)
-![](https://img.shields.io/github/license/SellerWorks/amazon-mws.svg)
+![](https://img.shields.io/scrutinizer/coverage/g/SellerWorks/amazon-mws.svg)
+![](https://img.shields.io/scrutinizer/g/SellerWorks/amazon-mws.svg)
 
 # Amazon MWS Toolkit
 
