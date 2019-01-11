@@ -1,6 +1,7 @@
-![GitHub release](https://img.shields.io/github/tag/SellerWorks/amazon-mws.svg?maxAge=2592000)
-![Travis](https://img.shields.io/travis/SellerWorks/amazon-mws.svg?maxAge=2592000)
-![Packagist](https://img.shields.io/packagist/l/SellerWorks/amazon-mws.svg?maxAge=2592000)
+![](https://img.shields.io/github/tag/SellerWorks/amazon-mws.svg)
+![](https://img.shields.io/travis/php-v/SellerWorks/amazon-mws.svg)
+![](https://img.shields.io/travis/SellerWorks/amazon-mws.svg)
+![](https://img.shields.io/github/license/SellerWorks/amazon-mws.svg)
 
 # Amazon MWS Toolkit
 
