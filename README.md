@@ -1,11 +1,10 @@
-![](https://img.shields.io/github/tag/SellerWorks/amazon-mws.svg)
-![](https://img.shields.io/github/license/SellerWorks/amazon-mws.svg)
-![](https://img.shields.io/travis/php-v/SellerWorks/amazon-mws.svg)
-![](https://img.shields.io/travis/SellerWorks/amazon-mws.svg)
-![](https://img.shields.io/scrutinizer/coverage/g/SellerWorks/amazon-mws.svg)
-![](https://img.shields.io/scrutinizer/g/SellerWorks/amazon-mws.svg)
+## Amazon MWS Toolkit
 
-# Amazon MWS Toolkit
+[![PHP Version](https://img.shields.io/packagist/php-v/SellerWorks/amazon-mws.svg?maxAge=3600)](https://packagist.org/packages/SellerWorks/amazon-mws)
+[![Latest Version](https://img.shields.io/packagist/v/SellerWorks/amazon-mws.svg?maxAge=3600)](https://packagist.org/packages/SellerWorks/amazon-mws)
+[![Build Status](https://img.shields.io/scrutinizer/build/g/SellerWorks/amazon-mws.svg?maxAge=3600)](https://scrutinizer-ci.com/g/SellerWorks/amazon-mws)
+[![Code Quality](https://img.shields.io/scrutinizer/g/SellerWorks/amazon-mws.svg?maxAge=3600)](https://scrutinizer-ci.com/g/SellerWorks/amazon-mws)
+[![Test Coverage](https://img.shields.io/scrutinizer/coverage/g/SellerWorks/amazon-mws.svg?maxAge=3600)](https://scrutinizer-ci.com/g/SellerWorks/amazon-mws)
 
 The **Amazon MWS Toolkit** makes it easy for developers to access Amazon's [Marketplace Webservices](https://developer.amazonservices.com/index.html) in their PHP code, and build robust applications using services like *Orders*, *Fulfillment Inbound Shipment* and *Reports*. You can get started in minutes by installing the toolkit through Composer or by downloading the latest release.
 
