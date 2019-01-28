@@ -1,29 +1,13 @@
 language: php
-
 php:
-  - 5.6
-  - 7.0
-  - hhvm
-
-matrix:
-  fast_finish: true
-  allow_failures:
-    - php: hhvm
-
-sudo: false
-
-cache:
-  directories:
-    - $HOME/.composer/cache
-
+  - 7.1
+  - 7.2
+  - 7.3
 before_install:
   - composer selfupdate
-
 install:
-  - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
-
+  - composer install --prefer-dist --no-interaction $COMPOSER_FLAGS
 script:
-  - phpunit --coverage-text
-
+  - phpunit --configuration phpunit.xml.dist --coverage-text --exclude-group incomplete
 notifications:
-  email: steve@seller.works
+  email: 'snebes+travis@gmail.com'
