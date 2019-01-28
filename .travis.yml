@@ -1,25 +1,13 @@
 language: php
-
 php:
   - 7.1
-
-matrix:
-  fast_finish: true
-
-sudo: false
-
-cache:
-  directories:
-    - $HOME/.composer/cache
-
+  - 7.2
+  - 7.3
 before_install:
   - composer selfupdate
-
 install:
-  - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
-
+  - composer install --prefer-dist --no-interaction $COMPOSER_FLAGS
 script:
-  - phpunit --coverage-text
-
+  - phpunit --configuration phpunit.xml.dist --coverage-text --exclude-group incomplete
 notifications:
-  email: snebes@gmail.com
+  email: 'snebes+travis@gmail.com'
